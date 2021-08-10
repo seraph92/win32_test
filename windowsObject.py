@@ -31,7 +31,9 @@ class WindowsObject:
         #print ("%08X: %s" % (hwnd, wintext))
 
 class ChildObject:
-    def __init__(self, parent_hwnd=None):
+    def __init__(self, parent_hwnd=None, match_class=None):
+        self.parent_hwnd = parent_hwnd
+        self.match_class = match_class
         self.win_objs = []
         win32gui.EnumChildWindows(parent_hwnd, self.__EnumChildWindowsHandler, None)
 
@@ -41,10 +43,18 @@ class ChildObject:
 
         if find_text:
             if wintext.find(find_text) != -1:
-                obj = {}
-                obj['handle'] = hwnd
-                obj['text'] = wintext
-                self.win_objs.append(obj)
+                if self.match_class:
+                    wnd_clas = win32gui.GetClassName(hwnd)
+                    if wnd_clas.find():
+                        obj = {}
+                        obj['handle'] = hwnd
+                        obj['text'] = wintext
+                        self.win_objs.append(obj)
+                else:
+                    obj = {}
+                    obj['handle'] = hwnd
+                    obj['text'] = wintext
+                    self.win_objs.append(obj)
         else:
             obj = {}
             obj['handle'] = hwnd
@@ -53,13 +63,13 @@ class ChildObject:
 
 if __name__ == '__main__':
     #win32gui.EnumWindows(EnumWindowsHandler, None)
-    w = WindowsObject("메모")
+    w = WindowsObject("KRC-EC100")
     print(f"w={w.win_objs}")
     #print(f"child = {w.getFirstObj().get('handle')}")
     #print(f"child = {w.getFirstObj()['handle']}")
     print(f"parent.handle=[{w.getFirstObj()['handle']}], parent.text=[{w.getFirstObj()['text']}]")
     parent = w.getFirstObj()['handle']
-    children = ChildObject(w.getFirstObj()['handle'])
+    children = ChildObject(w.getFirstObj()['handle'], 'WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1')
     print(f"children={children.win_objs}")
 
     for child in children.win_objs:
@@ -70,7 +80,8 @@ if __name__ == '__main__':
 
         print( "%08X %6d\t%s\t%s" % (hwnd, ctrl_id, wnd_clas, wnd_text) )
 
-
+    # class: WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
+    '''
     print("***************")
     control_hwnd = win32gui.GetDlgItem(592654, 15)
     print("control_hwnd=[%d]"%(control_hwnd))
@@ -104,9 +115,8 @@ if __name__ == '__main__':
 
     #win32api.SendMessage(parent, win32con.WM_GETTEXT, WM_text, 10)
     #print(f"WM_GETTEXT text       =[{WM_text}]")
-
     #win32api.SendMessage(control_hwnd, win32con.WM_CHAR, ord('H'), 0)
     #win32api.Sleep(100)
-
     #win32api.SendMessage(control_hwnd, win32con.WM_CHAR, ord('i'), 0)
     #win32api.Sleep(100)
+    '''
