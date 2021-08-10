@@ -87,14 +87,20 @@ if __name__ == '__main__':
     print("control_hwnd=[%08X]"%(parent))
     text = win32gui.GetWindowText(parent)
     print(f"win32gui.GetWindowText text       =[{text}]")
-    WM_text = ""
+
+    buf = "한글이 써지나? \n 글씨는 잘써지는데 왜 못가져오지?"
+    bufLen = len(buf)
+
+    win32gui.SendMessage(control_hwnd, win32con.WM_SETTEXT, bufLen, buf)
 
     bufLen = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXTLENGTH, 0, 0) + 1
     print(bufLen)
-    buffer = win32gui.PyMakeBuffer(bufLen)
-    win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXT, bufLen, buffer)
-    text = buffer[:bufLen] ## asd
-    print(f"text  =[{text}]")
+    #buffer = win32gui.PyMakeBuffer(bufLen)
+    buf = " " * bufLen
+    length = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXT, bufLen, buf)
+    print(f"buf  =[{buf}]")
+    result = buf[:length]
+    print(f"text  =[{result}]")
 
     #win32api.SendMessage(parent, win32con.WM_GETTEXT, WM_text, 10)
     #print(f"WM_GETTEXT text       =[{WM_text}]")
