@@ -3,7 +3,37 @@ from pywinauto.application import Application
 #import pywinauto
 import time
 
+import sqlite3
+
 from BKLOG import *
+
+class HistoryMgr:
+    def __init__(self, dbconn):
+        self.dbconn = dbconn
+        self.dbconn = sqlite3.connect("data/log.db")
+        self.cur = self.dbconn.cursor()
+
+    def execute(self, exec_str):
+        result=self.dbconn.execute(exec_str)
+        DEBUG(f"exec result=[{result}]")
+        return result
+
+    def query(self, exec_str):
+        cur=self.cur.execute(exec_str)
+        DEBUG(f"query result(cur)=[{cur}]")
+        rows = cur.fetchall()
+        return rows
+
+    def commit(self):
+        self.dbconn.commit()
+
+    def rollback(self):
+        self.dbconn.rollback()
+
+    def __del__(self):
+        self.dbconn.close()
+        DEBUG(f"db Connection Closed!!")
+
 
 class WindowsObject:
     def __init__(self, text=None, parent_hwnd=None):
