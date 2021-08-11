@@ -2,16 +2,27 @@ import win32gui
 from pywinauto.application import Application
 #import pywinauto
 import time
+import re
 
 import sqlite3
 
 from BKLOG import *
 
 class HistoryMgr:
-    def __init__(self, dbconn):
+    # SELECT strftime('%Y-%m-%d %H:%M:%S','now') as dtm, strftime('%Y-%m-%d %H:%M:%f','now') as udtm, strftime('%s','now') as unixdtm, date('now') as dt
+    def __init__(self, dbconn=None):
+        self.INSERT_HISTORY = "INSERT INTO inout_history(dtm, name, temper, dtm2, reg_dtm) values (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%f','now'))"
         self.dbconn = dbconn
-        self.dbconn = sqlite3.connect("data/log.db")
+        if self.dbconn == None:
+            self.dbconn = sqlite3.connect("data/log.db")
+
         self.cur = self.dbconn.cursor()
+
+    def execute_param(self, exec_str, param):
+        result=self.cur.execute(exec_str, param)
+        DEBUG(f"exec result=[{result}]")
+        return result
+
 
     def execute(self, exec_str):
         result=self.dbconn.execute(exec_str)
@@ -64,25 +75,56 @@ class WindowsObject:
             self.win_objs.append(obj)
         #print ("%08X: %s" % (hwnd, wintext))
 
+def log_processing(compiled_pattern, strLog):
+    history_mgr = HistoryMgr()
+    DEBUG(f"strLog=[{strLog}]")
+    # 외부로 이동
+    #p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
+    p = compiled_pattern
+    m = p.match(strLog)
+
+    #DEBUG(f"m          = [{m}]")
+    #DEBUG(f"m.group(0) = [{m.group(0)}]")
+    #DEBUG(f"m.group(1) = [{m.group(1)}]")
+    #DEBUG(f"m.group(2) = [{m.group(2)}]")
+    #DEBUG(f"m.group(3) = [{m.group(3)}]")
+    #DEBUG(f"m.group(4) = [{m.group(4)}]")
+    DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]"   )
+    DEBUG(f"m.group(name)   = [{m.group('name')}]"  )
+    DEBUG(f"m.group(temper) = [{m.group('temper')}]")
+    DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]"  )
+
+    # DB처리 (Cache 검증 및 insert)
+    try:
+        history_mgr.execute_param(history_mgr.INSERT_HISTORY, (m.group('dtm'), m.group('name'), m.group('temper'), m.group('dtm2')))
+    except sqlite3.IntegrityError as si:
+        # Insert 무결성은 무시
+        DEBUG(f"INSERT 무결성은 무시 [{si}]")
+    else:
+        history_mgr.commit()
+
 def monitoring(edit_control):
     loop_flag = True
+    processing_pattern = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
 
     while loop_flag:
-        try:
-            line_cnt = edit_control.line_count()
-            INFO(f"line_cnt:[{line_cnt}]")
+#        try:
+        line_cnt = edit_control.line_count()
+        INFO(f"line_cnt:[{line_cnt}]")
 
-            for i in range(0, line_cnt):
-                INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
-            INFO("")
-            time.sleep(3)
-        except:
-            loop_flag=False
+        for i in range(0, line_cnt):
+            INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
+            log_processing(processing_pattern, edit_control.get_line(i))
+        INFO("")
+        time.sleep(3)
+#        except:
+#            loop_flag=False
 
     return loop_flag
 
 def main():
-    w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+    #w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+    w = WindowsObject("sample.txt - Windows 메모장")
 
     DEBUG(f"w={w.win_objs}")
     DEBUG("w.handle,text=[%08X][%s]"%(w.obj['handle'], w.obj['text']))
@@ -103,7 +145,8 @@ def main():
     #dig.print_control_identifiers()
 
     # WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
-    logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
+    #logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
+    logwin = dig.child_window(class_name="Edit")
 
 
     result = monitoring(logwin)
