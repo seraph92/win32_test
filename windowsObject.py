@@ -11,29 +11,30 @@ class WindowsObject:
         self.win_objs = []
         win32gui.EnumWindows(self.__EnumWindowsHandler, text)
         if len(self.win_objs) < 1:
-            raise ValueError('Windows Object를 발견하지 못하였습니다.')
+            raise ValueError("Windows Object를 발견하지 못하였습니다.")
         self.obj = self.win_objs[0]
- 
+
     def getFirstObj(self):
         if len(self.win_objs) < 1:
             return None
         else:
             return self.win_objs[0]
- 
+
     def __EnumWindowsHandler(self, hwnd, find_text):
         wintext = win32gui.GetWindowText(hwnd)
         if find_text:
             if wintext.find(find_text) != -1:
                 obj = {}
-                obj['handle'] = hwnd
-                obj['text'] = wintext
+                obj["handle"] = hwnd
+                obj["text"] = wintext
                 self.win_objs.append(obj)
         else:
             obj = {}
-            obj['handle'] = hwnd
-            obj['text'] = wintext
+            obj["handle"] = hwnd
+            obj["text"] = wintext
             self.win_objs.append(obj)
-        #print ("%08X: %s" % (hwnd, wintext))
+        # print ("%08X: %s" % (hwnd, wintext))
+
 
 class ChildObject:
     def __init__(self, parent_hwnd=None, match_class=None):
@@ -43,25 +44,26 @@ class ChildObject:
         win32gui.EnumChildWindows(parent_hwnd, self.__EnumChildWindowsHandler, None)
 
     def __EnumChildWindowsHandler(self, hwnd, extra):
-        ctrl_id  = win32gui.GetDlgCtrlID(hwnd)
+        ctrl_id = win32gui.GetDlgCtrlID(hwnd)
         win_text = win32gui.GetWindowText(hwnd)
         wnd_clas = win32gui.GetClassName(hwnd)
 
         if self.match_class:
             if wnd_clas.find(self.match_class) != -1:
-                    obj = {}
-                    obj['handle']       = hwnd
-                    obj['control_id']   = ctrl_id
-                    obj['class_name']   = wnd_clas
-                    obj['text']         = win_text
-                    self.win_objs.append(obj)
+                obj = {}
+                obj["handle"] = hwnd
+                obj["control_id"] = ctrl_id
+                obj["class_name"] = wnd_clas
+                obj["text"] = win_text
+                self.win_objs.append(obj)
         else:
             obj = {}
-            obj['handle']       = hwnd
-            obj['control_id']   = ctrl_id
-            obj['class_name']   = wnd_clas
-            obj['text']         = win_text
+            obj["handle"] = hwnd
+            obj["control_id"] = ctrl_id
+            obj["class_name"] = wnd_clas
+            obj["text"] = win_text
             self.win_objs.append(obj)
+
 
 def getTextEditByClip(hwnd):
     # 원본 클립보드 값 저장하기
@@ -83,7 +85,7 @@ def getTextEditByClip(hwnd):
     print(f"retval  =[{retval}]")
 
     win32clipboard.OpenClipboard()
-    #data = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
+    # data = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
     data = win32clipboard.GetClipboardData()
     print(f"data  =[{data}]")
     win32clipboard.EmptyClipboard()
@@ -98,44 +100,45 @@ def getTextEditByClip(hwnd):
     win32clipboard.SetClipboardText(save_data)
     win32clipboard.CloseClipboard()
 
-if __name__ == '__main__':
-    #win32gui.EnumWindows(EnumWindowsHandler, None)
-    #w = WindowsObject("KRC-EC100")
+
+if __name__ == "__main__":
+    # win32gui.EnumWindows(EnumWindowsHandler, None)
+    # w = WindowsObject("KRC-EC100")
 
     w = WindowsObject("워드패드")
 
     print(f"w={w.win_objs}")
-    print("w.handle,text=[%08X][%s]"%(w.obj['handle'], w.obj['text']))
+    print("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
 
-    parent = w.obj['handle']
-    #children = ChildObject(parent, 'WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1')
-    children = ChildObject(parent, 'RICHEDIT50W')
+    parent = w.obj["handle"]
+    # children = ChildObject(parent, 'WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1')
+    children = ChildObject(parent, "RICHEDIT50W")
     print(f"children={children.win_objs}")
 
     for child in children.win_objs:
-        hwnd = child['handle']
-        ctrl_id  = win32gui.GetDlgCtrlID(hwnd)
+        hwnd = child["handle"]
+        ctrl_id = win32gui.GetDlgCtrlID(hwnd)
         wnd_clas = win32gui.GetClassName(hwnd)
-        wnd_text = win32gui.GetWindowText(hwnd)        
+        wnd_text = win32gui.GetWindowText(hwnd)
 
-        print( "%08X(%d) %6d\t%s\t%s" % (hwnd, hwnd, ctrl_id, wnd_clas, wnd_text) )
+        print("%08X(%d) %6d\t%s\t%s" % (hwnd, hwnd, ctrl_id, wnd_clas, wnd_text))
 
     # class: WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
     # class: RICHEDIT50W
 
     control_hwnd = 3086804
-    print("control_hwnd=[%d]"%(control_hwnd))
-    print("control_hwnd=[%08X]"%(control_hwnd))
-    #text = win32gui.GetWindowText(3086804)
-    #print(f"text       =[{text}]")
+    print("control_hwnd=[%d]" % (control_hwnd))
+    print("control_hwnd=[%08X]" % (control_hwnd))
+    # text = win32gui.GetWindowText(3086804)
+    # print(f"text       =[{text}]")
 
-    '''
+    """
     GetTextRange and get the range by using GetTextLength
     EM_GETTEXTEX
     GetWindowText
     GetDlgItemText
     WM_GETETXT
-    '''
+    """
     # WM_GETTEXTLENGTH
     bufLen = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXTLENGTH, 0, 0) + 1
     print(f"bufLen = [{bufLen}]")
@@ -152,12 +155,12 @@ if __name__ == '__main__':
     print(f"(GetWindowText) text = [{text}]")
 
     # GetDlgItemText
-    textA = win32gui.GetDlgItemText(3932736, 59648) 
+    textA = win32gui.GetDlgItemText(3932736, 59648)
     print(f"(GetDlgItemText) text = [{textA}]")
 
     getTextEditByClip(control_hwnd)
 
-    '''
+    """
     #retval = SendMessage(Text1.hWnd, EM_SETSEL, ByVal CLng(0), ByVal CLng(5))
     retval = win32gui.SendMessage(control_hwnd, win32con.EM_SETSEL, 0, length)
     print(f"retval  =[{retval}]")
@@ -181,10 +184,9 @@ if __name__ == '__main__':
     #save_data = win32clipboard.GetClipboardData()
 
     #sys.sleep(1)
-    '''
+    """
 
-
-    '''
+    """
     print("***************")
     control_hwnd = win32gui.GetDlgItem(592654, 15)
     print("control_hwnd=[%d]"%(control_hwnd))
@@ -222,4 +224,4 @@ if __name__ == '__main__':
     #win32api.Sleep(100)
     #win32api.SendMessage(control_hwnd, win32con.WM_CHAR, ord('i'), 0)
     #win32api.Sleep(100)
-    '''
+    """
