@@ -30,6 +30,9 @@ from PyQt5.QtCore import (
     Qt,
 )
 
+# 만들어야 할것들
+# DataModel
+
 
 class LogHandlingWindow(QWidget):
     def __init__(self):
@@ -192,33 +195,6 @@ class MyApp(QWidget):
         self.setGeometry(300, 300, 1024, 768)
         self.center()
         self.show()
-
-        # 여긴 임시 테스트
-        now = QDate.currentDate()
-        # print(now.toString('d.M.yy'))                   # 12.8.21
-        # print(now.toString('dd.MM.yyyy'))               # 12.08.2021
-        # print(now.toString('yyyy.MM.dd'))               # 2021.12.08
-        print(now.toString("yyyy.MM.dd(ddd)"))  # 2021.08.12(목)
-        # print(now.toString('ddd.MMMM.yyyy'))            # 목.8월.2021
-        # print(now.toString(Qt.ISODate))                 # 2021-08-12
-        # print(now.toString(Qt.DefaultLocaleLongDate))   # 2021년 8월 12일 목요일
-        # print(now.toString())
-        time = QTime.currentTime()
-        # print(time.toString('h.m.s'))                    # 18.40.19
-        print(time.toString("hh.mm.ss"))  # 18.40.19
-        # print(time.toString('hh.mm.ss.zzz'))             # 18.40.19.864
-        print(time.toString(Qt.DefaultLocaleLongDate))  # 오후 6:40:19
-        # print(time.toString(Qt.DefaultLocaleShortDate))  # 오후 6:40
-        # print(time.toString())
-
-        datetime = QDateTime.currentDateTime()
-        # print(datetime.toString('d.M.yy hh:mm:ss'))
-        # print(datetime.toString('dd.MM.yyyy, hh:mm:ss'))
-        print(datetime.toString("yyyyMMddhhmmss"))
-        print(datetime.toString("yyyy.MM.dd(ddd) hh:mm:ss"))
-        print(datetime.toString(Qt.DefaultLocaleLongDate))
-        print(datetime.toString(Qt.DefaultLocaleShortDate))
-        # print(datetime.toString())
 
     def center(self):
         qr = self.frameGeometry()
