@@ -89,10 +89,16 @@ def log_processing(compiled_pattern, strLog):
     #DEBUG(f"m.group(2) = [{m.group(2)}]")
     #DEBUG(f"m.group(3) = [{m.group(3)}]")
     #DEBUG(f"m.group(4) = [{m.group(4)}]")
-    DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]"   )
-    DEBUG(f"m.group(name)   = [{m.group('name')}]"  )
-    DEBUG(f"m.group(temper) = [{m.group('temper')}]")
-    DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]"  )
+
+    try:
+        DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]"   )
+        DEBUG(f"m.group(name)   = [{m.group('name')}]"  )
+        DEBUG(f"m.group(temper) = [{m.group('temper')}]")
+        DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]"  )
+    except AttributeError as ae:
+        # 파싱 오류
+        DEBUG(f"파싱 오류 무시 DB처리 하지 않음 [{ae}]")
+        return
 
     # DB처리 (Cache 검증 및 insert)
     try:
