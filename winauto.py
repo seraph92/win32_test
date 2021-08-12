@@ -89,6 +89,7 @@ def log_processing(compiled_pattern, strLog):
     #DEBUG(f"m.group(2) = [{m.group(2)}]")
     #DEBUG(f"m.group(3) = [{m.group(3)}]")
     #DEBUG(f"m.group(4) = [{m.group(4)}]")
+<<<<<<< HEAD
 
     try:
         DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]"   )
@@ -99,6 +100,12 @@ def log_processing(compiled_pattern, strLog):
         # 파싱 오류
         DEBUG(f"파싱 오류 무시 DB처리 하지 않음 [{ae}]")
         return
+=======
+    DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]"   )
+    DEBUG(f"m.group(name)   = [{m.group('name')}]"  )
+    DEBUG(f"m.group(temper) = [{m.group('temper')}]")
+    DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]"  )
+>>>>>>> 9abf744c999ea9e760ea7fe727f8968754991ab5
 
     # DB처리 (Cache 검증 및 insert)
     try:
@@ -129,8 +136,13 @@ def monitoring(edit_control):
     return loop_flag
 
 def main():
+<<<<<<< HEAD
     w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
     #w = WindowsObject("sample.txt - Windows 메모장")
+=======
+    #w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+    w = WindowsObject("sample.txt - Windows 메모장")
+>>>>>>> 9abf744c999ea9e760ea7fe727f8968754991ab5
 
     DEBUG(f"w={w.win_objs}")
     DEBUG("w.handle,text=[%08X][%s]"%(w.obj['handle'], w.obj['text']))
@@ -151,8 +163,13 @@ def main():
     #dig.print_control_identifiers()
 
     # WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
+<<<<<<< HEAD
     logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
     #logwin = dig.child_window(class_name="Edit")
+=======
+    #logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
+    logwin = dig.child_window(class_name="Edit")
+>>>>>>> 9abf744c999ea9e760ea7fe727f8968754991ab5
 
 
     result = monitoring(logwin)
