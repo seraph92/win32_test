@@ -31,66 +31,6 @@ from PyQt5.QtCore import (
 )
 
 
-class LogHandlingWindowHeader(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-
-    def initUI(self):
-        QToolTip.setFont(QFont("SansSerif", 10))
-        ## Top Grid
-        self.topGrid = QGridLayout()
-
-        ### Before Button
-        beforeBtn = QPushButton("이전", self)
-        beforeBtn.setToolTip("Before")
-        beforeBtn.resize(beforeBtn.sizeHint())
-        beforeBtn.clicked.connect(QCoreApplication.instance().quit)
-
-        ### Next Button
-        nextBtn = QPushButton("다음", self)
-        nextBtn.setToolTip("Next")
-        nextBtn.resize(nextBtn.sizeHint())
-        nextBtn.clicked.connect(QCoreApplication.instance().quit)
-
-        ### Close Button
-        closeBtn = QPushButton("닫기", self)
-        closeBtn.setToolTip("Close")
-        closeBtn.resize(closeBtn.sizeHint())
-        closeBtn.clicked.connect(QCoreApplication.instance().quit)
-
-        ## Top Grid Layout
-        self.topGrid.addWidget(beforeBtn, 0, 1)
-        self.topGrid.addWidget(nextBtn, 0, 2)
-        self.topGrid.addWidget(closeBtn, 0, 3)
-
-        ## Layout Setting
-        self.setLayout(self.topGrid)
-
-
-class LogHandlingWindowBottom(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-
-    def initUI(self):
-        ## Top Grid
-        self.bottomGrid = QGridLayout()
-
-        ### Close Button
-        QToolTip.setFont(QFont("SansSerif", 10))
-        closeBtn = QPushButton("닫기", self)
-        closeBtn.setToolTip("Close")
-        closeBtn.resize(closeBtn.sizeHint())
-        closeBtn.clicked.connect(QCoreApplication.instance().quit)
-
-        ## Top Grid Layout
-        self.bottomGrid.addWidget(closeBtn, 0, 3)
-
-        ## Layout Setting
-        self.setLayout(self.bottomGrid)
-
-
 class LogHandlingWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -206,8 +146,6 @@ class LogHandlingWindow(QWidget):
         ###################################################################
 
         ## Layout Setting
-        # self.header = LogHandlingWindowHeader()
-        # self.bottom = LogHandlingWindowBottom()
         layout = QVBoxLayout()
 
         # layout.addWidget(self.header)
