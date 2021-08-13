@@ -1,14 +1,29 @@
 import sys
+from dbm import HistoryMgr
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QDesktopWidget, QMainWindow, QApplication, QMessageBox
+from PyQt5.QtWidgets import QDesktopWidget, QHeaderView, QMainWindow, QApplication, QMessageBox
 from PyQt5 import QtCore
 from PyQt5 import uic
+
+from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
 
 
 class LogsModel(list):
     def __init__(self, l=[]):
+        sql  = "SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
+        sql += "FROM inout_history \n"
+        sql += "WHERE \n"
+        sql += "name like '%%'"
+
+        mgr = HistoryMgr()
+
+        self.data = mgr.query(sql)
+
+        print(f"data = [{self.data}]")
+
+        """
         self.data = [
             {
                 "dtm": "2021-08-09 18:59:53",
@@ -19,23 +34,28 @@ class LogsModel(list):
                 "send_dtm": "",
             }
         ]
+        """
 
         self.model = QStandardItemModel()
 
         self.applyModel()
 
     def remove(self, idx):
+        DEBUG(f"remove index= [{idx}]")
         temp = self.data[idx]
-        last_idx = len(self.data) - 1
+        del self.data[idx]
+        #last_idx = len(self.data) - 1
+        #DEBUG(f"remove last_Index [{last_idx}]")
 
-        self.data[idx] = self.data[last_idx]
-        self.data[last_idx] = temp
-        self.data.pop()
+        #self.data[idx] = self.data[last_idx]
+        #self.data[last_idx] = temp
+        #self.data.pop()
 
         self.model.clear()
         self.applyModel()
 
     def applyModel(self):
+        self.model.setHorizontalHeaderLabels(["출입일시", "이름", "온도","일시2", "등록일시", "전송일자", "전송버튼"])
         for data in self.data:
             self.model.appendRow(
                 [
@@ -45,6 +65,7 @@ class LogsModel(list):
                     QStandardItem(data["dtm2"]),
                     QStandardItem(data["reg_dtm"]),
                     QStandardItem(data["send_dtm"]),
+                    QStandardItem(""),
                 ]
             )
 
@@ -57,6 +78,10 @@ class LogViewModel:
 
         # event 할당
         self.view.clicked.connect(self.removeConfirm)
+        self.view.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.view.resizeColumnsToContents()
+        self.view.setColumnWidth(2, 50)
+        
 
     def dataInit(self):
         self.view.setModel(self.model.model)
@@ -86,7 +111,11 @@ class MainWindow(QMainWindow, ui_form):
         self.logsModel = LogsModel()
         self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
 
-        self.setGeometry(300, 300, 1024, 768)
+        #model.setHorizontalHeaderLabels(['Name', 'Age', 'Sex', 'Add'])
+        #self.logsModel.model.horizontalHeaderItem().setTextAlignment(Qt.AlignHCenter)
+
+
+        self.setGeometry(300, 300, 1280, 768)
         self.center()
         self.show()
 
