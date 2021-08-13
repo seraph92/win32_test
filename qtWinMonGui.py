@@ -5,6 +5,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
     QDesktopWidget,
     QHeaderView,
+    QLineEdit,
     QMainWindow,
     QApplication,
     QMessageBox,
@@ -42,12 +43,19 @@ class LogsModel(list):
     def __init__(self, l=[]):
         super().__init__()
 
-        sql = "SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
-        sql += "FROM inout_history \n"
-        sql += "WHERE \n"
-        sql += "name like '%%'"
+        self.PAGE_SIZE = 20
+        self.current_page = 1
 
         mgr = HistoryMgr()
+        self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+
+        print(f"total_page = [{self.total_page}]")
+
+        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
+        sql += f"FROM inout_history \n"
+        sql += f"WHERE \n"
+        sql += f"name like '%%'"
+        sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
 
         self.data = mgr.query(sql)
 
@@ -67,6 +75,7 @@ class LogsModel(list):
         """
 
         self.model = QStandardItemModel()
+        self.aggregation_model = QStandardItemModel()
 
         self.applyModel()
 
@@ -87,6 +96,7 @@ class LogsModel(list):
         return temp
 
     def applyModel(self):
+        # self.aggregation_model
         self.model.setHorizontalHeaderLabels(
             ["출입일시", "이름", "온도", "일시2", "등록일시", "전송일자", "전송버튼"]
         )
@@ -152,15 +162,20 @@ class MainWindow(QMainWindow, ui_form):
 
         self.adjustColumnSize()
 
-        self.setGeometry(300, 300, 1280, 768)
+        # self.setGeometry(300, 300, 1280, 768)
+        self.setGeometry(300, 300, 1024, 768)
         self.center()
         self.show()
+
+        # edit = QLineEdit()
+        # edit.
 
     @pyqtSlot()
     def adjustColumnSize(self):
         header = self.logTableView.horizontalHeader()
         header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        # self.logTableView.setColumnWidth(5, 50)
+        header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
 
     def center(self):
         qr = self.frameGeometry()

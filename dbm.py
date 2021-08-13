@@ -1,4 +1,3 @@
-
 from BKLOG import DEBUG
 import sqlite3
 
@@ -22,6 +21,12 @@ class HistoryMgr:
             d[col[0]] = row[idx]
 
         return d
+
+    def query_total_page(self, page=20):
+        sql = f"select count(*) / {page} as total_page from inout_history;"
+        rslt = self.query(sql)
+
+        return rslt[0]["total_page"]
 
     def execute_param(self, exec_str, param):
         if param != None:
@@ -53,7 +58,6 @@ class HistoryMgr:
         else:
             cur = self.cur.execute(exec_str)
 
-
         DEBUG(f"query result(cur)=[{cur}]")
         rows = cur.fetchall()
         return rows
@@ -71,13 +75,14 @@ class HistoryMgr:
 
 if __name__ == "__main__":
     historyDBM = HistoryMgr()
-    sql  = "SELECT dtm, name, temper, dtm2, reg_dtm \n"
+    sql = "SELECT dtm, name, temper, dtm2, reg_dtm \n"
     sql += "FROM inout_history \n"
     sql += "WHERE \n"
     sql += "name like '%%'"
-
     print(f"sql = [{sql}]")
 
     rows = historyDBM.query(sql)
-
     print(f"rows = [{rows}]")
+
+    total_page = historyDBM.query_total_page()
+    print(f"total_page = [{total_page}]")
