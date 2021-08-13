@@ -138,8 +138,8 @@ def monitoring(edit_control):
 
 
 def main():
-    # w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
-    w = WindowsObject("sample.txt - Windows 메모장")
+    w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+    #w = WindowsObject("sample.txt - Windows 메모장")
 
     DEBUG(f"w={w.win_objs}")
     DEBUG("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
@@ -160,8 +160,8 @@ def main():
     # dig.print_control_identifiers()
 
     # WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
-    # logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
-    logwin = dig.child_window(class_name="Edit")
+    logwin = dig.child_window(class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1")
+    #logwin = dig.child_window(class_name="Edit")
 
     result = monitoring(logwin)
 
