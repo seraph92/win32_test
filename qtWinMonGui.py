@@ -3,6 +3,7 @@ from dbm import HistoryMgr
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
+    QDataWidgetMapper,
     QDesktopWidget,
     QHeaderView,
     QLineEdit,
@@ -21,35 +22,30 @@ from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
 
-# 데이터가 변경되었을때 컬럼의 크기를 변경하기 위해 새로운 Signal 정의
-# 아직 사용되지 않음
-class DataChangeEventHandler(QObject):
-    onDataChange = pyqtSignal()
-
-    def __init__(self, model, view):
-        super().__init__()
-        self.model = model
-        self.view = view
-
-    def run(self):
-        self.onDataChange.emit()
-
-
 class LogsModel(list):
-    # class LogsModel(QObject):
-    # onDataChange = DataChangeSignal()
-    # onDataChange = pyqtSignal()
 
     def __init__(self, l=[]):
         super().__init__()
 
-        self.PAGE_SIZE = 20
+        #self.PAGE_SIZE = 20
+        self.PAGE_SIZE = 15
         self.current_page = 1
 
+        self.item_data = {}
+        self.item_data["current_page"] = 1
+
+        self.model = QStandardItemModel()
+        self.model.setColumnCount(7)
+        self.aggregation_model = QStandardItemModel()
+        self.query_page()
+
+        '''
         mgr = HistoryMgr()
         self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+        self.item_data["total_page"] = self.total_page
 
-        print(f"total_page = [{self.total_page}]")
+        #print(f"self.item_data=[{self.item_data}]")
+        #print(f"total_page = [{self.item_data['total_page']}]")
 
         sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
         sql += f"FROM inout_history \n"
@@ -61,23 +57,61 @@ class LogsModel(list):
 
         print(f"data = [{self.data}]")
 
-        """
-        self.data = [
-            {
-                "dtm": "2021-08-09 18:59:53",
-                "name": "이수미",
-                "temper": "36.6.",
-                "dtm2": "2021-08-09T18:58:06",
-                "reg_dtm": "2021-08-11 18:02:39.928",
-                "send_dtm": "",
-            }
-        ]
-        """
-
         self.model = QStandardItemModel()
+        self.model.setColumnCount(7)
         self.aggregation_model = QStandardItemModel()
 
         self.applyModel()
+        '''
+
+    def query_page(self):
+
+        mgr = HistoryMgr()
+        self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+        self.item_data['current_page'] = self.current_page
+        self.item_data["total_page"] = self.total_page
+
+        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
+        sql += f"FROM inout_history \n"
+        sql += f"WHERE \n"
+        sql += f"name like '%%'\n"
+        sql += f"ORDER BY dtm desc\n"
+        sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+
+        print(f"sql = [{sql}]")
+
+        self.data = mgr.query(sql)
+
+        print(f"data = [{self.data}]")
+
+        #self.model = QStandardItemModel()
+        #self.aggregation_model = QStandardItemModel()
+        self.model.clear()
+        self.model.setColumnCount(7)
+        self.aggregation_model.clear()
+
+        self.applyModel()
+
+
+    def before_page(self):
+        self.current_page -=1
+        if self.current_page < 1:
+            self.current_page = 1
+
+        print(f"before current_page=[{self.current_page}]")
+        #self.model.clear()
+        #self.aggregation_model.clear()
+        self.query_page()
+
+    def next_page(self):
+        self.current_page +=1
+        if self.current_page > self.total_page:
+            self.current_page = self.total_page
+
+        print(f"next current_page=[{self.current_page}]")
+        #self.model.clear()
+        #self.aggregation_model.clear()
+        self.query_page()
 
     def remove(self, idx):
         DEBUG(f"remove index= [{idx}]")
@@ -91,12 +125,22 @@ class LogsModel(list):
         # self.data.pop()
 
         self.model.clear()
+        self.aggregation_model.clear()
         self.applyModel()
 
         return temp
 
     def applyModel(self):
-        # self.aggregation_model
+
+        print(f"Page: {self.item_data['current_page']} / {self.item_data['total_page']}")
+
+        self.aggregation_model.appendRow(
+            [
+                #QStandardItem(f"{self.item_data['current_page']} / {self.item_data['total_page']}"),
+                QStandardItem(f"{self.current_page} / {self.item_data['total_page']}"),
+            ]
+        )
+
         self.model.setHorizontalHeaderLabels(
             ["출입일시", "이름", "온도", "일시2", "등록일시", "전송일자", "전송버튼"]
         )
@@ -112,13 +156,16 @@ class LogsModel(list):
                     QStandardItem(""),
                 ]
             )
-        # self.onDataChange.emit()
-        # self.signal.run()
-
 
 class LogViewModel:
     def __init__(self, view, model):
-        self.view = view
+        self.view = view["table_view"]
+        self.item_view = view["item_view"]
+        self.view = view["table_view"]
+
+        self.mapper = QDataWidgetMapper()
+        self.mapper.setModel(model.aggregation_model)
+
         self.model = model
         self.dataInit()
 
@@ -127,6 +174,13 @@ class LogViewModel:
         self.view.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )
+
+        view["before_button"].clicked.connect(self.before_page)
+        view["before_button2"].clicked.connect(self.before_page)
+        view["next_button"].clicked.connect(self.next_page)
+        view["next_button2"].clicked.connect(self.next_page)
+
+        #self.view
         # self.model.onDataChange.connect(self.adjustColumnSize)
 
         # self.view.resizeColumnsToContents()
@@ -134,6 +188,16 @@ class LogViewModel:
 
     def dataInit(self):
         self.view.setModel(self.model.model)
+        self.mapper.addMapping(self.item_view, 0)
+        self.mapper.toFirst()
+
+    def before_page(self):
+        self.model.before_page()
+        self.mapper.toFirst()
+
+    def next_page(self):
+        self.model.next_page()
+        self.mapper.toFirst()
 
     def removeConfirm(self):
         data = self.view.selectedIndexes()
@@ -157,8 +221,19 @@ class MainWindow(QMainWindow, ui_form):
         super().__init__()
         self.setupUi(self)
 
+        self.views = {}
+        self.views["table_view"] = self.logTableView
+        self.views["item_view"] = self.pageEdit
+        self.views["before_button"] = self.beforeBtn
+        self.views["before_button2"] = self.beforeBtn2
+        self.views["next_button"] = self.nextBtn
+        self.views["next_button2"] = self.nextBtn2
+
         self.logsModel = LogsModel()
-        self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
+        #self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
+        self.logViewModel = LogViewModel(self.views, self.logsModel)
+
+        #QDataWidgetMapper
 
         self.adjustColumnSize()
 

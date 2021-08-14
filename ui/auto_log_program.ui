@@ -33,7 +33,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="beforeBtn_3">
+        <widget class="QPushButton" name="beforeBtn">
          <property name="text">
           <string>이전</string>
          </property>
@@ -53,7 +53,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLineEdit" name="pageLineEdit_3">
+        <widget class="QLineEdit" name="pageEdit">
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
@@ -73,7 +73,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="nextBtn_3">
+        <widget class="QPushButton" name="nextBtn">
          <property name="text">
           <string>다음</string>
          </property>
@@ -95,12 +95,15 @@
        <attribute name="horizontalHeaderDefaultSectionSize">
         <number>50</number>
        </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
       </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QPushButton" name="beforeBtn_4">
+        <widget class="QPushButton" name="beforeBtn2">
          <property name="text">
           <string>이전</string>
          </property>
@@ -140,7 +143,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="nextBtn_4">
+        <widget class="QPushButton" name="nextBtn2">
          <property name="text">
           <string>다음</string>
          </property>
@@ -159,5 +162,22 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pageEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>pageLineEdit_4</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>497</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>727</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
