@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 options = Options()
 options.headless = True
-browser = webdriver.Chrome(executable_path="d:/work/chromedriver.exe", options=options)
+browser = webdriver.Chrome(executable_path="c:/webdriver/chromedriver.exe", options=options)
 browser.get("https://datalab.naver.com/shoppingInsight/sCategory.naver")
 
 time.sleep(3)

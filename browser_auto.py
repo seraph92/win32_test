@@ -2,7 +2,7 @@ from selenium import webdriver
 
 search_word = input("무엇을 검색하고 싶으세요? : ")
 # 셀레니움 크롬 웹드라이버로 자동으로 google 사이트 접속
-browser = webdriver.Chrome("D:\work\chromedriver.exe")
+browser = webdriver.Chrome("./driver/chromedriver.exe")
 browser.get("https://google.co.kr")
 
 # 검색창에 검색어 '셀레니움'입력 후 submit()
