@@ -3,23 +3,73 @@ import json
 temp = {}
 
 
-class Config:
-    def __init__(self, file_path="./config.json"):
-        self.values = temp
+class Config(dict):
+    def __init__(self, file_path="./config.json", *arg, **kw):
+        super(Config, self).__init__(*arg, **kw)
         self.file_path = file_path
-        self.reload()
+        print(f"file_path = [{self.file_path}]")
+        self.reload(self.file_path)
 
-    def reload(self):
-        self.clear()
-        if self.file_path:
-            try:
-                with open(self.file_path, "r") as f:
-                    self.values.update(json.load(f))
-            except FileNotFoundError as fe:
-                print(f"error = [{fe}]")
+    def __setitem__(self, key, item):
+        self.__dict__[key] = item
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __repr__(self):
+        return repr(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __delitem__(self, key):
+        del self.__dict__[key]
 
     def clear(self):
-        self.values.clear()
+        return self.__dict__.clear()
+
+    def copy(self):
+        return self.__dict__.copy()
+
+    def has_key(self, k):
+        return k in self.__dict__
+
+    def update(self, *args, **kwargs):
+        return self.__dict__.update(*args, **kwargs)
+
+    def keys(self):
+        return self.__dict__.keys()
+
+    def values(self):
+        return self.__dict__.values()
+
+    def items(self):
+        return self.__dict__.items()
+
+    def pop(self, *args):
+        return self.__dict__.pop(*args)
+
+    def __cmp__(self, dict_):
+        return self.__cmp__(self.__dict__, dict_)
+
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __unicode__(self):
+        return unicode(repr(self.__dict__))
+
+    def reload(self, file_path):
+        self.clear()
+        print(f"file_path = [{file_path}]")
+        if file_path:
+            try:
+                with open(file_path, "r") as f:
+                    self.update(json.load(f))
+            except FileNotFoundError as fe:
+                print(f"error = [{fe}]")
 
     """
     {
@@ -39,23 +89,15 @@ class Config:
     }
     """
     # config.values['test']['test2']['test3']
-    def update(self, data, var=None):
+    def update_each(self, data, var=None):
         if var == None:
             var = self.values
-        if isinstance(data, list):
-            for i, v in enumerate(data):
-                if isinstance(v, dict) or isinstance(v, list):
-                    self.update(v)
-                else:
-                    var[i] = v
-        elif isinstance(data, dict):
-            for (k, v) in data.items():
-                if isinstance(v, dict) or isinstance(v, list):
-                    self.update(v)
-                else:
-                    var[k] = v
-        else:
-            var = data
+
+        for (k, v) in data.items():
+            if isinstance(v, dict):
+                self.update_each(v, var[k])
+            else:
+                var[k] = v
 
     def update2(self, data):
         for (k1, v1) in data.items():
@@ -75,19 +117,21 @@ class Config:
                 json.dump(dict(self.values), f)
 
 
+CONFIG = Config()
+
 if __name__ == "__main__":
     conf = Config()
+    print(f"user_id = [{conf['user_id']}]")
+    """
     conf.values = {
         "user_id": "seraph92",
         "user_pw": "123456",
-        "options": [
-            {
-                "option1": "op_value1",
-                "option2": "op_value2",
-            },
-            {"option3": "op_value3"},
-        ],
+        "options": {
+            "option1": "op_value1",
+            "option2": "op_value2",
+        },
     }
-    conf.update({"options": {"add_key": "add_value"}})
+    conf.update_each({"options": {"add_key": "add_value"}})
 
     conf.export()
+    """
