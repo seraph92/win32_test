@@ -1,0 +1,471 @@
+{
+  "id": "d3fc15bb-1071-4e95-9f63-1e87a74f5dad",
+  "version": "2.0",
+  "name": "kakao channel message sending",
+  "url": "https://center-pf.kakao.com",
+  "tests": [{
+    "id": "53154cf7-d807-42fd-b13b-e4deb3e1a291",
+    "name": "메시지 발송 테스트",
+    "commands": [{
+      "id": "2b20c900-53be-4d27-8f95-5bcc39a467ae",
+      "comment": "",
+      "command": "open",
+      "target": "https://accounts.kakao.com/login/kakaobusiness?continue=https://business.kakao.com/dashboard/?sid%3Dpfr",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "dd8e86f1-33c0-4079-a190-411bc9ff9960",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "517x770",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "32e806cc-6c14-43b8-aa95-ae9feff74a05",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_email_2",
+      "targets": [
+        ["id=id_email_2", "id"],
+        ["name=email", "name"],
+        ["css=#id_email_2", "css:finder"],
+        ["xpath=//input[@id='id_email_2']", "xpath:attributes"],
+        ["xpath=//div[@id='loginEmailField']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "98bc76eb-a812-46b4-8ab1-56bd86e24af1",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_email_2",
+      "targets": [
+        ["id=id_email_2", "id"],
+        ["name=email", "name"],
+        ["css=#id_email_2", "css:finder"],
+        ["xpath=//input[@id='id_email_2']", "xpath:attributes"],
+        ["xpath=//div[@id='loginEmailField']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "read8312101@naver.com"
+    }, {
+      "id": "5ea20667-08e7-4c0f-a8d2-fd5807ce2758",
+      "comment": "",
+      "command": "click",
+      "target": "id=id_password_3",
+      "targets": [
+        ["id=id_password_3", "id"],
+        ["name=password", "name"],
+        ["css=#id_password_3", "css:finder"],
+        ["xpath=//input[@id='id_password_3']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/fieldset/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f3178be8-1391-4e34-af9a-45b3582cad1b",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "id=id_password_3",
+      "targets": [
+        ["id=id_password_3", "id"],
+        ["name=password", "name"],
+        ["css=#id_password_3", "css:finder"],
+        ["xpath=//input[@id='id_password_3']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/fieldset/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "7ce6e48f-dc25-4db9-9870-998fe66e3d8c",
+      "comment": "",
+      "command": "type",
+      "target": "id=id_password_3",
+      "targets": [
+        ["id=id_password_3", "id"],
+        ["name=password", "name"],
+        ["css=#id_password_3", "css:finder"],
+        ["xpath=//input[@id='id_password_3']", "xpath:attributes"],
+        ["xpath=//form[@id='login-form']/fieldset/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "dmsqkrtk!101"
+    }, {
+      "id": "dc01c15c-0291-4c19-9b4d-ef7a9be20062",
+      "comment": "",
+      "command": "click",
+      "target": "css=.link_title",
+      "targets": [
+        ["css=.link_title", "css:finder"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/table/tbody/tr/td/div/div/strong/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')])[2]", "xpath:href"],
+        ["xpath=//strong/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e30a044f-3597-4b67-ae3f-9b147e7d678a",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=1:1채팅2",
+      "targets": [
+        ["linkText=1:1채팅2", "linkText"],
+        ["css=li:nth-child(3) > .link_snb", "css:finder"],
+        ["xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/_RdKNT/dashboard')])[11]", "xpath:href"],
+        ["xpath=//div/div/div[2]/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'1:1채팅2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3e8ef0bc-1084-4b3b-90d9-d67b461d8f74",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=채팅 목록",
+      "targets": [
+        ["linkText=채팅 목록", "linkText"],
+        ["css=.open li:nth-child(1) > .link_sub", "css:finder"],
+        ["xpath=//a[contains(text(),'채팅 목록')]", "xpath:link"],
+        ["xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/_RdKNT/chats')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'채팅 목록')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "7b631ab4-39ec-4b95-8e46-fd54bfb290fc",
+    "name": "메시지 발송 테스트2",
+    "commands": [{
+      "id": "4fb578df-0658-4fbd-8554-812978182bee",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3d8cb6df-ad68-4bee-b8b2-e5091bd7e820",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "517x770",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d3932db7-69b2-4bcc-9b88-00bc23e12827",
+      "comment": "",
+      "command": "click",
+      "target": "css=.tit_invite",
+      "targets": [
+        ["css=.tit_invite", "css:finder"],
+        ["xpath=//div[@id='kakaoBody']/div/div/div[2]/div/a/div/strong", "xpath:idRelative"],
+        ["xpath=//a/div/strong", "xpath:position"],
+        ["xpath=//strong[contains(.,'리드101송도학원')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5554885f-8d66-4f66-b649-64e226c64022",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a",
+      "targets": [
+        ["linkText=1:1채팅2", "linkText"],
+        ["css=.open > .link_snb", "css:finder"],
+        ["xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '/_RdKNT/dashboard')])[11]", "xpath:href"],
+        ["xpath=//div/div/div[2]/ul/li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'1:1채팅2')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a3494f1d-d9c2-4588-b8c9-602d5d119c4f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=채팅 목록",
+      "targets": [
+        ["linkText=채팅 목록", "linkText"],
+        ["css=.open li:nth-child(1) > .link_sub", "css:finder"],
+        ["xpath=//a[contains(text(),'채팅 목록')]", "xpath:link"],
+        ["xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/ul/li/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '/_RdKNT/chats')]", "xpath:href"],
+        ["xpath=//li[3]/ul/li/a", "xpath:position"],
+        ["xpath=//a[contains(.,'채팅 목록')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "61569063-5a47-4362-8900-4163135afb30",
+      "comment": "",
+      "command": "click",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f1322ace-e466-4ec7-8d0c-951bac99732b",
+      "comment": "",
+      "command": "type",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "이범각"
+    }, {
+      "id": "150a9d77-82f9-4625-b6f5-93cf023052f3",
+      "comment": "",
+      "command": "type",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "이범각"
+    }, {
+      "id": "64642018-4ebf-4fb0-b438-73f7bd6cb0df",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "25b8f97b-c678-47ca-85d7-097726001a4b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.txt_info:nth-child(1)",
+      "targets": [
+        ["css=.txt_info:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='mArticle']/div[2]/div[3]/div/div/li/a/div/div/p", "xpath:idRelative"],
+        ["xpath=//a/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'테스트')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win1697",
+      "windowTimeout": 2000
+    }, {
+      "id": "6fa055d1-0bf1-4f34-8665-23fa4cb0d2c2",
+      "comment": "",
+      "command": "storeWindowHandle",
+      "target": "root",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d7869649-fbdd-4c22-a094-5e8ce3e6a869",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win1697}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3202b81b-bf80-44a9-90ab-3fcfabc25198",
+      "comment": "",
+      "command": "click",
+      "target": "id=chatWrite",
+      "targets": [
+        ["id=chatWrite", "id"],
+        ["css=#chatWrite", "css:finder"],
+        ["xpath=//textarea[@id='chatWrite']", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "732fcd06-8117-4388-8f1e-b7bc956832fb",
+      "comment": "",
+      "command": "type",
+      "target": "id=chatWrite",
+      "targets": [
+        ["id=chatWrite", "id"],
+        ["css=#chatWrite", "css:finder"],
+        ["xpath=//textarea[@id='chatWrite']", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "abc"
+    }, {
+      "id": "8c9cbf2e-0d58-40bd-8749-11364c8d1754",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn_g",
+      "targets": [
+        ["css=.btn_g", "css:finder"],
+        ["xpath=(//button[@type='button'])[12]", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/button", "xpath:idRelative"],
+        ["xpath=//fieldset/button", "xpath:position"],
+        ["xpath=//button[contains(.,'전송')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7171b98f-e8a4-40f6-8a16-6f0118cf0f4a",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8de70197-ade9-4ab5-b72f-55acb8c5f64e",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "038311b3-a31c-4a28-adf1-41bd59155786",
+      "comment": "",
+      "command": "click",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "081301cc-6f7b-4c51-be44-ad5da21d2875",
+      "comment": "",
+      "command": "click",
+      "target": "css=.box_tf",
+      "targets": [
+        ["css=.box_tf", "css:finder"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div", "xpath:idRelative"],
+        ["xpath=//fieldset/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f583ac09-6112-4f69-80dc-5b8383dcf98c",
+      "comment": "",
+      "command": "type",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "이시은"
+    }, {
+      "id": "73a8eb1f-78f8-4c38-9edf-92fe5d41475e",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "name=keyword",
+      "targets": [
+        ["name=keyword", "name"],
+        ["css=.tf_g", "css:finder"],
+        ["xpath=//input[@name='keyword']", "xpath:attributes"],
+        ["xpath=//div[@id='mArticle']/div[2]/div/div[2]/form/fieldset/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "${KEY_ENTER}"
+    }, {
+      "id": "86455043-8a5b-4bd1-bdd9-876afdbe6f1c",
+      "comment": "",
+      "command": "click",
+      "target": "css=.txt_info:nth-child(1)",
+      "targets": [
+        ["css=.txt_info:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='mArticle']/div[2]/div[3]/div/div/li/a/div/div/p", "xpath:idRelative"],
+        ["xpath=//a/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'좋게')]", "xpath:innerText"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win4320",
+      "windowTimeout": 2000
+    }, {
+      "id": "4a273b58-9767-4bf5-9218-64113d8f512a",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win4320}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "21eb7468-7780-45a4-92fd-74274ebec883",
+      "comment": "",
+      "command": "click",
+      "target": "id=chatWrite",
+      "targets": [
+        ["id=chatWrite", "id"],
+        ["css=#chatWrite", "css:finder"],
+        ["xpath=//textarea[@id='chatWrite']", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d4fa6c49-1031-4adc-a0ef-0fa13cb69c53",
+      "comment": "",
+      "command": "type",
+      "target": "id=chatWrite",
+      "targets": [
+        ["id=chatWrite", "id"],
+        ["css=#chatWrite", "css:finder"],
+        ["xpath=//textarea[@id='chatWrite']", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "test"
+    }, {
+      "id": "f47838b1-cfa5-48aa-b566-8b1ac7f3266a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn_g",
+      "targets": [
+        ["css=.btn_g", "css:finder"],
+        ["xpath=(//button[@type='button'])[12]", "xpath:attributes"],
+        ["xpath=//div[@id='kakaoWrap']/div/div[2]/div/div[2]/div[2]/form/fieldset/button", "xpath:idRelative"],
+        ["xpath=//fieldset/button", "xpath:position"],
+        ["xpath=//button[contains(.,'전송')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "044085fa-43a6-4af0-a23a-ae6206da7ab8",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ae81339a-06f9-4802-9b80-b8754eb8a98f",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "daa14e61-4d4b-4411-99d2-0d70ef5c98a2",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "4d4b430a-de71-4270-af8a-695162a602c8",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["53154cf7-d807-42fd-b13b-e4deb3e1a291"]
+  }],
+  "urls": ["https://center-pf.kakao.com/"],
+  "plugins": []
+}
