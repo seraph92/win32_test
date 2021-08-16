@@ -142,7 +142,7 @@ class LogsModel(list):
         )
 
         self.model.setHorizontalHeaderLabels(
-            ["출입일시", "이름", "온도", "일시2", "등록일시", "전송일자", "전송버튼"]
+            ["출입일시", "이름", "온도", "일시2", "등록일시", "전송일시", "전송버튼"]
         )
         for data in self.data:
             self.model.appendRow(
@@ -170,7 +170,7 @@ class LogViewModel:
         self.dataInit()
 
         # event 할당
-        self.view.clicked.connect(self.removeConfirm)
+        #self.view.clicked.connect(self.removeConfirm)
         self.view.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )
