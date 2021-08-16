@@ -24,11 +24,14 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1001</width>
+     <width>1021</width>
      <height>761</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout" rowstretch="5,0,0" columnstretch="1,5">
+   <layout class="QGridLayout" name="gridLayout" rowstretch="8,0,2,0" columnstretch="2,8">
+    <item row="2" column="1">
+     <widget class="QTextEdit" name="logEdit"/>
+    </item>
     <item row="0" column="0">
      <widget class="QListView" name="msgListView"/>
     </item>
@@ -174,10 +177,11 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QLineEdit" name="lineEdit_2"/>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="conEdit"/>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QTextEdit" name="scrapLogEdit"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
