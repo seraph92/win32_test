@@ -1,5 +1,6 @@
 import sys
 from dbm import HistoryMgr
+import time
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
@@ -16,18 +17,18 @@ from PyQt5 import QtCore
 from PyQt5 import uic
 
 # signal processing importing
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
+from PyQt5.QtCore import QThread, pyqtSlot, pyqtSignal, QObject
 
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
 
-class LogsModel(list):
 
+class LogsModel(list):
     def __init__(self, l=[]):
         super().__init__()
 
-        #self.PAGE_SIZE = 20
+        # self.PAGE_SIZE = 20
         self.PAGE_SIZE = 15
         self.current_page = 1
 
@@ -39,7 +40,7 @@ class LogsModel(list):
         self.aggregation_model = QStandardItemModel()
         self.query_page()
 
-        '''
+        """
         mgr = HistoryMgr()
         self.total_page = mgr.query_total_page(self.PAGE_SIZE)
         self.item_data["total_page"] = self.total_page
@@ -62,13 +63,13 @@ class LogsModel(list):
         self.aggregation_model = QStandardItemModel()
 
         self.applyModel()
-        '''
+        """
 
     def query_page(self):
 
         mgr = HistoryMgr()
         self.total_page = mgr.query_total_page(self.PAGE_SIZE)
-        self.item_data['current_page'] = self.current_page
+        self.item_data["current_page"] = self.current_page
         self.item_data["total_page"] = self.total_page
 
         sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
@@ -84,33 +85,32 @@ class LogsModel(list):
 
         print(f"data = [{self.data}]")
 
-        #self.model = QStandardItemModel()
-        #self.aggregation_model = QStandardItemModel()
+        # self.model = QStandardItemModel()
+        # self.aggregation_model = QStandardItemModel()
         self.model.clear()
         self.model.setColumnCount(7)
         self.aggregation_model.clear()
 
         self.applyModel()
 
-
     def before_page(self):
-        self.current_page -=1
+        self.current_page -= 1
         if self.current_page < 1:
             self.current_page = 1
 
         print(f"before current_page=[{self.current_page}]")
-        #self.model.clear()
-        #self.aggregation_model.clear()
+        # self.model.clear()
+        # self.aggregation_model.clear()
         self.query_page()
 
     def next_page(self):
-        self.current_page +=1
+        self.current_page += 1
         if self.current_page > self.total_page:
             self.current_page = self.total_page
 
         print(f"next current_page=[{self.current_page}]")
-        #self.model.clear()
-        #self.aggregation_model.clear()
+        # self.model.clear()
+        # self.aggregation_model.clear()
         self.query_page()
 
     def remove(self, idx):
@@ -132,11 +132,13 @@ class LogsModel(list):
 
     def applyModel(self):
 
-        print(f"Page: {self.item_data['current_page']} / {self.item_data['total_page']}")
+        print(
+            f"Page: {self.item_data['current_page']} / {self.item_data['total_page']}"
+        )
 
         self.aggregation_model.appendRow(
             [
-                #QStandardItem(f"{self.item_data['current_page']} / {self.item_data['total_page']}"),
+                # QStandardItem(f"{self.item_data['current_page']} / {self.item_data['total_page']}"),
                 QStandardItem(f"{self.current_page} / {self.item_data['total_page']}"),
             ]
         )
@@ -157,30 +159,58 @@ class LogsModel(list):
                 ]
             )
 
+
 class LogViewModel:
-    def __init__(self, view, model):
-        self.view = view["table_view"]
-        self.item_view = view["item_view"]
-        self.view = view["table_view"]
+    def __init__(self, views, models):
+        self.view = views["table_view"]
+        self.item_view = views["item_view"]
+        self.view = views["table_view"]
 
         self.mapper = QDataWidgetMapper()
-        self.mapper.setModel(model.aggregation_model)
+        self.mapper.setModel(models["logModel"].aggregation_model)
 
-        self.model = model
+        self.model = models["logModel"]
         self.dataInit()
 
         # event 할당
-        #self.view.clicked.connect(self.removeConfirm)
+        # self.view.clicked.connect(self.removeConfirm)
         self.view.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )
 
-        view["before_button"].clicked.connect(self.before_page)
-        view["before_button2"].clicked.connect(self.before_page)
-        view["next_button"].clicked.connect(self.next_page)
-        view["next_button2"].clicked.connect(self.next_page)
+        views["before_button"].clicked.connect(self.before_page)
+        views["before_button2"].clicked.connect(self.before_page)
+        views["next_button"].clicked.connect(self.next_page)
+        views["next_button2"].clicked.connect(self.next_page)
 
-        #self.view
+        ## TO-DO
+        # Log Capturing Thread가 동작하고
+        # 로그는 DB에 적재 되며, 새롭게 적재될때 데이터 모델이 새로 반영되어야 한다.
+        # Thread가 살아 있다면 capLogEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
+        # 1 - create Worker and Thread inside the Form
+        self.log_capture_obj = LogCaptureWorker()  # no parent!
+        self.thread = QThread()  # no parent!
+        # 2 - Connect Worker`s Signals to Form method slots to post data.
+        # self.log_catpure_obj.ticReady.connect(self.ticReady)
+        # 3 - Move the Worker object to the Thread object
+        self.log_capture_obj.moveToThread(self.thread)
+        # 4 - Connect Worker Signals to the Thread slots
+        self.log_capture_obj.finished.connect(self.thread.quit)
+        # 5 - Connect Thread started signal to Worker operational slot method
+        self.thread.started.connect(self.log_capture_obj.run)
+        # * - Thread finished signal will close the app if you want!
+        # self.thread.finished.connect(app.exit)
+        # 6 - Start the thread
+        self.thread.start()
+
+        # self.th_log_capture = Worker()
+
+        ## TO-DO
+        # Channel Message 전송 Thread가 동작하고
+        # 처리과정은 logEdit로 보내져야 한다.
+        # Thread가 살아 있다면 logEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
+
+        # self.view
         # self.model.onDataChange.connect(self.adjustColumnSize)
 
         # self.view.resizeColumnsToContents()
@@ -216,6 +246,39 @@ class LogViewModel:
             self.model.remove(idx)
 
 
+class LogCaptureWorker(QObject):
+    finished = pyqtSignal()
+    ticReady = pyqtSignal(int)
+    response = pyqtSignal()
+
+    def __init__(self):
+        self.loop = True
+
+    @pyqtSlot()
+    def run(self):  # A slot takes no params
+        while self.loop:
+            time.sleep(1)
+            self.ticReady.emit(i)
+            self.response.emit()
+
+        self.finished.emit()
+
+
+# class Worker(QThread):
+#     finished = pyqtSignal(int)
+#     intReady = pyqtSignal(int, int)
+#     doing = pyqtSignal(str)
+
+#     def __init__(self, parent=None):
+#         super(Worker, self).__init__(parent)
+#         self.working = True
+
+#     def run(self):
+#         while self.working:
+#             self.doing.emit("doing")
+#             self.sleep(1)
+
+
 class MainWindow(QMainWindow, ui_form):
     def __init__(self):
         super().__init__()
@@ -229,11 +292,15 @@ class MainWindow(QMainWindow, ui_form):
         self.views["next_button"] = self.nextBtn
         self.views["next_button2"] = self.nextBtn2
 
-        self.logsModel = LogsModel()
-        #self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
-        self.logViewModel = LogViewModel(self.views, self.logsModel)
+        self.models = {}
+        self.models["logModel"] = LogsModel()
 
-        #QDataWidgetMapper
+        # self.logsModel = LogsModel()
+        # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
+        # self.logViewModel = LogViewModel(self.views, self.logsModel)
+        self.logViewModel = LogViewModel(self.views, self.models)
+
+        # QDataWidgetMapper
 
         self.adjustColumnSize()
 
@@ -259,9 +326,30 @@ class MainWindow(QMainWindow, ui_form):
         self.move(qr.topLeft())
 
 
+def uac_require():
+    asadmin = "asadmin"
+    try:
+        if sys.argv[-1] != asadmin:
+            script = os.path.abspath(sys.argv[0])
+            params = " ".join([script] + sys.argv[1:] + [asadmin])
+            shell.ShellExecuteEx(
+                lpVerb="runas", lpFile=sys.executable, lpParameters=params
+            )
+            sys.exit()
+        return True
+    except:
+        return False
+
+
 if __name__ == "__main__":
+    if uac_require():
+        INFO("continue")
+    else:
+        ERROR("error message")
+
     app = QApplication(sys.argv)
     myWindow = MainWindow()
     myWindow.setWindowTitle("Log Monitor")
     # myWindow.show()
+    # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
     app.exec_()
