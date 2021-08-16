@@ -3,6 +3,7 @@
 import time
 import json
 from selenium import webdriver
+import selenium
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -10,6 +11,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+from Config import CONFIG
 
 class ChannelMessageSending():
 
@@ -42,8 +45,40 @@ class ChannelMessageSending():
     self.driver.get("https://center-pf.kakao.com/")
     # 2 | setWindowSize | 517x770 | 
     self.driver.set_window_size(517, 770)
+
+    ## 로그인 분기처리
+    # accounts.kakao.com/login
+    url = self.driver.current_url
+    print(f"url = [{url}]")
+
+    if 'accounts.kakao.com/login' in self.driver.current_url:
+      # 로그인 처리 필요
+      print(f"로그인 필요!!")
+      # 3 | click | id=id_email_2 | 
+      self.driver.find_element(By.ID, "id_email_2").click()
+      # 4 | type | id=id_email_2 | read8312101@naver.com
+      self.driver.find_element(By.ID, "id_email_2").send_keys("read8312101@naver.com")
+      # 5 | click | id=id_password_3 | 
+      self.driver.find_element(By.ID, "id_password_3").click()
+      # 6 | sendKeys | id=id_password_3 | ${KEY_ENTER}
+      self.driver.find_element(By.ID, "id_password_3").send_keys(Keys.ENTER)
+      # 7 | type | id=id_password_3 | dmsqkrtk!101
+      self.driver.find_element(By.ID, "id_password_3").send_keys("dmsqkrtk!101")
+
+
+    self.driver.find_element(By.XPATH, "//strong[contains(.,\'리드101송도학원\')]").click()
     # 3 | click | css=.tit_invite | 
-    self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+    #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+
+    # if title:
+    #   ## 로그인 되어 있음
+    #   print(f"로그인 되어 있음!!")
+    # else:
+    #   ## 로그인 해야 함
+    #   print(f"로그인 해야함")
+
+    self.driver.close()
+
     # 4 | click | xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a | 
     self.driver.find_element(By.XPATH, "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a").click()
     # 5 | click | linkText=채팅 목록 | 
