@@ -1,7 +1,4 @@
-import os
 import sys
-import win32com.shell.shell as shell
-
 from dbm import HistoryMgr
 import time
 import traceback
@@ -12,74 +9,21 @@ from PyQt5.QtWidgets import (
     QDesktopWidget,
     QHeaderView,
     QLineEdit,
-    QListView,
     QMainWindow,
     QApplication,
     QMessageBox,
     QTableView,
-    QTextEdit,
 )
 from PyQt5 import QtCore
 from PyQt5 import uic
 
 # signal processing importing
-from PyQt5.QtCore import (
-    QModelIndex,
-    QRunnable,
-    QThread,
-    QThreadPool,
-    pyqtSlot,
-    pyqtSignal,
-    QObject,
-)
+from PyQt5.QtCore import QRunnable, QThread, QThreadPool, pyqtSlot, pyqtSignal, QObject
 
-from LogCapture import LogCaptureWin32Worker
+from LogCapture import LogCaptureWin32, log_capture_main
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
-
-
-class MsgsModel(list):
-    def __init__(self, l=[]):
-        super().__init__()
-
-        self.data = []
-        self.model = QStandardItemModel()
-
-    def applyModel(self):
-        self.model.clear()
-        for data in self.data:
-            self.model.appendRow(
-                [
-                    QStandardItem(data["user"]),
-                    QStandardItem(data["message"]),
-                ]
-            )
-
-    def add_msg(self, d):
-        enter_exit = "등원" if d["rnk"] % 2 else "하원"
-        INFO(f"rank = {d['rnk']} = {enter_exit}")
-        msg = {
-            "user": d["name"],
-            "message": f"[{d['dtm']}] {d['name']}학생이 리드101송도학원에 { enter_exit }하였습니다.",
-        }
-
-        INFO(f"msg = [{msg}]")
-
-        # 기 발송 검증
-        if d["send_dtm"]:
-            return
-
-        # 중복 검증
-        # {k: v for k, v in my_dict.items() if int(v) > 2000}
-        # INFO(f"data = [{self.data}]")
-        names = (data["user"] for data in self.data)
-        # INFO(f"names = [{names}]")
-        if d["name"] in names:
-            return
-
-        self.data.append(msg)
-        self.applyModel()
 
 
 class LogsModel(list):
@@ -130,7 +74,7 @@ class LogsModel(list):
         self.item_data["current_page"] = self.current_page
         self.item_data["total_page"] = self.total_page
 
-        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm \n"
+        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
         sql += f"FROM inout_history \n"
         sql += f"WHERE \n"
         sql += f"name like '%%'\n"
@@ -150,9 +94,6 @@ class LogsModel(list):
         self.aggregation_model.clear()
 
         self.applyModel()
-
-    def getRows(self, idx):
-        return self.data[idx]
 
     def before_page(self):
         self.current_page -= 1
@@ -205,7 +146,7 @@ class LogsModel(list):
         )
 
         self.model.setHorizontalHeaderLabels(
-            ["출입일시", "이름", "온도", "일시2", "등록일시", "등하원", "전송일시"]
+            ["출입일시", "이름", "온도", "일시2", "등록일시", "전송일시", "전송버튼"]
         )
         for data in self.data:
             self.model.appendRow(
@@ -215,8 +156,8 @@ class LogsModel(list):
                     QStandardItem(data["temper"]),
                     QStandardItem(data["dtm2"]),
                     QStandardItem(data["reg_dtm"]),
-                    QStandardItem("등원" if data["rnk"] % 2 else "하원"),
                     QStandardItem(data["send_dtm"]),
+                    QStandardItem(""),
                 ]
             )
 
@@ -227,17 +168,15 @@ class LogViewModel:
         self.log_capture_loop = None
         self.views = views
 
-        self.view: QTableView = views["table_view"]
-        self.msg_view: QListView = views["msg_view"]
-        self.item_view: QLineEdit = views["item_view"]
-        # self.view = views["table_view"]
-        self.scrap_log_edit: QTextEdit = views["scrap_log_edit"]
+        self.view = views["table_view"]
+        self.item_view = views["item_view"]
+        self.view = views["table_view"]
+        self.scrap_log_edit = views['scrap_log_edit']
 
         self.mapper = QDataWidgetMapper()
-        self.mapper.setModel(models["log_model"].aggregation_model)
+        self.mapper.setModel(models["logModel"].aggregation_model)
 
-        self.model: LogsModel = models["log_model"]
-        self.msg_model: MsgsModel = models["msg_model"]
+        self.model = models["logModel"]
         self.dataInit()
 
         # event 할당
@@ -250,68 +189,80 @@ class LogViewModel:
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
-
-        self.view.doubleClicked.connect(self.add_msg)
-
         # 두개의 thread를 위한 threadpool 생성
-        self.thread = QThread()
-        self.worker = LogCaptureWin32Worker()
-        self.worker.moveToThread(self.thread)
-
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        # self.worker.progress.connect(self.reportProgress)
-
-        self.thread.started.connect(
-            lambda: self.views["log_edit"].setStyleSheet("background: rightblue")
-        )
-        self.thread.finished.connect(
-            lambda: self.views["log_edit"].setStyleSheet("background-color: #f5d6c1;")
+        self.threadpool = QThreadPool()
+        INFO(
+            "Multithreading with maximum %d threads" % self.threadpool.maxThreadCount()
         )
 
-        # Step 6: Start the thread
-        self.thread.start()
+        self.logCapture = LogCaptureWin32()
+        # 중복 로그는 남기지 않음
+        #self.logCapture.dupped.connect(self.dup_handle)
+        self.logCapture.inserted.connect(self.inserted_handle)
+
+        # self.do_work(self.log_capture_fn)
+        self.do_work(self.log_capture_fn)
+
+        #self.log_capture_th = QThread(self.parent)
+        #logCapture = LogCaptureWin32()
+        #logCapture.moveToThread(self.log_capture_th)
+        #self.log_capture_th.start()
 
         ## TO-DO
         # Channel Message 전송 Thread가 동작하고
         # 처리과정은 logEdit로 보내져야 한다.
         # Thread가 살아 있다면 logEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
 
-        # 중복 로그는 남기지 않음
-        self.worker.dupped.connect(self.dup_handle)
-        self.worker.inserted.connect(self.inserted_handle)
+        # self.view
+        # self.model.onDataChange.connect(self.adjustColumnSize)
+
+        # self.view.resizeColumnsToContents()
+        # self.view.setColumnWidth(2, 50)
 
     def __del__(self):
-        # self.logCapture.loop_flag = False
+        #self.logCapture.loop_flag = False
         print(f"LogViewModel destroyed!!")
 
-    def add_msg(self, model):
-        row = self.view.currentIndex().row()
-        # column = self.view.currentIndex().column()
-        rows = self.model.getRows(row)
-        DEBUG(f"rows = [{rows}]")
-        self.msg_model.add_msg(rows)
+    # thread를 만들어 pool에 추가한다.
+    def do_work(self, _fn, *args, **kwargs):
+        # Pass the function to execute
+        worker = Worker(
+            # self.log_capture_fn
+            _fn
+        )  # Any other args, kwargs are passed to the run function
+        worker.setAutoDelete(True)
+
+        if "result_signal_handler" in kwargs:
+            worker.signals.result.connect(kwargs["result_signal_handler"])
+
+        if "finished_signal_handler" in kwargs:
+            worker.signals.finished.connect(kwargs["finished_signal_handler"])
+
+        if "progress_signal_handler" in kwargs:
+            worker.signals.progress.connect(kwargs["progress_signal_handler"])
+
+        # Execute
+        self.threadpool.start(worker)
+
+    def log_capture_fn(self, progress_callback):
+        #self.log_capture_loop = logCapture.loop_flag
+        self.logCapture.run()
+        #log_capture_main()
+            # progress_callback.emit(n * 100 / 4)
+
+        return "Done."
 
     # scrap시 dup발생시 호출되는 함수
     def dup_handle(self, strlog, error):
-        # self.scrap_log_edit.append(f"[{strlog}]-[{error}]")
-        self.views["log_edit"].append(f"[{strlog}]-[{error}]")
-        self.views["log_edit"].verticalScrollBar().setValue(
-            self.views["log_edit"].verticalScrollBar().maximum()
-        )
+        #self.scrap_log_edit.append(f"[{strlog}]-[{error}]")
+        self.views['log_edit'].append(f"[{strlog}]-[{error}]")
 
     # scrap시 insert발생시 호출되는 함수
     def inserted_handle(self, strlog):
-        self.views["log_edit"].append(f"[{strlog}]")
-        self.views["log_edit"].verticalScrollBar().setValue(
-            self.views["log_edit"].verticalScrollBar().maximum()
-        )
+        self.views['log_edit'].append(f"[{strlog}]")
 
     def dataInit(self):
         self.view.setModel(self.model.model)
-        self.msg_view.setModel(self.msg_model.model)
         self.mapper.addMapping(self.item_view, 0)
         self.mapper.toFirst()
 
@@ -340,30 +291,86 @@ class LogViewModel:
             self.model.remove(idx)
 
 
-# class Worker(QObject):
+# class LogCaptureWorker(QObject):
 #     finished = pyqtSignal()
-#     error = pyqtSignal(tuple)
-#     result = pyqtSignal(object)
-#     progress = pyqtSignal()
+#     ticReady = pyqtSignal(int)
+#     response = pyqtSignal()
 
-#     def __init__(self, *args, **kwargs):
-#         super(QObject, self).__init__()
-
-#         # Store constructor arguments (re-used for processing)
-#         self.args = args
-#         self.kwargs = kwargs
-#         self.isRunning = True
+#     def __init__(self):
+#         self.loop = True
 
 #     @pyqtSlot()
-#     def run(self):
-#         while self.isRunning:
-#             self.progress.emit()
+#     def run(self):  # A slot takes no params
+#         while self.loop:
+#             time.sleep(1)
+#             self.ticReady.emit(i)
+#             self.response.emit()
 
 #         self.finished.emit()
 
-#     @pyqtSlot()
-#     def stop(self):
-#         self.isRunning = False
+
+class WorkerSignals(QObject):
+    """
+    Defines the signals available from a running worker thread.
+    Supported signals are:
+    finished
+        No data
+    error
+        tuple (exctype, value, traceback.format_exc() )
+    result
+        object data returned from processing, anything
+    progress
+        int indicating % progress
+    """
+
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+
+
+class Worker(QRunnable):
+    """
+    Worker thread
+    Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
+    :param callback: The function callback to run on this worker thread. Supplied args and
+                     kwargs will be passed through to the runner.
+    :type callback: function
+    :param args: Arguments to pass to the callback function
+    :param kwargs: Keywords to pass to the callback function
+
+    """
+
+    def __init__(self, fn, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+        # Add the callback to our kwargs
+        if "progress_callback" not in self.kwargs:
+            self.kwargs["progress_callback"] = self.signals.progress
+
+    @pyqtSlot()
+    def run(self):
+        """
+        Initialise the runner function with passed args, kwargs.
+        """
+
+        # Retrieve args/kwargs here; and fire processing using them
+        try:
+            result = self.fn(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.result.emit(result)  # Return the result of the processing
+        finally:
+            self.signals.finished.emit()  # Done
 
 
 class MainWindow(QMainWindow, ui_form):
@@ -373,7 +380,6 @@ class MainWindow(QMainWindow, ui_form):
 
         self.views = {}
         self.views["table_view"] = self.logTableView
-        self.views["msg_view"] = self.msgListView
         self.views["item_view"] = self.pageEdit
         self.views["before_button"] = self.beforeBtn
         self.views["before_button2"] = self.beforeBtn2
@@ -383,13 +389,13 @@ class MainWindow(QMainWindow, ui_form):
         self.views["log_edit"] = self.logEdit
 
         self.models = {}
-        self.models["log_model"] = LogsModel()
-        self.models["msg_model"] = MsgsModel()
+        self.models["logModel"] = LogsModel()
 
         # self.logsModel = LogsModel()
         # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
         # self.logViewModel = LogViewModel(self.views, self.logsModel)
         self.logViewModel = LogViewModel(self, self.views, self.models)
+
 
         # QDataWidgetMapper
 
@@ -419,22 +425,24 @@ class MainWindow(QMainWindow, ui_form):
 
 def uac_require():
     asadmin = "asadmin"
-    # try:
-    if sys.argv[-1] != asadmin:
-        script = os.path.abspath(sys.argv[0])
-        params = " ".join([script] + sys.argv[1:] + [asadmin])
-        shell.ShellExecuteEx(lpVerb="runas", lpFile=sys.executable, lpParameters=params)
-        sys.exit(0)
-    return True
-    # except:
-    #    return False
+    try:
+        if sys.argv[-1] != asadmin:
+            script = os.path.abspath(sys.argv[0])
+            params = " ".join([script] + sys.argv[1:] + [asadmin])
+            shell.ShellExecuteEx(
+                lpVerb="runas", lpFile=sys.executable, lpParameters=params
+            )
+            sys.exit()
+        return True
+    except:
+        return False
 
 
 if __name__ == "__main__":
-    # if uac_require():
-    #    INFO("continue")
-    # else:
-    #    ERROR("error message")
+    if uac_require():
+        INFO("continue")
+    else:
+        ERROR("error message")
 
     app = QApplication(sys.argv)
     myWindow = MainWindow()

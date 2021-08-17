@@ -3,6 +3,7 @@
 import time
 import json
 import re
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from selenium import webdriver
 import selenium
@@ -18,8 +19,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from Config import CONFIG
 
 
-class ChannelMessageSending:
+class ChannelMessageSending(QObject):
+    finished = pyqtSignal()
+    inserted = pyqtSignal(str)
+    dupped = pyqtSignal(str, str)
+    in_processing = pyqtSignal(int)
+
     def __init__(self, user):
+        super().__init__()
+        self.loop_flag = True
+
         self.setup_method()
         self.users = []
         self.users.append(user)

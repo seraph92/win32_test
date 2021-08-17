@@ -10,6 +10,9 @@ import sqlite3
 
 from BKLOG import *
 
+# GLOBAL_WIN = "AGENT"
+GLOBAL_WIN = "EDIT"
+
 
 class HistoryMgr:
     # SELECT strftime('%Y-%m-%d %H:%M:%S','now') as dtm, strftime('%Y-%m-%d %H:%M:%f','now') as udtm, strftime('%s','now') as unixdtm, date('now') as dt
@@ -129,7 +132,7 @@ def monitoring(edit_control, loop_flag=True):
         DEBUG(f"line_cnt:[{line_cnt}]")
 
         for i in range(0, line_cnt):
-            #INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
+            # INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
             log_processing(processing_pattern, edit_control.get_line(i))
         DEBUG("")
         time.sleep(3)
@@ -172,18 +175,21 @@ def log_capture_main():
     # print(f"메모장내용:[{logwin.text_block()}]")
     # print(f"메모장내용:[{logwin.window_text()}]")
 
-class LogCaptureWin32(QObject):
+
+class LogCaptureWin32Worker(QObject):
     finished = pyqtSignal()
     inserted = pyqtSignal(str)
-    dupped   = pyqtSignal(str, str)
+    dupped = pyqtSignal(str, str)
     in_processing = pyqtSignal(int)
 
     def __init__(self):
-        super(QObject, self).__init__()
+        super().__init__()
 
         self.loop_flag = True
-        self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
-        # w = WindowsObject("sample.txt - Windows 메모장")
+        if GLOBAL_WIN == "AGENT":
+            self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+        else:
+            self.w = WindowsObject("sample.txt - Windows 메모장")
 
         DEBUG(f"w={self.w.win_objs}")
         DEBUG("w.handle,text=[%08X][%s]" % (self.w.obj["handle"], self.w.obj["text"]))
@@ -194,14 +200,18 @@ class LogCaptureWin32(QObject):
         self.dig = self.app.window(handle=self.hwnd)
         # dig.print_control_identifiers()
 
-        self.logwin = self.dig.child_window(
-            class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
-        )
-        # self.logwin = self.dig.child_window(class_name="Edit")
+        if GLOBAL_WIN == "AGENT":
+            self.logwin = self.dig.child_window(
+                class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
+            )
+        else:
+            self.logwin = self.dig.child_window(class_name="Edit")
 
         # result = monitoring(logwin)
 
-    #def monitoring(edit_control, loop_flag=True):
+    def stop(self):
+        self.loop_flag = False
+
     def run(self):
         edit_control = self.logwin
 
@@ -286,6 +296,6 @@ if __name__ == "__main__":
         INFO("continue")
     else:
         ERROR("error message")
-    logCapture = LogCaptureWin32()
+    logCapture = LogCaptureWin32Worker()
     logCapture.run()
-    #log_capture_main()
+    # log_capture_main()
