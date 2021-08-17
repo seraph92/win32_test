@@ -1,6 +1,7 @@
 import sys
 from dbm import HistoryMgr
 import time
+import traceback
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
@@ -17,8 +18,9 @@ from PyQt5 import QtCore
 from PyQt5 import uic
 
 # signal processing importing
-from PyQt5.QtCore import QThread, pyqtSlot, pyqtSignal, QObject
+from PyQt5.QtCore import QRunnable, QThread, QThreadPool, pyqtSlot, pyqtSignal, QObject
 
+from LogCapture import log_capture_main
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
@@ -183,25 +185,33 @@ class LogViewModel:
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
 
+        # 두개의 thread를 위한 threadpool 생성
+        self.threadpool = QThreadPool()
+        INFO(
+            "Multithreading with maximum %d threads" % self.threadpool.maxThreadCount()
+        )
+
+        # self.do_work(self.log_capture_fn)
+        self.do_work(self.log_capture_fn)
         ## TO-DO
         # Log Capturing Thread가 동작하고
         # 로그는 DB에 적재 되며, 새롭게 적재될때 데이터 모델이 새로 반영되어야 한다.
         # Thread가 살아 있다면 capLogEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
         # 1 - create Worker and Thread inside the Form
-        self.log_capture_obj = LogCaptureWorker()  # no parent!
-        self.thread = QThread()  # no parent!
+        # self.log_capture_obj = LogCaptureWorker()  # no parent!
+        # self.thread = QThread()  # no parent!
         # 2 - Connect Worker`s Signals to Form method slots to post data.
         # self.log_catpure_obj.ticReady.connect(self.ticReady)
         # 3 - Move the Worker object to the Thread object
-        self.log_capture_obj.moveToThread(self.thread)
+        # self.log_capture_obj.moveToThread(self.thread)
         # 4 - Connect Worker Signals to the Thread slots
-        self.log_capture_obj.finished.connect(self.thread.quit)
+        # self.log_capture_obj.finished.connect(self.thread.quit)
         # 5 - Connect Thread started signal to Worker operational slot method
-        self.thread.started.connect(self.log_capture_obj.run)
+        # self.thread.started.connect(self.log_capture_obj.run)
         # * - Thread finished signal will close the app if you want!
         # self.thread.finished.connect(app.exit)
         # 6 - Start the thread
-        self.thread.start()
+        # self.thread.start()
 
         # self.th_log_capture = Worker()
 
@@ -215,6 +225,35 @@ class LogViewModel:
 
         # self.view.resizeColumnsToContents()
         # self.view.setColumnWidth(2, 50)
+
+    # thread를 반들어 pool에 추가한다.
+    def do_work(self, _fn, *args, **kwargs):
+        # Pass the function to execute
+        worker = Worker(
+            # self.log_capture_fn
+            _fn
+        )  # Any other args, kwargs are passed to the run function
+
+        if "result_signal_handler" in kwargs:
+            worker.signals.result.connect(kwargs["result_signal_handler"])
+
+        if "finished_signal_handler" in kwargs:
+            worker.signals.finished.connect(kwargs["finished_signal_handler"])
+
+        if "progress_signal_handler" in kwargs:
+            worker.signals.progress.connect(kwargs["progress_signal_handler"])
+
+        # Execute
+        self.threadpool.start(worker)
+
+    def log_capture_fn(self, progress_callback):
+        while True:
+            time.sleep(1)
+            print(f"[{progress_callback}]호출되고 있어")
+            log_capture_main()
+            # progress_callback.emit(n * 100 / 4)
+
+        return "Done."
 
     def dataInit(self):
         self.view.setModel(self.model.model)
@@ -262,6 +301,78 @@ class LogCaptureWorker(QObject):
             self.response.emit()
 
         self.finished.emit()
+
+
+class WorkerSignals(QObject):
+    """
+    Defines the signals available from a running worker thread.
+
+    Supported signals are:
+
+    finished
+        No data
+
+    error
+        tuple (exctype, value, traceback.format_exc() )
+
+    result
+        object data returned from processing, anything
+
+    progress
+        int indicating % progress
+
+    """
+
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+
+
+class Worker(QRunnable):
+    """
+    Worker thread
+
+    Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
+
+    :param callback: The function callback to run on this worker thread. Supplied args and
+                     kwargs will be passed through to the runner.
+    :type callback: function
+    :param args: Arguments to pass to the callback function
+    :param kwargs: Keywords to pass to the callback function
+
+    """
+
+    def __init__(self, fn, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()
+
+        # Add the callback to our kwargs
+        if "progress_callback" not in self.kwargs:
+            self.kwargs["progress_callback"] = self.signals.progress
+
+    @pyqtSlot()
+    def run(self):
+        """
+        Initialise the runner function with passed args, kwargs.
+        """
+
+        # Retrieve args/kwargs here; and fire processing using them
+        try:
+            result = self.fn(*self.args, **self.kwargs)
+        except:
+            traceback.print_exc()
+            exctype, value = sys.exc_info()[:2]
+            self.signals.error.emit((exctype, value, traceback.format_exc()))
+        else:
+            self.signals.result.emit(result)  # Return the result of the processing
+        finally:
+            self.signals.finished.emit()  # Done
 
 
 # class Worker(QThread):
