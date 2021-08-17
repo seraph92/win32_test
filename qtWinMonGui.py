@@ -20,7 +20,7 @@ from PyQt5 import uic
 # signal processing importing
 from PyQt5.QtCore import QRunnable, QThread, QThreadPool, pyqtSlot, pyqtSignal, QObject
 
-from LogCapture import log_capture_main
+from LogCapture import LogCaptureWin32, log_capture_main
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
@@ -163,10 +163,15 @@ class LogsModel(list):
 
 
 class LogViewModel:
-    def __init__(self, views, models):
+    def __init__(self, parent, views, models):
+        self.parent = parent
+        self.log_capture_loop = None
+        self.views = views
+
         self.view = views["table_view"]
         self.item_view = views["item_view"]
         self.view = views["table_view"]
+        self.scrap_log_edit = views['scrap_log_edit']
 
         self.mapper = QDataWidgetMapper()
         self.mapper.setModel(models["logModel"].aggregation_model)
@@ -184,36 +189,24 @@ class LogViewModel:
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
-
         # 두개의 thread를 위한 threadpool 생성
         self.threadpool = QThreadPool()
         INFO(
             "Multithreading with maximum %d threads" % self.threadpool.maxThreadCount()
         )
 
+        self.logCapture = LogCaptureWin32()
+        # 중복 로그는 남기지 않음
+        #self.logCapture.dupped.connect(self.dup_handle)
+        self.logCapture.inserted.connect(self.inserted_handle)
+
         # self.do_work(self.log_capture_fn)
         self.do_work(self.log_capture_fn)
-        ## TO-DO
-        # Log Capturing Thread가 동작하고
-        # 로그는 DB에 적재 되며, 새롭게 적재될때 데이터 모델이 새로 반영되어야 한다.
-        # Thread가 살아 있다면 capLogEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
-        # 1 - create Worker and Thread inside the Form
-        # self.log_capture_obj = LogCaptureWorker()  # no parent!
-        # self.thread = QThread()  # no parent!
-        # 2 - Connect Worker`s Signals to Form method slots to post data.
-        # self.log_catpure_obj.ticReady.connect(self.ticReady)
-        # 3 - Move the Worker object to the Thread object
-        # self.log_capture_obj.moveToThread(self.thread)
-        # 4 - Connect Worker Signals to the Thread slots
-        # self.log_capture_obj.finished.connect(self.thread.quit)
-        # 5 - Connect Thread started signal to Worker operational slot method
-        # self.thread.started.connect(self.log_capture_obj.run)
-        # * - Thread finished signal will close the app if you want!
-        # self.thread.finished.connect(app.exit)
-        # 6 - Start the thread
-        # self.thread.start()
 
-        # self.th_log_capture = Worker()
+        #self.log_capture_th = QThread(self.parent)
+        #logCapture = LogCaptureWin32()
+        #logCapture.moveToThread(self.log_capture_th)
+        #self.log_capture_th.start()
 
         ## TO-DO
         # Channel Message 전송 Thread가 동작하고
@@ -226,13 +219,18 @@ class LogViewModel:
         # self.view.resizeColumnsToContents()
         # self.view.setColumnWidth(2, 50)
 
-    # thread를 반들어 pool에 추가한다.
+    def __del__(self):
+        #self.logCapture.loop_flag = False
+        print(f"LogViewModel destroyed!!")
+
+    # thread를 만들어 pool에 추가한다.
     def do_work(self, _fn, *args, **kwargs):
         # Pass the function to execute
         worker = Worker(
             # self.log_capture_fn
             _fn
         )  # Any other args, kwargs are passed to the run function
+        worker.setAutoDelete(True)
 
         if "result_signal_handler" in kwargs:
             worker.signals.result.connect(kwargs["result_signal_handler"])
@@ -247,13 +245,21 @@ class LogViewModel:
         self.threadpool.start(worker)
 
     def log_capture_fn(self, progress_callback):
-        while True:
-            time.sleep(1)
-            print(f"[{progress_callback}]호출되고 있어")
-            log_capture_main()
+        #self.log_capture_loop = logCapture.loop_flag
+        self.logCapture.run()
+        #log_capture_main()
             # progress_callback.emit(n * 100 / 4)
 
         return "Done."
+
+    # scrap시 dup발생시 호출되는 함수
+    def dup_handle(self, strlog, error):
+        #self.scrap_log_edit.append(f"[{strlog}]-[{error}]")
+        self.views['log_edit'].append(f"[{strlog}]-[{error}]")
+
+    # scrap시 insert발생시 호출되는 함수
+    def inserted_handle(self, strlog):
+        self.views['log_edit'].append(f"[{strlog}]")
 
     def dataInit(self):
         self.view.setModel(self.model.model)
@@ -285,42 +291,36 @@ class LogViewModel:
             self.model.remove(idx)
 
 
-class LogCaptureWorker(QObject):
-    finished = pyqtSignal()
-    ticReady = pyqtSignal(int)
-    response = pyqtSignal()
+# class LogCaptureWorker(QObject):
+#     finished = pyqtSignal()
+#     ticReady = pyqtSignal(int)
+#     response = pyqtSignal()
 
-    def __init__(self):
-        self.loop = True
+#     def __init__(self):
+#         self.loop = True
 
-    @pyqtSlot()
-    def run(self):  # A slot takes no params
-        while self.loop:
-            time.sleep(1)
-            self.ticReady.emit(i)
-            self.response.emit()
+#     @pyqtSlot()
+#     def run(self):  # A slot takes no params
+#         while self.loop:
+#             time.sleep(1)
+#             self.ticReady.emit(i)
+#             self.response.emit()
 
-        self.finished.emit()
+#         self.finished.emit()
 
 
 class WorkerSignals(QObject):
     """
     Defines the signals available from a running worker thread.
-
     Supported signals are:
-
     finished
         No data
-
     error
         tuple (exctype, value, traceback.format_exc() )
-
     result
         object data returned from processing, anything
-
     progress
         int indicating % progress
-
     """
 
     finished = pyqtSignal()
@@ -332,9 +332,7 @@ class WorkerSignals(QObject):
 class Worker(QRunnable):
     """
     Worker thread
-
     Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
-
     :param callback: The function callback to run on this worker thread. Supplied args and
                      kwargs will be passed through to the runner.
     :type callback: function
@@ -375,21 +373,6 @@ class Worker(QRunnable):
             self.signals.finished.emit()  # Done
 
 
-# class Worker(QThread):
-#     finished = pyqtSignal(int)
-#     intReady = pyqtSignal(int, int)
-#     doing = pyqtSignal(str)
-
-#     def __init__(self, parent=None):
-#         super(Worker, self).__init__(parent)
-#         self.working = True
-
-#     def run(self):
-#         while self.working:
-#             self.doing.emit("doing")
-#             self.sleep(1)
-
-
 class MainWindow(QMainWindow, ui_form):
     def __init__(self):
         super().__init__()
@@ -402,6 +385,8 @@ class MainWindow(QMainWindow, ui_form):
         self.views["before_button2"] = self.beforeBtn2
         self.views["next_button"] = self.nextBtn
         self.views["next_button2"] = self.nextBtn2
+        self.views["scrap_log_edit"] = self.scrapLogEdit
+        self.views["log_edit"] = self.logEdit
 
         self.models = {}
         self.models["logModel"] = LogsModel()
@@ -409,7 +394,7 @@ class MainWindow(QMainWindow, ui_form):
         # self.logsModel = LogsModel()
         # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
         # self.logViewModel = LogViewModel(self.views, self.logsModel)
-        self.logViewModel = LogViewModel(self.views, self.models)
+        self.logViewModel = LogViewModel(self, self.views, self.models)
 
         # QDataWidgetMapper
 

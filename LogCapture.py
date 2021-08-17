@@ -1,3 +1,4 @@
+from PyQt5.QtCore import QObject, QRunnable, pyqtSignal
 import win32gui
 from pywinauto.application import Application
 
@@ -113,9 +114,10 @@ def log_processing(compiled_pattern, strLog):
         DEBUG(f"INSERT 무결성은 무시 [{si}]")
     else:
         history_mgr.commit()
+        INFO(f"로그등록:[{strLog}]")
 
 
-def monitoring(edit_control):
+def monitoring(edit_control, loop_flag=True):
     loop_flag = True
     processing_pattern = re.compile(
         r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)"
@@ -124,12 +126,12 @@ def monitoring(edit_control):
     while loop_flag:
         #        try:
         line_cnt = edit_control.line_count()
-        INFO(f"line_cnt:[{line_cnt}]")
+        DEBUG(f"line_cnt:[{line_cnt}]")
 
         for i in range(0, line_cnt):
-            INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
+            #INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
             log_processing(processing_pattern, edit_control.get_line(i))
-        INFO("")
+        DEBUG("")
         time.sleep(3)
     #        except:
     #            loop_flag=False
@@ -170,6 +172,96 @@ def log_capture_main():
     # print(f"메모장내용:[{logwin.text_block()}]")
     # print(f"메모장내용:[{logwin.window_text()}]")
 
+class LogCaptureWin32(QObject):
+    finished = pyqtSignal()
+    inserted = pyqtSignal(str)
+    dupped   = pyqtSignal(str, str)
+    in_processing = pyqtSignal(int)
+
+    def __init__(self):
+        super(QObject, self).__init__()
+
+        self.loop_flag = True
+        self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+        # w = WindowsObject("sample.txt - Windows 메모장")
+
+        DEBUG(f"w={self.w.win_objs}")
+        DEBUG("w.handle,text=[%08X][%s]" % (self.w.obj["handle"], self.w.obj["text"]))
+
+        self.hwnd = self.w.obj["handle"]
+        self.app = Application(backend="win32").connect(handle=self.hwnd)
+
+        self.dig = self.app.window(handle=self.hwnd)
+        # dig.print_control_identifiers()
+
+        self.logwin = self.dig.child_window(
+            class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
+        )
+        # self.logwin = self.dig.child_window(class_name="Edit")
+
+        # result = monitoring(logwin)
+
+    #def monitoring(edit_control, loop_flag=True):
+    def run(self):
+        edit_control = self.logwin
+
+        print("돌고있나?")
+
+        processing_pattern = re.compile(
+            r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)"
+        )
+
+        while self.loop_flag:
+            line_cnt = edit_control.line_count()
+            INFO(f"line_cnt:[{line_cnt}]")
+
+            for i in range(0, line_cnt):
+                line = edit_control.get_line(i)
+                self.log_processing(processing_pattern, line)
+            DEBUG("")
+            self.in_processing.emit(line_cnt)
+            time.sleep(3)
+
+    def log_processing(self, compiled_pattern, strLog):
+        history_mgr = HistoryMgr()
+        DEBUG(f"strLog=[{strLog}]")
+        # 외부로 이동
+        # p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
+        p = compiled_pattern
+        m = p.match(strLog)
+
+        # DEBUG(f"m          = [{m}]")
+        # DEBUG(f"m.group(0) = [{m.group(0)}]")
+        # DEBUG(f"m.group(1) = [{m.group(1)}]")
+        # DEBUG(f"m.group(2) = [{m.group(2)}]")
+        # DEBUG(f"m.group(3) = [{m.group(3)}]")
+        # DEBUG(f"m.group(4) = [{m.group(4)}]")
+
+        try:
+            DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]")
+            DEBUG(f"m.group(name)   = [{m.group('name')}]")
+            DEBUG(f"m.group(temper) = [{m.group('temper')}]")
+            DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]")
+        except AttributeError as ae:
+            # 파싱 오류
+            DEBUG(f"파싱 오류 무시 DB처리 하지 않음 [{ae}]")
+            return
+
+        # DB처리 (Cache 검증 및 insert)
+        try:
+            history_mgr.execute_param(
+                history_mgr.INSERT_HISTORY,
+                (m.group("dtm"), m.group("name"), m.group("temper"), m.group("dtm2")),
+            )
+        except sqlite3.IntegrityError as si:
+            # Insert 무결성은 무시
+            self.dupped.emit(strLog, str(si))
+            DEBUG(f"INSERT 무결성은 무시 [{si}]")
+        else:
+            history_mgr.commit()
+            self.inserted.emit(strLog)
+            INFO(f"로그등록:[{strLog}]")
+
 
 def uac_require():
     asadmin = "asadmin"
@@ -194,5 +286,6 @@ if __name__ == "__main__":
         INFO("continue")
     else:
         ERROR("error message")
-
-    log_capture_main()
+    logCapture = LogCaptureWin32()
+    logCapture.run()
+    #log_capture_main()
