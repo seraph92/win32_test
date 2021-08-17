@@ -396,6 +396,7 @@ class MainWindow(QMainWindow, ui_form):
         # self.logViewModel = LogViewModel(self.views, self.logsModel)
         self.logViewModel = LogViewModel(self, self.views, self.models)
 
+
         # QDataWidgetMapper
 
         self.adjustColumnSize()
