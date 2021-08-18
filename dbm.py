@@ -22,11 +22,11 @@ class HistoryMgr:
 
         return d
 
-    def query_total_page(self, page=20):
-        sql = f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page from inout_history;"
-        rslt = self.query(sql)
+    # def query_total_page(self, page=20):
+    #     sql = f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page from inout_history;"
+    #     rslt = self.query(sql)
 
-        return rslt[0]["total_page"]
+    #     return rslt[0]["total_page"]
 
     def execute_param(self, exec_str, param):
         if param != None:

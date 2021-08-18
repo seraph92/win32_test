@@ -17,21 +17,23 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 
 from Config import CONFIG
-
+from BKLOG import *
 
 class ChannelMessageSending(QObject):
     finished = pyqtSignal()
     inserted = pyqtSignal(str)
     dupped = pyqtSignal(str, str)
     in_processing = pyqtSignal(int)
+    one_processed = pyqtSignal(dict)
+    need_msg = pyqtSignal()
 
-    def __init__(self, user):
+    def __init__(self):
         super().__init__()
         self.loop_flag = True
 
         self.setup_method()
-        self.users = []
-        self.users.append(user)
+        self.user_msgs = []
+        #self.users.append(user)
 
     def setup_method(self):
         options = Options()
@@ -54,7 +56,8 @@ class ChannelMessageSending(QObject):
         if len(wh_now) > len(wh_then):
             return set(wh_now).difference(set(wh_then)).pop()
 
-    def sendMessage(self):
+    #def sendMessage(self):
+    def run(self):
         # Test name: 메시지 발송 테스트2
         # Step # | name | target | value
         # 1 | open | / |
@@ -64,15 +67,14 @@ class ChannelMessageSending(QObject):
 
         ## 로그인 분기처리
         # accounts.kakao.com/login
-        print(f"url = [{self.driver.current_url}]")
+        DEBUG(f"url = [{self.driver.current_url}]")
 
         dashboard_pattern = re.compile(r"^https://business.kakao.com/dashboard")
-
         login_pattern = re.compile(r"^https://accounts.kakao.com/login")
 
         if login_pattern.match(self.driver.current_url):
             # 로그인 처리 필요
-            print(f"로그인 필요!!")
+            DEBUG(f"로그인 필요!!")
             try:
                 # 3 | click | id=id_email_2 |
                 # self.driver.find_element(By.XPATH, "//input[@id='id_email_2']").click()
@@ -91,7 +93,7 @@ class ChannelMessageSending(QObject):
                     By.XPATH, "//input[@id='id_password_3']"
                 ).send_keys(Keys.ENTER)
             except selenium.common.exceptions.ElementClickInterceptedException as ecie:
-                print(f"skip login error, have to login manually [{ecie}]")
+                DEBUG(f"skip login error, have to login manually [{ecie}]")
 
             while True:
                 if dashboard_pattern.match(self.driver.current_url):
@@ -122,10 +124,10 @@ class ChannelMessageSending(QObject):
 
         # if title:
         #   ## 로그인 되어 있음
-        #   print(f"로그인 되어 있음!!")
+        #   DEBUG(f"로그인 되어 있음!!")
         # else:
         #   ## 로그인 해야 함
-        #   print(f"로그인 해야함")
+        #   DEBUG(f"로그인 해야함")
 
         # self.driver.close()
 
@@ -136,9 +138,12 @@ class ChannelMessageSending(QObject):
         # 5 | click | linkText=채팅 목록 |
         self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
 
-        while True:
-            for user in self.users:
-                time.sleep(5)
+        while self.loop_flag:
+            # msgList에서 발송 대상자를 가져온다.
+            self.need_msg.emit()
+            time.sleep(1)
+            for user_msg in self.user_msgs:
+                #time.sleep(5)
                 # 6 | click | name=keyword |
                 # self.driver.find_element(By.NAME, "keyword").click()
                 # self.driver.find_element(By.NAME, "keyword").click()
@@ -147,7 +152,8 @@ class ChannelMessageSending(QObject):
                 actions.double_click(element).perform()
 
                 # 7 | type | name=keyword |
-                self.driver.find_element(By.NAME, "keyword").send_keys(user["name"])
+                #self.driver.find_element(By.NAME, "keyword").send_keys(user_msg["user"])
+                self.driver.find_element(By.NAME, "keyword").send_keys("이범각")
                 # 8 | type | name=keyword |
                 # self.driver.find_element(By.NAME, "keyword").send_keys(user['name'])
                 # 9 | sendKeys | name=keyword | ${KEY_ENTER}
@@ -173,7 +179,11 @@ class ChannelMessageSending(QObject):
                 # 15 | click | css=.btn_g |
                 self.driver.find_element(By.ID, "chatWrite").click()
                 # 16 | close |  |
-                self.driver.find_element(By.ID, "chatWrite").send_keys(user["message"])
+                msg_list = user_msg["message"].split(sep='\n')
+                for i, message in enumerate(msg_list):
+                    self.driver.find_element(By.ID, "chatWrite").send_keys(message)
+                    if i != len(msg_list)-1:
+                        self.driver.find_element(By.ID, "chatWrite").send_keys(Keys.SHIFT + Keys.ENTER)
                 self.driver.find_element(By.ID, "chatWrite").send_keys(Keys.ENTER)
                 time.sleep(1)
                 # 17 | selectWindow | handle=${root} |
@@ -182,6 +192,10 @@ class ChannelMessageSending(QObject):
                 self.driver.close()
                 # 19 | click | css=.box_tf |
                 self.driver.switch_to.window(self.vars["root"])
+
+                self.one_processed.emit(user_msg)
+
+                del self.user_msgs[0]
 
             # # 20 | type | name=keyword | 이시은
             # self.driver.find_element(By.NAME, "keyword").click()
@@ -208,15 +222,15 @@ class ChannelMessageSending(QObject):
             # self.driver.switch_to.window(self.vars["root"])
 
             # 10초간 sleep
-            time.sleep(10)
+            #time.sleep(2)
 
         self.driver.close()
 
 
 if __name__ == "__main__":
-    print(f"CONFIG[user_id]=[{CONFIG['user_id']}]")
-    print(f"CONFIG[user_pw]=[{CONFIG['user_pw']}]")
-    # print(f"CONFIG=[{CONFIG}]")
+    DEBUG(f"CONFIG[user_id]=[{CONFIG['user_id']}]")
+    DEBUG(f"CONFIG[user_pw]=[{CONFIG['user_pw']}]")
+    # DEBUG(f"CONFIG=[{CONFIG}]")
     user = {
         "name": "이범각",
         "message": "테스트 입니다.",
@@ -230,6 +244,6 @@ if __name__ == "__main__":
     # )
 
     # if pattern.match("https://accounts.kakao.com/login/kakaobusiness?continue=https://business.kakao.com/dashboard/?sid%3Dpfr"):
-    #   print(f"포함되어 있어")
+    #   DEBUG(f"포함되어 있어")
     # else:
-    #   print(f"포함되어 있지 않아")
+    #   DEBUG(f"포함되어 있지 않아")

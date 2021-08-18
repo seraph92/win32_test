@@ -1,3 +1,4 @@
+from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
 import win32com.shell.shell as shell
@@ -56,12 +57,33 @@ class MsgsModel(list):
                 ]
             )
 
+    def del_msg(self, idx):
+        del self.data[idx]
+        self.applyModel()
+    
+    def deque_msg(self):
+        try:
+            data = self.data[0]
+            del self.data[0]
+            self.applyModel()
+        except IndexError as ie:
+            data = None
+        return data
+
     def add_msg(self, d):
         enter_exit = "등원" if d["rnk"] % 2 else "하원"
         INFO(f"rank = {d['rnk']} = {enter_exit}")
+
+        if   enter_exit == "등원":
+            enter_exit_msg = "도착했습니다.\n-READ101-"
+        elif enter_exit == "하원":
+            enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
+        else:
+            enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
+
         msg = {
             "user": d["name"],
-            "message": f"[{d['dtm']}] {d['name']}학생이 리드101송도학원에 { enter_exit }하였습니다.",
+            "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
         }
 
         INFO(f"msg = [{msg}]")
@@ -86,6 +108,8 @@ class LogsModel(list):
     def __init__(self, l=[]):
         super().__init__()
 
+        now = datetime.datetime.now()
+        self.today = now.strftime("%Y%m%d")
         # self.PAGE_SIZE = 20
         self.PAGE_SIZE = 15
         self.current_page = 1
@@ -96,6 +120,7 @@ class LogsModel(list):
         self.model = QStandardItemModel()
         self.model.setColumnCount(7)
         self.aggregation_model = QStandardItemModel()
+        self.today_model = QStandardItemModel()
         self.query_page()
 
         """
@@ -123,17 +148,34 @@ class LogsModel(list):
         self.applyModel()
         """
 
-    def query_page(self):
-
+    # Total Page 조회
+    def query_total_page(self):
+        page = self.PAGE_SIZE
+        today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
         mgr = HistoryMgr()
-        self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+        sql =  f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page\n"
+        sql += f"from inout_history\n"
+        sql += f"where date(dtm) = date('{today}')\n"
+        rslt = mgr.query(sql)
+        return rslt[0]["total_page"]
+
+    # 현재 Page 조회
+    def query_page(self):
+        mgr = HistoryMgr()
+        #self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+        self.total_page = self.query_total_page()
         self.item_data["current_page"] = self.current_page
         self.item_data["total_page"] = self.total_page
+        today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
+        INFO(f"self.today = {self.today}")
+        INFO(f"today = {today}")
+        # 20210809
 
         sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm \n"
         sql += f"FROM inout_history \n"
         sql += f"WHERE \n"
         sql += f"name like '%%'\n"
+        sql += f"and date(dtm) = date('{today}')\n"
         sql += f"ORDER BY dtm desc\n"
         sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
 
@@ -143,17 +185,12 @@ class LogsModel(list):
 
         print(f"data = [{self.data}]")
 
-        # self.model = QStandardItemModel()
-        # self.aggregation_model = QStandardItemModel()
-        self.model.clear()
-        self.model.setColumnCount(7)
-        self.aggregation_model.clear()
-
         self.applyModel()
 
     def getRows(self, idx):
         return self.data[idx]
 
+    # before Button 클릭시 호출됨
     def before_page(self):
         self.current_page -= 1
         if self.current_page < 1:
@@ -164,6 +201,7 @@ class LogsModel(list):
         # self.aggregation_model.clear()
         self.query_page()
 
+    # next Button 클릭시 호출됨
     def next_page(self):
         self.current_page += 1
         if self.current_page > self.total_page:
@@ -174,6 +212,7 @@ class LogsModel(list):
         # self.aggregation_model.clear()
         self.query_page()
 
+    # remove Button 클릭시 호출됨 (하지만 현재 사용하지 않음)
     def remove(self, idx):
         DEBUG(f"remove index= [{idx}]")
         temp = self.data[idx]
@@ -185,16 +224,26 @@ class LogsModel(list):
         # self.data[last_idx] = temp
         # self.data.pop()
 
-        self.model.clear()
-        self.aggregation_model.clear()
+        #self.model.clear()
+        #self.aggregation_model.clear()
         self.applyModel()
 
         return temp
 
+    # data를 model에 적용
     def applyModel(self):
+        self.model.clear()
+        self.model.setColumnCount(7)
+        self.aggregation_model.clear()
 
-        print(
+        DEBUG(
             f"Page: {self.item_data['current_page']} / {self.item_data['total_page']}"
+        )
+
+        self.today_model.appendRow(
+            [
+                QStandardItem(f"{self.today}"),
+            ]
         )
 
         self.aggregation_model.appendRow(
@@ -233,8 +282,11 @@ class LogViewModel:
         # self.view = views["table_view"]
         self.scrap_log_edit: QTextEdit = views["scrap_log_edit"]
 
-        self.mapper = QDataWidgetMapper()
-        self.mapper.setModel(models["log_model"].aggregation_model)
+        self.paging_mapper = QDataWidgetMapper()
+        self.paging_mapper.setModel(models["log_model"].aggregation_model)
+
+        self.today_mapper = QDataWidgetMapper()
+        self.today_mapper.setModel(models["log_model"].today_model)
 
         self.model: LogsModel = models["log_model"]
         self.msg_model: MsgsModel = models["msg_model"]
@@ -250,10 +302,43 @@ class LogViewModel:
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
+        views["today_edit"].editingFinished.connect(self.date_change)
 
         self.view.doubleClicked.connect(self.add_msg)
+        self.msg_view.doubleClicked.connect(self.del_msg)
 
-        # 두개의 thread를 위한 threadpool 생성
+        self.setup_log_capture_thread()
+        #self.setup_send_msg_thread()
+
+    def setup_send_msg_thread(self):
+        # Log Capture Thread 설정
+        self.msg_thread = QThread()
+        self.msg_worker = ChannelMessageSending()
+        self.msg_worker.moveToThread(self.msg_thread)
+
+        self.msg_thread.started.connect(self.msg_worker.run)
+        self.msg_worker.finished.connect(self.msg_thread.quit)
+        self.msg_worker.finished.connect(self.msg_worker.deleteLater)
+        self.msg_thread.finished.connect(self.msg_thread.deleteLater)
+
+        self.msg_thread.started.connect(
+            lambda: self.views["msg_edit"].setStyleSheet("background: rightblue")
+        )
+        self.msg_thread.finished.connect(
+            lambda: self.views["msg_edit"].setStyleSheet("background-color: #f5d6c1;")
+        )
+
+        # Step 6: Start the thread
+        self.msg_thread.start()
+
+        # 중복 로그는 남기지 않음
+        self.msg_worker.need_msg.connect(self.send_msg)
+        self.msg_worker.one_processed.connect(self.log_sending)
+        #self.msg_worker.inserted.connect(self.inserted_handle)
+
+
+    def setup_log_capture_thread(self):
+        # Log Capture Thread 설정
         self.thread = QThread()
         self.worker = LogCaptureWin32Worker()
         self.worker.moveToThread(self.thread)
@@ -274,18 +359,35 @@ class LogViewModel:
         # Step 6: Start the thread
         self.thread.start()
 
-        ## TO-DO
-        # Channel Message 전송 Thread가 동작하고
-        # 처리과정은 logEdit로 보내져야 한다.
-        # Thread가 살아 있다면 logEidt의 배경은 파란색으로, 죽어 있다면 붉은색으로 변경
-
         # 중복 로그는 남기지 않음
-        self.worker.dupped.connect(self.dup_handle)
+        #self.worker.dupped.connect(self.dup_handle)
         self.worker.inserted.connect(self.inserted_handle)
 
     def __del__(self):
         # self.logCapture.loop_flag = False
         print(f"LogViewModel destroyed!!")
+
+    def log_sending(self, user_msg):
+        INFO(f"")
+    def send_msg(self):
+        # 첫번째 데이터를 꺼내서 msg_worker로 전송
+        data = self.msg_model.deque_msg()
+        if data:
+            self.msg_worker.user_msgs.append(data)
+
+    def date_change(self):
+        self.model.today = self.views['today_edit'].text()
+        INFO(f"date changed = [{self.model.today}]")
+        self.model.current_page = 1
+        self.model.query_total_page()
+        self.model.query_page()
+        self.paging_mapper.toFirst()
+
+    def del_msg(self, model):
+        row = self.msg_view.currentIndex().row()
+        # column = self.view.currentIndex().column()
+        self.msg_model.del_msg(row)
+        DEBUG(f"delete row = [{row}]")
 
     def add_msg(self, model):
         row = self.view.currentIndex().row()
@@ -312,16 +414,18 @@ class LogViewModel:
     def dataInit(self):
         self.view.setModel(self.model.model)
         self.msg_view.setModel(self.msg_model.model)
-        self.mapper.addMapping(self.item_view, 0)
-        self.mapper.toFirst()
+        self.paging_mapper.addMapping(self.item_view, 0)
+        self.paging_mapper.toFirst()
+        self.today_mapper.addMapping(self.views['today_edit'], 0)
+        self.today_mapper.toFirst()
 
     def before_page(self):
         self.model.before_page()
-        self.mapper.toFirst()
+        self.paging_mapper.toFirst()
 
     def next_page(self):
         self.model.next_page()
-        self.mapper.toFirst()
+        self.paging_mapper.toFirst()
 
     def removeConfirm(self):
         data = self.view.selectedIndexes()
@@ -375,6 +479,7 @@ class MainWindow(QMainWindow, ui_form):
         self.views["table_view"] = self.logTableView
         self.views["msg_view"] = self.msgListView
         self.views["item_view"] = self.pageEdit
+        self.views["today_edit"] = self.todayEdit
         self.views["before_button"] = self.beforeBtn
         self.views["before_button2"] = self.beforeBtn2
         self.views["next_button"] = self.nextBtn
@@ -392,6 +497,8 @@ class MainWindow(QMainWindow, ui_form):
         self.logViewModel = LogViewModel(self, self.views, self.models)
 
         # QDataWidgetMapper
+
+        #self.setCentralWidget()
 
         self.adjustColumnSize()
 
