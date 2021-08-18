@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
@@ -19,6 +20,7 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QTableView,
     QTextEdit,
+    QWidget,
 )
 from PyQt5 import QtCore
 from PyQt5 import uic
@@ -38,6 +40,7 @@ from LogCapture import LogCaptureWin32Worker
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
+# ui_form = uic.loadUiType("ui/auto_log_program_widget.ui")[0]
 
 
 class MsgsModel(list):
@@ -60,7 +63,7 @@ class MsgsModel(list):
     def del_msg(self, idx):
         del self.data[idx]
         self.applyModel()
-    
+
     def deque_msg(self):
         try:
             data = self.data[0]
@@ -70,11 +73,12 @@ class MsgsModel(list):
             data = None
         return data
 
+
     def add_msg(self, d):
         enter_exit = "등원" if d["rnk"] % 2 else "하원"
         INFO(f"rank = {d['rnk']} = {enter_exit}")
 
-        if   enter_exit == "등원":
+        if enter_exit == "등원":
             enter_exit_msg = "도착했습니다.\n-READ101-"
         elif enter_exit == "하원":
             enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
@@ -84,6 +88,7 @@ class MsgsModel(list):
         msg = {
             "user": d["name"],
             "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
+            "dtm": d["dtm"],
         }
 
         INFO(f"msg = [{msg}]")
@@ -153,7 +158,7 @@ class LogsModel(list):
         page = self.PAGE_SIZE
         today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
         mgr = HistoryMgr()
-        sql =  f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page\n"
+        sql = f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page\n"
         sql += f"from inout_history\n"
         sql += f"where date(dtm) = date('{today}')\n"
         rslt = mgr.query(sql)
@@ -162,7 +167,7 @@ class LogsModel(list):
     # 현재 Page 조회
     def query_page(self):
         mgr = HistoryMgr()
-        #self.total_page = mgr.query_total_page(self.PAGE_SIZE)
+        # self.total_page = mgr.query_total_page(self.PAGE_SIZE)
         self.total_page = self.query_total_page()
         self.item_data["current_page"] = self.current_page
         self.item_data["total_page"] = self.total_page
@@ -224,11 +229,21 @@ class LogsModel(list):
         # self.data[last_idx] = temp
         # self.data.pop()
 
-        #self.model.clear()
-        #self.aggregation_model.clear()
+        # self.model.clear()
+        # self.aggregation_model.clear()
         self.applyModel()
 
         return temp
+
+    def update_sent_dtm(self, user_msg):
+        mgr = HistoryMgr()
+        sql = f"UPDATE inout_history\n"
+        sql += f"SET send_dtm = strftime('%Y-%m-%d %H:%M:%f','now')\n"
+        sql += f"where dtm = '{user_msg['dtm']}'\n"
+        rslt = mgr.execute(sql)
+        mgr.dbconn.commit()
+        self.query_page()
+        self.applyModel()
 
     # data를 model에 적용
     def applyModel(self):
@@ -308,7 +323,7 @@ class LogViewModel:
         self.msg_view.doubleClicked.connect(self.del_msg)
 
         self.setup_log_capture_thread()
-        #self.setup_send_msg_thread()
+        self.setup_send_msg_thread()
 
     def setup_send_msg_thread(self):
         # Log Capture Thread 설정
@@ -334,8 +349,7 @@ class LogViewModel:
         # 중복 로그는 남기지 않음
         self.msg_worker.need_msg.connect(self.send_msg)
         self.msg_worker.one_processed.connect(self.log_sending)
-        #self.msg_worker.inserted.connect(self.inserted_handle)
-
+        # self.msg_worker.inserted.connect(self.inserted_handle)
 
     def setup_log_capture_thread(self):
         # Log Capture Thread 설정
@@ -360,7 +374,7 @@ class LogViewModel:
         self.thread.start()
 
         # 중복 로그는 남기지 않음
-        #self.worker.dupped.connect(self.dup_handle)
+        # self.worker.dupped.connect(self.dup_handle)
         self.worker.inserted.connect(self.inserted_handle)
 
     def __del__(self):
@@ -368,7 +382,9 @@ class LogViewModel:
         print(f"LogViewModel destroyed!!")
 
     def log_sending(self, user_msg):
-        INFO(f"")
+        INFO(f"{user_msg}")
+        self.model.update_sent_dtm(user_msg)
+
     def send_msg(self):
         # 첫번째 데이터를 꺼내서 msg_worker로 전송
         data = self.msg_model.deque_msg()
@@ -376,7 +392,7 @@ class LogViewModel:
             self.msg_worker.user_msgs.append(data)
 
     def date_change(self):
-        self.model.today = self.views['today_edit'].text()
+        self.model.today = self.views["today_edit"].text()
         INFO(f"date changed = [{self.model.today}]")
         self.model.current_page = 1
         self.model.query_total_page()
@@ -394,7 +410,8 @@ class LogViewModel:
         # column = self.view.currentIndex().column()
         rows = self.model.getRows(row)
         DEBUG(f"rows = [{rows}]")
-        self.msg_model.add_msg(rows)
+        if not rows["send_dtm"]:
+            self.msg_model.add_msg(rows)
 
     # scrap시 dup발생시 호출되는 함수
     def dup_handle(self, strlog, error):
@@ -416,7 +433,7 @@ class LogViewModel:
         self.msg_view.setModel(self.msg_model.model)
         self.paging_mapper.addMapping(self.item_view, 0)
         self.paging_mapper.toFirst()
-        self.today_mapper.addMapping(self.views['today_edit'], 0)
+        self.today_mapper.addMapping(self.views["today_edit"], 0)
         self.today_mapper.toFirst()
 
     def before_page(self):
@@ -469,6 +486,66 @@ class LogViewModel:
 #     def stop(self):
 #         self.isRunning = False
 
+"""
+class MainWindow(
+    QMainWindow,
+):
+    def __init__(self):
+        super().__init__()
+        # self.setupUi(self)
+
+        self.mainWidget = ui_form()
+        self.mainWidget.setupUi(self)
+
+        self.views = {}
+        self.views["table_view"] = self.mainWidget.logTableView
+        self.views["msg_view"] = self.mainWidget.msgListView
+        self.views["item_view"] = self.mainWidget.pageEdit
+        self.views["today_edit"] = self.mainWidget.todayEdit
+        self.views["before_button"] = self.mainWidget.beforeBtn
+        self.views["before_button2"] = self.mainWidget.beforeBtn2
+        self.views["next_button"] = self.mainWidget.nextBtn
+        self.views["next_button2"] = self.mainWidget.nextBtn2
+        self.views["scrap_log_edit"] = self.mainWidget.scrapLogEdit
+        self.views["log_edit"] = self.mainWidget.logEdit
+
+        self.models = {}
+        self.models["log_model"] = LogsModel()
+        self.models["msg_model"] = MsgsModel()
+
+        # self.logsModel = LogsModel()
+        # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
+        # self.logViewModel = LogViewModel(self.views, self.logsModel)
+        self.logViewModel = LogViewModel(self, self.views, self.models)
+
+        # QDataWidgetMapper
+
+        self.setCentralWidget(self.mainWidget.gridLayout)
+
+        self.adjustColumnSize()
+
+        # self.setGeometry(300, 300, 1280, 768)
+        self.setGeometry(300, 300, 1024, 768)
+        self.center()
+        self.show()
+
+        # edit = QLineEdit()
+        # edit.
+
+    @pyqtSlot()
+    def adjustColumnSize(self):
+        header = self.mainWidget.logTableView.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        # self.logTableView.setColumnWidth(5, 50)
+        header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+"""
+
 
 class MainWindow(QMainWindow, ui_form):
     def __init__(self):
@@ -497,8 +574,7 @@ class MainWindow(QMainWindow, ui_form):
         self.logViewModel = LogViewModel(self, self.views, self.models)
 
         # QDataWidgetMapper
-
-        #self.setCentralWidget()
+        # set.gridLayout.setRowStretch(int row, int stretch)
 
         self.adjustColumnSize()
 
@@ -509,6 +585,9 @@ class MainWindow(QMainWindow, ui_form):
 
         # edit = QLineEdit()
         # edit.
+
+    # def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
+    #     self.gridLayout.setFixedSize(resizeEvent.size)
 
     @pyqtSlot()
     def adjustColumnSize(self):
