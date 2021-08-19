@@ -9,6 +9,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
     QDataWidgetMapper,
     QDesktopWidget,
+    QDialog,
     QHeaderView,
     QLineEdit,
     QListView,
@@ -30,6 +31,7 @@ from LogCapture import LogCaptureWin32Worker
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
+UserDetailDialog = uic.loadUiType("ui/user_detail.ui")[0]
 
 class MsgsModel(list):
     def __init__(self, l=[]):
@@ -95,6 +97,66 @@ class MsgsModel(list):
 
         self.data.append(msg)
         self.applyModel()
+
+class UsersModel(list):
+    def __init__(self, l=[]):
+        super().__init__()
+
+        self.model = QStandardItemModel()
+        self.model.setColumnCount(4)
+        self.query_page()
+
+    # 현재 Page 조회
+    def query_page(self):
+        mgr = HistoryMgr()
+
+        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql += f"FROM user \n"
+        sql += f"WHERE \n"
+        sql += f"user_name like '%%'\n"
+        sql += f"ORDER BY user_name \n"
+        #sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+
+        DEBUG(f"sql = [{sql}]")
+        #INFO(f"sql = [{sql}]")
+
+        self.data = mgr.query(sql)
+
+        DEBUG(f"data = [{self.data}]")
+        #INFO(f"data = [{self.data}]")
+
+        self.applyModel()
+
+    def getRows(self, idx):
+        return self.data[idx]
+
+    # remove Button 클릭시 호출됨 (하지만 현재 사용하지 않음)
+    def remove(self, idx):
+        DEBUG(f"remove index= [{idx}]")
+        temp = self.data[idx]
+        del self.data[idx]
+        self.applyModel()
+
+        return temp
+
+    # data를 model에 적용
+    def applyModel(self):
+        self.model.clear()
+        self.model.setColumnCount(4)
+
+        self.model.setHorizontalHeaderLabels(
+            ["no", "이름", "채팅방", "등록일시"]
+        )
+        for data in self.data:
+            self.model.appendRow(
+                [
+                    QStandardItem(str(data["no"])),
+                    QStandardItem(data["user_name"]),
+                    QStandardItem(data["chat_room"]),
+                    QStandardItem(data["reg_dtm"]),
+                ]
+            )
+
 
 
 class LogsModel(list):
@@ -279,11 +341,9 @@ class LogViewModel:
         self.log_capture_loop = None
         self.views = views
 
+        # Log Tab
         self.view: QTableView = views["table_view"]
-        self.msg_view: QListView = views["msg_view"]
-        self.item_view: QLineEdit = views["item_view"]
-        # self.view = views["table_view"]
-        self.scrap_log_edit: QTextEdit = views["scrap_log_edit"]
+        self.model: LogsModel = models["log_model"]
 
         self.paging_mapper = QDataWidgetMapper()
         self.paging_mapper.setModel(models["log_model"].aggregation_model)
@@ -291,27 +351,66 @@ class LogViewModel:
         self.today_mapper = QDataWidgetMapper()
         self.today_mapper.setModel(models["log_model"].today_model)
 
-        self.model: LogsModel = models["log_model"]
+        self.page_edit: QLineEdit = views["page_edit"]
+
+        # User Tab
+        self.user_view: QTableView = views["user_table_view"]
+        self.user_model: LogsModel = models["user_model"]
+
+
+        # Left Top
+        self.msg_view: QListView = views["msg_view"]
         self.msg_model: MsgsModel = models["msg_model"]
+        # Right Bottom
+        self.scrap_log_edit: QTextEdit = views["scrap_log_edit"]
+        # Left Bottom
+
         self.dataInit()
 
-        # event 할당
-        # self.view.clicked.connect(self.removeConfirm)
         self.view.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )
 
+        # event 할당
         views["before_button"].clicked.connect(self.before_page)
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
         views["today_edit"].editingFinished.connect(self.date_change)
 
+        views["regist_user_button"].clicked.connect(self.show_dialog)
+        views["regist_user_button2"].clicked.connect(self.show_dialog)
+
         self.view.doubleClicked.connect(self.add_msg)
         self.msg_view.doubleClicked.connect(self.del_msg)
 
         self.setup_log_capture_thread()
         #self.setup_send_msg_thread()
+
+    def show_dialog(self):
+        #self.views["user_detail_dialog"].exec()
+        # 신규등록 창
+        dlg = UserDetailDlg(self.parent)
+        dlg.accepted.connect(self.dialog_accept)
+        dlg.rejected.connect(self.dialog_reject)
+        dlg.exec()
+
+    def dialog_accept(self):
+        pass
+
+    def dialog_reject(self):
+        pass
+
+    def adjust_user_view_column(self):
+        header = self.user_view.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
+
+    def adjust_log_view_column(self):
+        header = self.view.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
+
 
     def setup_send_msg_thread(self):
         # Log Capture Thread 설정
@@ -417,12 +516,20 @@ class LogViewModel:
         )
 
     def dataInit(self):
+        # Log Tab
         self.view.setModel(self.model.model)
-        self.msg_view.setModel(self.msg_model.model)
-        self.paging_mapper.addMapping(self.item_view, 0)
+        self.paging_mapper.addMapping(self.page_edit, 0)
         self.paging_mapper.toFirst()
         self.today_mapper.addMapping(self.views["today_edit"], 0)
         self.today_mapper.toFirst()
+        self.adjust_log_view_column()
+
+        # User Tab
+        self.user_view.setModel(self.user_model.model)
+        self.adjust_user_view_column()
+
+        # Left Top (List)
+        self.msg_view.setModel(self.msg_model.model)
 
     def before_page(self):
         self.model.before_page()
@@ -449,91 +556,24 @@ class LogViewModel:
             self.model.remove(idx)
 
 
-# class Worker(QObject):
-#     finished = pyqtSignal()
-#     error = pyqtSignal(tuple)
-#     result = pyqtSignal(object)
-#     progress = pyqtSignal()
+class UserDetailDlg(QDialog, UserDetailDialog):
+    """User Detail Dialog."""
+    def __init__(self, parent=None, user_name=None):
+        super().__init__(parent)
+        self.setupUi(self)
 
-#     def __init__(self, *args, **kwargs):
-#         super(QObject, self).__init__()
-
-#         # Store constructor arguments (re-used for processing)
-#         self.args = args
-#         self.kwargs = kwargs
-#         self.isRunning = True
-
-#     @pyqtSlot()
-#     def run(self):
-#         while self.isRunning:
-#             self.progress.emit()
-
-#         self.finished.emit()
-
-#     @pyqtSlot()
-#     def stop(self):
-#         self.isRunning = False
-
-"""
-class MainWindow(
-    QMainWindow,
-):
-    def __init__(self):
-        super().__init__()
-        # self.setupUi(self)
-
-        self.mainWidget = ui_form()
-        self.mainWidget.setupUi(self)
+        self.user_name = user_name
 
         self.views = {}
-        self.views["table_view"] = self.mainWidget.logTableView
-        self.views["msg_view"] = self.mainWidget.msgListView
-        self.views["item_view"] = self.mainWidget.pageEdit
-        self.views["today_edit"] = self.mainWidget.todayEdit
-        self.views["before_button"] = self.mainWidget.beforeBtn
-        self.views["before_button2"] = self.mainWidget.beforeBtn2
-        self.views["next_button"] = self.mainWidget.nextBtn
-        self.views["next_button2"] = self.mainWidget.nextBtn2
-        self.views["scrap_log_edit"] = self.mainWidget.scrapLogEdit
-        self.views["log_edit"] = self.mainWidget.logEdit
 
-        self.models = {}
-        self.models["log_model"] = LogsModel()
-        self.models["msg_model"] = MsgsModel()
+        self.views["user_name_edit"] = self.user_name_edit
+        self.views["chat_room_edit"] = self.chat_room_edit
+        self.views["reg_dtm_edit"]   = self.reg_dtm_edit
 
-        # self.logsModel = LogsModel()
-        # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
-        # self.logViewModel = LogViewModel(self.views, self.logsModel)
-        self.logViewModel = LogViewModel(self, self.views, self.models)
-
-        # QDataWidgetMapper
-
-        self.setCentralWidget(self.mainWidget.gridLayout)
-
-        self.adjustColumnSize()
-
-        # self.setGeometry(300, 300, 1280, 768)
-        self.setGeometry(300, 300, 1024, 768)
-        self.center()
-        self.show()
-
-        # edit = QLineEdit()
-        # edit.
-
-    @pyqtSlot()
-    def adjustColumnSize(self):
-        header = self.mainWidget.logTableView.horizontalHeader()
-        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-        # self.logTableView.setColumnWidth(5, 50)
-        header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
-
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
-"""
-
+        if self.user_name:
+            self.setWindowTitle("사용자 정보 수정")
+        else:
+            self.setWindowTitle("사용자 정보 등록")
 
 class MainWindow(QMainWindow, ui_form):
     def __init__(self):
@@ -541,28 +581,39 @@ class MainWindow(QMainWindow, ui_form):
         self.setupUi(self)
 
         self.views = {}
+        ## Log Tab
         self.views["table_view"] = self.logTableView
-        self.views["msg_view"] = self.msgListView
-        self.views["item_view"] = self.pageEdit
+        self.views["page_edit"] = self.pageEdit
         self.views["today_edit"] = self.todayEdit
         self.views["before_button"] = self.beforeBtn
         self.views["before_button2"] = self.beforeBtn2
         self.views["next_button"] = self.nextBtn
         self.views["next_button2"] = self.nextBtn2
+
+        ## User Tab
+        self.views["user_table_view"] = self.userTableView
+        self.views["regist_user_button"] = self.registUserBtn
+        self.views["regist_user_button2"] = self.registUserBtn2
+
+        ## Left Bottom List
         self.views["scrap_log_edit"] = self.scrapLogEdit
+        ## Right Bottom List
         self.views["log_edit"] = self.logEdit
+        ## Left Top List
+        self.views["msg_view"] = self.msgListView
+
+        ## Dialog
+        #self.views["user_detail_dialog"] = UserDetailDlg(self)
 
         self.models = {}
+        ## table_view의 모델
         self.models["log_model"] = LogsModel()
+        ## msg_view의 모델
         self.models["msg_model"] = MsgsModel()
+        ## user_table_view의 모델
+        self.models["user_model"] = UsersModel()
 
-        # self.logsModel = LogsModel()
-        # self.logViewModel = LogViewModel(self.logTableView, self.logsModel)
-        # self.logViewModel = LogViewModel(self.views, self.logsModel)
         self.logViewModel = LogViewModel(self, self.views, self.models)
-
-        # QDataWidgetMapper
-        # set.gridLayout.setRowStretch(int row, int stretch)
 
         self.adjustColumnSize()
 
@@ -570,9 +621,6 @@ class MainWindow(QMainWindow, ui_form):
         self.setGeometry(300, 300, 1024, 768)
         self.center()
         self.show()
-
-        # edit = QLineEdit()
-        # edit.
 
     # def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
     #     self.gridLayout.setFixedSize(resizeEvent.size)
