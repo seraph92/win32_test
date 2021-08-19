@@ -4356,3 +4356,6 @@
 2021-08-18 23:09:57,799 - root - INFO - [query_page:170] self.today = 20210818
 2021-08-18 23:09:57,800 - root - INFO - [query_page:171] today = 2021-08-18
 2021-08-18 23:09:57,839 - root - INFO - [run:226] line_cnt:[88]
+2021-08-18 23:13:39,587 - root - INFO - [query_page:170] self.today = 20210818
+2021-08-18 23:13:39,588 - root - INFO - [query_page:171] today = 2021-08-18
+2021-08-18 23:13:39,803 - root - INFO - [run:226] line_cnt:[88]
