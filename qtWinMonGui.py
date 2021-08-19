@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
@@ -10,6 +11,8 @@ from PyQt5.QtWidgets import (
     QDataWidgetMapper,
     QDesktopWidget,
     QDialog,
+    QDialogButtonBox,
+    QFrame,
     QHeaderView,
     QLineEdit,
     QListView,
@@ -27,11 +30,14 @@ from PyQt5.QtCore import (
     pyqtSlot,
 )
 
+import sqlite3
+
 from LogCapture import LogCaptureWin32Worker
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
 UserDetailDialog = uic.loadUiType("ui/user_detail.ui")[0]
+
 
 class MsgsModel(list):
     def __init__(self, l=[]):
@@ -62,7 +68,6 @@ class MsgsModel(list):
         except IndexError as ie:
             data = None
         return data
-
 
     def add_msg(self, d):
         enter_exit = "등원" if d["rnk"] % 2 else "하원"
@@ -98,6 +103,92 @@ class MsgsModel(list):
         self.data.append(msg)
         self.applyModel()
 
+
+class UserModel(list):
+    def __init__(self, l=[]):
+        super().__init__()
+        self.model = QStandardItemModel(1, 3)
+        # self.user_name_model = QStandardItemModel()
+        # self.chat_room_model = QStandardItemModel()
+        # self.reg_dtm_model = QStandardItemModel()
+
+    def query_one(self, user_name):
+        mgr = HistoryMgr()
+
+        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql += f"FROM user \n"
+        sql += f"WHERE \n"
+        sql += f"user_name like '{user_name}'\n"
+        sql += f"ORDER BY user_name \n"
+        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+
+        INFO(f"sql = [{sql}]")
+        # INFO(f"sql = [{sql}]")
+
+        datas = mgr.query(sql)
+
+        INFO(f"datas = [{datas}]")
+
+        self.data = datas[0]
+
+        DEBUG(f"data = [{self.data}]")
+        # INFO(f"data = [{self.data}]")
+
+        self.applyModel()
+
+    def regist_user(self, user):
+        # user_name = self.model.item(0, 1).accessibleText()
+        # chat_room = self.model.item(0, 2).accessibleText()
+        user_name = user["user_name"]
+        chat_room = user["chat_room"]
+
+        try:
+            mgr = HistoryMgr()
+            sql = f"INSERT INTO user(user_name, chat_room, reg_dtm) \n"
+            sql += f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now'))\n"
+            rslt = mgr.execute(sql)
+            mgr.dbconn.commit()
+        except:
+            mgr.dbconn.rollback()
+            raise sqlite3.IntegrityError("등록실패")
+
+    def update_user(self, user_name):
+        mgr = HistoryMgr()
+        sql = f"UPDATE user\n"
+        sql += f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now')\n"
+        sql += f"AND chat_room = '{self.data['chat_room']}'\n"
+        sql += f"where user_name = '{user_name}'\n"
+        rslt = mgr.execute(sql)
+        mgr.dbconn.commit()
+
+    # data를 model에 적용
+    def applyModel(self):
+        self.model.clear()
+        # self.user_name_model.clear()
+        # self.chat_room_model.clear()
+        # self.reg_dtm_model.clear()
+
+        self.model.setItem(0, 0, QStandardItem(f"{self.data['user_name']}"))
+        self.model.setItem(0, 1, QStandardItem(f"{self.data['chat_room']}"))
+        self.model.setItem(0, 2, QStandardItem(f"{self.data['reg_dtm']}"))
+
+        # self.user_name_model.appendRow(
+        #     [
+        #         QStandardItem(f"{self.data['user_name']}"),
+        #     ]
+        # )
+        # self.chat_room_model.appendRow(
+        #     [
+        #         QStandardItem(f"{self.data['chat_room']}"),
+        #     ]
+        # )
+        # self.reg_dtm_model.appendRow(
+        #     [
+        #         QStandardItem(f"{self.data['reg_dtm']}"),
+        #     ]
+        # )
+
+
 class UsersModel(list):
     def __init__(self, l=[]):
         super().__init__()
@@ -115,15 +206,15 @@ class UsersModel(list):
         sql += f"WHERE \n"
         sql += f"user_name like '%%'\n"
         sql += f"ORDER BY user_name \n"
-        #sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
 
         DEBUG(f"sql = [{sql}]")
-        #INFO(f"sql = [{sql}]")
+        # INFO(f"sql = [{sql}]")
 
         self.data = mgr.query(sql)
 
         DEBUG(f"data = [{self.data}]")
-        #INFO(f"data = [{self.data}]")
+        # INFO(f"data = [{self.data}]")
 
         self.applyModel()
 
@@ -144,9 +235,7 @@ class UsersModel(list):
         self.model.clear()
         self.model.setColumnCount(4)
 
-        self.model.setHorizontalHeaderLabels(
-            ["no", "이름", "채팅방", "등록일시"]
-        )
+        self.model.setHorizontalHeaderLabels(["no", "이름", "채팅방", "등록일시"])
         for data in self.data:
             self.model.appendRow(
                 [
@@ -156,7 +245,6 @@ class UsersModel(list):
                     QStandardItem(data["reg_dtm"]),
                 ]
             )
-
 
 
 class LogsModel(list):
@@ -357,7 +445,6 @@ class LogViewModel:
         self.user_view: QTableView = views["user_table_view"]
         self.user_model: LogsModel = models["user_model"]
 
-
         # Left Top
         self.msg_view: QListView = views["msg_view"]
         self.msg_model: MsgsModel = models["msg_model"]
@@ -378,28 +465,40 @@ class LogViewModel:
         views["next_button2"].clicked.connect(self.next_page)
         views["today_edit"].editingFinished.connect(self.date_change)
 
-        views["regist_user_button"].clicked.connect(self.show_dialog)
-        views["regist_user_button2"].clicked.connect(self.show_dialog)
+        views["regist_user_button"].clicked.connect(self.show_regist_dialog)
+        views["regist_user_button2"].clicked.connect(self.show_regist_dialog)
 
         self.view.doubleClicked.connect(self.add_msg)
         self.msg_view.doubleClicked.connect(self.del_msg)
+        self.user_view.doubleClicked.connect(self.show_detail_dialog)
 
         self.setup_log_capture_thread()
-        #self.setup_send_msg_thread()
+        # self.setup_send_msg_thread()
 
-    def show_dialog(self):
-        #self.views["user_detail_dialog"].exec()
-        # 신규등록 창
-        dlg = UserDetailDlg(self.parent)
-        dlg.accepted.connect(self.dialog_accept)
-        dlg.rejected.connect(self.dialog_reject)
+    def show_detail_dialog(self):
+        # 상세정보 창
+        row = self.user_view.currentIndex().row()
+        rows = self.user_model.getRows(row)
+        INFO(f"rows = [{rows}]")
+        dlg = UserDetailDlg(self.parent, rows["user_name"])
         dlg.exec()
 
-    def dialog_accept(self):
-        pass
+    def show_regist_dialog(self):
+        # self.views["user_detail_dialog"].exec()
+        # 신규등록 창
+        dlg = UserDetailDlg(self.parent)
+        dlg.accepted.connect(self.regist_dialog_accept)
+        dlg.rejected.connect(self.regist_dialog_reject)
+        dlg.exec()
 
-    def dialog_reject(self):
-        pass
+    def regist_dialog_accept(self):
+        INFO(f"OK버튼 눌렀지?")
+        self.user_model.query_page()
+        self.user_model.applyModel()
+        self.adjust_user_view_column()
+
+    def regist_dialog_reject(self):
+        INFO(f"Cancel버튼 눌렀지?")
 
     def adjust_user_view_column(self):
         header = self.user_view.horizontalHeader()
@@ -410,7 +509,6 @@ class LogViewModel:
         header = self.view.horizontalHeader()
         header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
         header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
-
 
     def setup_send_msg_thread(self):
         # Log Capture Thread 설정
@@ -471,6 +569,7 @@ class LogViewModel:
     def log_sending(self, user_msg):
         INFO(f"{user_msg}")
         self.model.update_sent_dtm(user_msg)
+        self.adjust_log_view_column()
 
     def send_msg(self):
         # 첫번째 데이터를 꺼내서 msg_worker로 전송
@@ -485,6 +584,7 @@ class LogViewModel:
         self.model.query_total_page()
         self.model.query_page()
         self.paging_mapper.toFirst()
+        self.adjust_log_view_column()
 
     def del_msg(self, model):
         row = self.msg_view.currentIndex().row()
@@ -534,10 +634,12 @@ class LogViewModel:
     def before_page(self):
         self.model.before_page()
         self.paging_mapper.toFirst()
+        self.adjust_log_view_column()
 
     def next_page(self):
         self.model.next_page()
         self.paging_mapper.toFirst()
+        self.adjust_log_view_column()
 
     def removeConfirm(self):
         data = self.view.selectedIndexes()
@@ -558,22 +660,101 @@ class LogViewModel:
 
 class UserDetailDlg(QDialog, UserDetailDialog):
     """User Detail Dialog."""
+
     def __init__(self, parent=None, user_name=None):
         super().__init__(parent)
         self.setupUi(self)
 
+        # self.user_name이 있고 없고에 따라, 등록과 수정을 구분
         self.user_name = user_name
 
-        self.views = {}
-
-        self.views["user_name_edit"] = self.user_name_edit
-        self.views["chat_room_edit"] = self.chat_room_edit
-        self.views["reg_dtm_edit"]   = self.reg_dtm_edit
-
         if self.user_name:
+            INFO(f"사용자 정보 수정 [{self.user_name}]")
             self.setWindowTitle("사용자 정보 수정")
+            # w : QLineEdit = QLineEdit()
+            # w.setStyleSheet('background-color: transparent;')
+            self.user_name_edit.setReadOnly(True)
+            self.user_name_edit.setStyleSheet("background-color: transparent;")
+            # background-color: transparent;
         else:
             self.setWindowTitle("사용자 정보 등록")
+
+        # 작은 MVVM처럼 세팅
+        self.views = {}
+        self.models = {}
+
+        # 작은 view들 세팅
+        self.views["user_name_edit"] = self.user_name_edit
+        self.views["chat_room_edit"] = self.chat_room_edit
+        self.views["reg_dtm_edit"] = self.reg_dtm_edit
+        self.views["button_box"] = self.buttonBox
+
+        # 작은 model들 세팅
+        self.models["user_model"] = UserModel()
+
+        self.dataInit()
+        # event 할당
+        # self.buttonBox.accepted.connect(self.accept)
+        # self.buttonBox.rejected.connect(self.reject)
+
+        # 이지만 할게 없네
+
+        if self.user_name:
+            self.models["user_model"].query_one(self.user_name)
+            self.mapper.toFirst()
+
+            # self.name_mapper.toFirst()
+            # self.chat_mapper.toFirst()
+            # self.reg_dtm_mapper.toFirst()
+
+    def accept(self) -> None:
+        INFO(f"accept 내부에서 처리")
+        if self.user_name:
+            # 수정
+            self.models["user_model"].update_user(self.user_name)
+        else:
+            # 등록
+            # w = QLineEdit()
+            # w.text()
+            user = {
+                "user_name": self.views["user_name_edit"].text(),
+                "chat_room": self.views["chat_room_edit"].text(),
+            }
+            try:
+                self.models["user_model"].regist_user(user)
+            except sqlite3.IntegrityError as ie:
+                ERROR(f"사용자등록에 실패하였습니다. 중복이 발생하였습니다.[{ie}]")
+                QMessageBox.about(self, "사용자 추가 오류", "사용자 추가하는데 실패하였습니다.(중복)")
+        return super().accept()
+
+    def reject(self) -> None:
+        INFO(f"reject 내부에서 처리")
+        return super().reject()
+
+    def dataInit(self):
+        self.mapper = QDataWidgetMapper()
+        self.mapper.setModel(self.models["user_model"].model)
+
+        # self.name_mapper = QDataWidgetMapper()
+        # self.name_mapper.setModel(self.models["user_model"].user_name_model)
+        # self.chat_mapper = QDataWidgetMapper()
+        # self.chat_mapper.setModel(self.models["user_model"].chat_room_model)
+        # self.reg_dtm_mapper = QDataWidgetMapper()
+        # self.reg_dtm_mapper.setModel(self.models["user_model"].reg_dtm_model)
+
+        # Log Tab
+        self.mapper.addMapping(self.views["user_name_edit"], 0)
+        self.mapper.addMapping(self.views["chat_room_edit"], 1)
+        self.mapper.addMapping(self.views["reg_dtm_edit"], 2)
+        self.mapper.toFirst()
+
+        # self.name_mapper.addMapping(self.views["user_name_edit"], 0)
+        # self.name_mapper.toFirst()
+        # self.chat_mapper.addMapping(self.views["chat_room_edit"], 0)
+        # self.chat_mapper.toFirst()
+        # self.reg_dtm_mapper.addMapping(self.views["reg_dtm_edit"], 0)
+        # self.reg_dtm_mapper.toFirst()
+
 
 class MainWindow(QMainWindow, ui_form):
     def __init__(self):
@@ -603,7 +784,7 @@ class MainWindow(QMainWindow, ui_form):
         self.views["msg_view"] = self.msgListView
 
         ## Dialog
-        #self.views["user_detail_dialog"] = UserDetailDlg(self)
+        # self.views["user_detail_dialog"] = UserDetailDlg(self)
 
         self.models = {}
         ## table_view의 모델
@@ -622,8 +803,8 @@ class MainWindow(QMainWindow, ui_form):
         self.center()
         self.show()
 
-    # def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
-    #     self.gridLayout.setFixedSize(resizeEvent.size)
+    def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
+        self.frame.setFixedSize(resizeEvent.size())
 
     @pyqtSlot()
     def adjustColumnSize(self):
