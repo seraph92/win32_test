@@ -916,6 +916,7 @@
 2021-08-19 05:52:34,178 - root - INFO - [run:226] line_cnt:[86]
 2021-08-19 05:52:37,268 - root - INFO - [run:226] line_cnt:[86]
 2021-08-19 05:52:40,344 - root - INFO - [run:226] line_cnt:[86]
+<<<<<<< HEAD
 2021-08-19 15:00:30,846 - root - INFO - [query_page:175] self.today = 20210819
 2021-08-19 15:00:30,847 - root - INFO - [query_page:176] today = 2021-08-19
 2021-08-19 15:15:12,904 - root - INFO - [query_page:175] self.today = 20210819
@@ -1477,3 +1478,5 @@
 2021-08-19 15:39:41,519 - root - INFO - [run:236] line_cnt:[88]
 2021-08-19 15:39:44,811 - root - INFO - [run:236] line_cnt:[88]
 2021-08-19 15:39:48,107 - root - INFO - [run:236] line_cnt:[88]
+=======
+>>>>>>> a613884f4148d3267017cf781c1b258aeffa8da8
