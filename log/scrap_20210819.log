@@ -916,3 +916,264 @@
 2021-08-19 05:52:34,178 - root - INFO - [run:226] line_cnt:[86]
 2021-08-19 05:52:37,268 - root - INFO - [run:226] line_cnt:[86]
 2021-08-19 05:52:40,344 - root - INFO - [run:226] line_cnt:[86]
+2021-08-19 15:00:30,846 - root - INFO - [query_page:175] self.today = 20210819
+2021-08-19 15:00:30,847 - root - INFO - [query_page:176] today = 2021-08-19
+2021-08-19 15:15:12,904 - root - INFO - [query_page:175] self.today = 20210819
+2021-08-19 15:15:12,906 - root - INFO - [query_page:176] today = 2021-08-19
+2021-08-19 15:15:52,949 - root - ERROR - [<module>:308] error message
+2021-08-19 15:15:52,965 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:15:53,732 - root - INFO - [<module>:306] continue
+2021-08-19 15:15:53,742 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:15:56,269 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:15:56,984 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:15:59,509 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:00,255 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:03,478 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:06,724 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:09,571 - root - INFO - [query_page:175] self.today = 20210819
+2021-08-19 15:16:09,571 - root - INFO - [query_page:176] today = 2021-08-19
+2021-08-19 15:16:09,601 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:09,990 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:12,842 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:13,203 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:16,184 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:16,470 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:17,615 - root - INFO - [date_change:396] date changed = [20210813]
+2021-08-19 15:16:17,619 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:17,620 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:19,414 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:19,678 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:22,531 - root - INFO - [date_change:396] date changed = [20210813]
+2021-08-19 15:16:22,534 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:22,534 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:22,655 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:22,656 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:22,782 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:23,003 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:24,239 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:24,240 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:26,012 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:26,249 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:29,260 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:29,465 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:32,509 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:32,682 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:35,812 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:35,941 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:37,409 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:37,410 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:37,568 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:37,569 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:37,727 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:37,727 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:37,912 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:37,912 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:38,094 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:38,094 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:38,265 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:38,265 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:38,453 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:38,454 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:38,608 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:38,609 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:16:39,096 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:39,226 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:42,349 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:42,461 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:45,739 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:45,757 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:49,053 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:49,085 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:52,313 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:52,351 - root - INFO - [add_msg:79] rank = 1 = 등원
+2021-08-19 15:16:52,352 - root - INFO - [add_msg:94] msg = [{'user': '이수미', 'message': '[2021-08-13 15:05:07] 이수미학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 15:05:07'}]
+2021-08-19 15:16:52,361 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:55,644 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:55,644 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:59,006 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:59,024 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:16:59,315 - root - INFO - [log_sending:385] {'user': '이수미', 'message': '[2021-08-13 15:05:07] 이수미학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 15:05:07'}
+2021-08-19 15:16:59,328 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:16:59,329 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:02,478 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:02,542 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:05,775 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:05,823 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:09,000 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:09,110 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:12,271 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:12,398 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:15,561 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:15,671 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:18,794 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:18,922 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:19,899 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:19,901 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:22,161 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:22,195 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:23,042 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:23,042 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:24,965 - root - INFO - [add_msg:79] rank = 2 = 하원
+2021-08-19 15:17:24,966 - root - INFO - [add_msg:94] msg = [{'user': '이수미', 'message': '[2021-08-13 16:28:47] 이수미학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 16:28:47'}]
+2021-08-19 15:17:25,498 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:25,547 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:27,013 - root - INFO - [add_msg:79] rank = 1 = 등원
+2021-08-19 15:17:27,014 - root - INFO - [add_msg:94] msg = [{'user': 'yuna', 'message': '[2021-08-13 16:18:17] yuna학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 16:18:17'}]
+2021-08-19 15:17:28,798 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:28,860 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:32,044 - root - INFO - [log_sending:385] {'user': '이수미', 'message': '[2021-08-13 16:28:47] 이수미학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 16:28:47'}
+2021-08-19 15:17:32,059 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:32,060 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:32,158 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:32,158 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:35,396 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:35,506 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:38,612 - root - INFO - [log_sending:385] {'user': 'yuna', 'message': '[2021-08-13 16:18:17] yuna학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 16:18:17'}
+2021-08-19 15:17:38,623 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:38,624 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:38,690 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:38,768 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:41,985 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:42,032 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:43,096 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:43,097 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:45,022 - root - INFO - [add_msg:79] rank = 2 = 하원
+2021-08-19 15:17:45,023 - root - INFO - [add_msg:94] msg = [{'user': 'Scott', 'message': '[2021-08-13 17:49:12] Scott학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 17:49:12'}]
+2021-08-19 15:17:45,338 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:45,370 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:48,629 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:48,650 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:49,990 - root - INFO - [add_msg:79] rank = 1 = 등원
+2021-08-19 15:17:49,990 - root - INFO - [add_msg:94] msg = [{'user': 'Scott', 'message': '[2021-08-13 17:02:52] Scott학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 17:02:52'}]
+2021-08-19 15:17:51,996 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:51,996 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:52,277 - root - INFO - [log_sending:385] {'user': 'Scott', 'message': '[2021-08-13 17:49:12] Scott학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 17:49:12'}
+2021-08-19 15:17:52,291 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:52,292 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:55,394 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:55,424 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:58,718 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:58,735 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:17:58,776 - root - INFO - [log_sending:385] {'user': 'Scott', 'message': '[2021-08-13 17:02:52] Scott학생 도착했습니다.\n-READ101-', 'dtm': '2021-08-13 17:02:52'}
+2021-08-19 15:17:58,801 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:17:58,801 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:17:59,141 - root - INFO - [add_msg:79] rank = 2 = 하원
+2021-08-19 15:17:59,142 - root - INFO - [add_msg:94] msg = [{'user': '신예서Aurora', 'message': '[2021-08-13 17:04:40] 신예서Aurora학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 17:04:40'}]
+2021-08-19 15:18:02,087 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:02,152 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:05,479 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:05,543 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:06,265 - root - INFO - [log_sending:385] {'user': '신예서Aurora', 'message': '[2021-08-13 17:04:40] 신예서Aurora학생 수업이 끝났습니다.(출발)\n-READ101-', 'dtm': '2021-08-13 17:04:40'}
+2021-08-19 15:18:06,276 - root - INFO - [query_page:175] self.today = 20210813
+2021-08-19 15:18:06,277 - root - INFO - [query_page:176] today = 2021-08-13
+2021-08-19 15:18:08,957 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:08,975 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:12,280 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:12,297 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:15,574 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:18,782 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:22,041 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:25,297 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:28,488 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:31,708 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:34,974 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:38,216 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:41,482 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:44,734 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:47,972 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:51,212 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:54,464 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:18:57,730 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:00,981 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:04,255 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:07,504 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:10,767 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:14,036 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:17,308 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:17,573 - root - INFO - [log_processing:283] 로그등록:[[2021-08-17 22:51:07] 출입 확인 (이름: 이수미, 체온: 36.7. 출입시간 : 2021-08-17T22:48:50)]
+2021-08-19 15:19:20,591 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:23,859 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:27,119 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:30,340 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:33,511 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:36,679 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:39,839 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:43,078 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:46,229 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:49,394 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:52,559 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:55,726 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:19:58,889 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:02,048 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:05,221 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:08,386 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:11,548 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:14,711 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:17,882 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:21,047 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:24,216 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:27,389 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:30,520 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:33,672 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:36,817 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:39,960 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:43,091 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:46,217 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:49,346 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:52,476 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:55,618 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:20:58,768 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:01,904 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:05,053 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:08,198 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:11,400 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:14,558 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:17,724 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:20,859 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:23,995 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:27,124 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:30,259 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:33,430 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:36,575 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:39,703 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:42,848 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:46,015 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:49,164 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:52,336 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:55,514 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:21:58,680 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:01,841 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:05,012 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:08,189 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:11,357 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:14,519 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:17,685 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:20,842 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:24,013 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:27,185 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:30,356 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:33,515 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:36,693 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:39,854 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:43,029 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:46,198 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:49,360 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:52,538 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:55,722 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:22:58,884 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:02,052 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:05,226 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:08,395 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:11,562 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:14,722 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:17,899 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:21,063 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:24,232 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:27,392 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:30,582 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:33,750 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:37,063 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:40,250 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:43,421 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:46,583 - root - INFO - [run:236] line_cnt:[88]
+2021-08-19 15:23:49,751 - root - INFO - [run:236] line_cnt:[88]

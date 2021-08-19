@@ -10,8 +10,8 @@ import sqlite3
 
 from BKLOG import *
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 
 class HistoryMgr:
@@ -52,9 +52,11 @@ class HistoryMgr:
 
 
 class WindowsObject:
-    def __init__(self, text=None, parent_hwnd=None):
+    def __init__(self, r_text=None, parent_hwnd=None):
         self.win_objs = []
-        win32gui.EnumWindows(self.__EnumWindowsHandler, text)
+        self.pattern = re.compile(r_text)
+        #win32gui.EnumWindows(self.__EnumWindowsHandler, r_text)
+        win32gui.EnumWindows(self.__EnumWindowsHandler, None)
         if len(self.win_objs) < 1:
             raise ValueError("Windows Object를 발견하지 못하였습니다.")
         self.obj = self.win_objs[0]
@@ -66,19 +68,26 @@ class WindowsObject:
             return self.win_objs[0]
 
     def __EnumWindowsHandler(self, hwnd, find_text):
+    #def __EnumWindowsHandler(self, hwnd):
         wintext = win32gui.GetWindowText(hwnd)
-        if find_text:
-            if wintext.find(find_text) != -1:
-                obj = {}
-                obj["handle"] = hwnd
-                obj["text"] = wintext
-                self.win_objs.append(obj)
-        else:
+        # if find_text:
+        #     if wintext.find(find_text) != -1:
+        #         obj = {}
+        #         obj["handle"] = hwnd
+        #         obj["text"] = wintext
+        #         self.win_objs.append(obj)
+        # else:
+        #     obj = {}
+        #     obj["handle"] = hwnd
+        #     obj["text"] = wintext
+        #     self.win_objs.append(obj)
+        # print ("%08X: %s" % (hwnd, wintext))
+        if self.pattern.match(wintext):
             obj = {}
             obj["handle"] = hwnd
             obj["text"] = wintext
             self.win_objs.append(obj)
-        # print ("%08X: %s" % (hwnd, wintext))
+
 
 
 def log_processing(compiled_pattern, strLog):
@@ -187,7 +196,8 @@ class LogCaptureWin32Worker(QObject):
 
         self.loop_flag = True
         if GLOBAL_WIN == "AGENT":
-            self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+            #self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+            self.w = WindowsObject(r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]")
         else:
             self.w = WindowsObject("sample.txt - Windows 메모장")
 
