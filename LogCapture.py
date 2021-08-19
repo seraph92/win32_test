@@ -10,8 +10,8 @@ import sqlite3
 
 from BKLOG import *
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 
 class HistoryMgr:
@@ -181,8 +181,8 @@ def log_capture_main():
 
     result = monitoring(logwin)
 
-    # print(f"메모장내용:[{logwin.text_block()}]")
-    # print(f"메모장내용:[{logwin.window_text()}]")
+    # DEBUG(f"메모장내용:[{logwin.text_block()}]")
+    # DEBUG(f"메모장내용:[{logwin.window_text()}]")
 
 
 class LogCaptureWin32Worker(QObject):
@@ -225,7 +225,7 @@ class LogCaptureWin32Worker(QObject):
     def run(self):
         edit_control = self.logwin
 
-        print("돌고있나?")
+        DEBUG("돌고있나?")
 
         processing_pattern = re.compile(
             r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)"

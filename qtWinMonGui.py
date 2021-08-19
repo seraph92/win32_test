@@ -1,12 +1,9 @@
-from PyQt5 import QtGui
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
 import win32com.shell.shell as shell
 
 from dbm import HistoryMgr
-import time
-import traceback
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
@@ -20,28 +17,19 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QTableView,
     QTextEdit,
-    QWidget,
 )
-from PyQt5 import QtCore
 from PyQt5 import uic
 
 # signal processing importing
 from PyQt5.QtCore import (
-    QModelIndex,
-    QRunnable,
     QThread,
-    QThreadPool,
     pyqtSlot,
-    pyqtSignal,
-    QObject,
 )
 
 from LogCapture import LogCaptureWin32Worker
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
-# ui_form = uic.loadUiType("ui/auto_log_program_widget.ui")[0]
-
 
 class MsgsModel(list):
     def __init__(self, l=[]):
@@ -133,8 +121,8 @@ class LogsModel(list):
         self.total_page = mgr.query_total_page(self.PAGE_SIZE)
         self.item_data["total_page"] = self.total_page
 
-        #print(f"self.item_data=[{self.item_data}]")
-        #print(f"total_page = [{self.item_data['total_page']}]")
+        #DEBUG(f"self.item_data=[{self.item_data}]")
+        #DEBUG(f"total_page = [{self.item_data['total_page']}]")
 
         sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
         sql += f"FROM inout_history \n"
@@ -144,7 +132,7 @@ class LogsModel(list):
 
         self.data = mgr.query(sql)
 
-        print(f"data = [{self.data}]")
+        DEBUG(f"data = [{self.data}]")
 
         self.model = QStandardItemModel()
         self.model.setColumnCount(7)
@@ -184,11 +172,11 @@ class LogsModel(list):
         sql += f"ORDER BY dtm desc\n"
         sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
 
-        print(f"sql = [{sql}]")
+        DEBUG(f"sql = [{sql}]")
 
         self.data = mgr.query(sql)
 
-        print(f"data = [{self.data}]")
+        DEBUG(f"data = [{self.data}]")
 
         self.applyModel()
 
@@ -201,7 +189,7 @@ class LogsModel(list):
         if self.current_page < 1:
             self.current_page = 1
 
-        print(f"before current_page=[{self.current_page}]")
+        DEBUG(f"before current_page=[{self.current_page}]")
         # self.model.clear()
         # self.aggregation_model.clear()
         self.query_page()
@@ -212,7 +200,7 @@ class LogsModel(list):
         if self.current_page > self.total_page:
             self.current_page = self.total_page
 
-        print(f"next current_page=[{self.current_page}]")
+        DEBUG(f"next current_page=[{self.current_page}]")
         # self.model.clear()
         # self.aggregation_model.clear()
         self.query_page()
@@ -323,7 +311,7 @@ class LogViewModel:
         self.msg_view.doubleClicked.connect(self.del_msg)
 
         self.setup_log_capture_thread()
-        self.setup_send_msg_thread()
+        #self.setup_send_msg_thread()
 
     def setup_send_msg_thread(self):
         # Log Capture Thread 설정
@@ -379,7 +367,7 @@ class LogViewModel:
 
     def __del__(self):
         # self.logCapture.loop_flag = False
-        print(f"LogViewModel destroyed!!")
+        DEBUG(f"LogViewModel destroyed!!")
 
     def log_sending(self, user_msg):
         INFO(f"{user_msg}")

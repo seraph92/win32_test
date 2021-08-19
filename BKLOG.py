@@ -5,8 +5,39 @@ import sys
 import datetime
 import logging
 
+from Config import CONFIG
+
 LOG = logging.getLogger()
-LOG.setLevel(logging.INFO)
+
+CRITICAL = 50
+FATAL = CRITICAL
+ERROR = 40
+WARNING = 30
+WARN = WARNING
+INFO = 20
+DEBUG = 10
+NOTSET = 0
+
+
+if CONFIG['logging'] == "INFO":
+    LOG.setLevel(logging.INFO)
+elif CONFIG['logging'] == "DEBUG":
+    LOG.setLevel(logging.DEBUG)
+elif CONFIG['logging'] == "ERROR":
+    LOG.setLevel(logging.ERROR)
+elif CONFIG['logging'] == "CRITICAL":  # CRITICAL == FATAL
+    LOG.setLevel(logging.CRITICAL)
+elif CONFIG['logging'] == "FATAL":
+    LOG.setLevel(logging.FATAL)
+elif CONFIG['logging'] == "WARN": # WARN == WARNING
+    LOG.setLevel(logging.WARN)
+elif CONFIG['logging'] == "WARNING":
+    LOG.setLevel(logging.WARNING)
+elif CONFIG['logging'] == "NOTSET":
+    LOG.setLevel(logging.NOTSET)
+else:
+    LOG.setLevel(logging.ERROR)
+
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # log handler

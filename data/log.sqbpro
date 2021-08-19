@@ -1,41 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:/work/python/win32_test/data/log.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1091"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,13:maininout_history"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="inout_history" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="131"/><column index="2" value="102"/><column index="3" value="57"/><column index="4" value="135"/><column index="5" value="156"/><column index="6" value="77"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">select dtm, name, rank() over (PARTITION BY name ORDER by dtm) as rnk
-from inout_history
-order by dtm;
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/work/python/win32_test-1/data/log.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1318"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,13:maininout_history"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="inout_history" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="152"/><column index="2" value="123"/><column index="3" value="66"/><column index="4" value="156"/><column index="5" value="182"/><column index="6" value="180"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="user" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="31"/><column index="2" value="132"/><column index="3" value="263"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">select dtm, name, rank() over (PARTITION BY name ORDER by dtm) as rnk
+from inout_history
+order by dtm;
+
+SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm
+FROM inout_history
+WHERE
+name like '%%'
+ORDER BY dtm desc
+
+SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, row_number() over (PARTITION BY dtm2 ORDER by dtm) as rnk2, send_dtm
+FROM inout_history
+WHERE
+name like '%%'
+ORDER BY dtm desc;
+
+select count(*) as total_page from inout_history
+select cast ( (count(*) / 15) as int ) + ( (count(*) / 15) &gt; cast ( (count(*) / 15) as int )) as total_page from inout_history
+
+select 85 / 15 + case 85 % 15 when 0 then 0 else 1 END;
+select 60 / 15, 60 % 15;
 
 SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm
-FROM inout_history
-WHERE
-name like '%%'
-ORDER BY dtm desc
-
-SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, row_number() over (PARTITION BY dtm2 ORDER by dtm) as rnk2, send_dtm
-FROM inout_history
-WHERE
-name like '%%'
+from inout_history
+where name like '%%'
+and date(dtm) = date('2021-08-13')
 ORDER BY dtm desc;
 
-select count(*) as total_page from inout_history
-select cast ( (count(*) / 15) as int ) + ( (count(*) / 15) &gt; cast ( (count(*) / 15) as int )) as total_page from inout_history
+
+select dtm2, count(*) cnt
+from inout_history
+where date(dtm) = date('2021-08-13')
+group by dtm2;
 
-select 85 / 15 + case 85 % 15 when 0 then 0 else 1 END;
-select 60 / 15, 60 % 15;
+--SELECT a.dtm, a.name, a.temper, a.dtm2, a.reg_dtm, rank() over (PARTITION BY a.name ORDER by a.dtm) as rnk, send_dtm, b.cnt
+SELECT dtm, name, temper, a.dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm, b.cnt
+from inout_history a, (select dtm2, count(*) cnt
+from inout_history
+where date(dtm) = date('2021-08-13')
+group by dtm2) b
+where a.name like '%%'
+and a.dtm2 = b.dtm2
+and date(a.dtm) = date('2021-08-13')
+ORDER BY dtm desc;
 
 
-commit;</sql><sql name="SQL 2">CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
-INSERT INTO t1 VALUES   (1, 'A', 'one'  ),
-                        (2, 'B', 'two'  ),
-                        (3, 'C', 'three'),
-                        (4, 'D', 'one'  ),
-                        (5, 'E', 'two'  ),
-                        (6, 'F', 'three'),
-                        (7, 'G', 'one'  );</sql><sql name="SQL 3">select *
-from t1;
+;
 
-SELECT a, b, group_concat(b, '.') OVER (
-  ORDER BY a ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
-) AS group_concat FROM t1;
+</sql><sql name="SQL 2">CREATE TABLE t1(a INTEGER PRIMARY KEY, b, c);
+INSERT INTO t1 VALUES   (1, 'A', 'one'  ),
+                        (2, 'B', 'two'  ),
+                        (3, 'C', 'three'),
+                        (4, 'D', 'one'  ),
+                        (5, 'E', 'two'  ),
+                        (6, 'F', 'three'),
+                        (7, 'G', 'one'  );</sql><sql name="Window">select *
+from t1;
+
+SELECT a, b, group_concat(b, '.') OVER (
+  ORDER BY a ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+) AS group_concat FROM t1;
+
+SELECT c, a, b, group_concat(b, '.') OVER (
+  PARTITION BY c ORDER BY a RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+) AS group_concat
+FROM t1 ORDER BY c, a;</sql><sql name="SQL 5">SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm
+FROM inout_history
+WHERE
+name like '%%'
+and date(dtm) = date('2021-08-13')
+ORDER BY dtm desc
+LIMIT 15 OFFSET 0;
 
-SELECT c, a, b, group_concat(b, '.') OVER (
-  PARTITION BY c ORDER BY a RANGE BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
-) AS group_concat
-FROM t1 ORDER BY c, a;</sql><current_tab id="2"/></tab_sql></sqlb_project>
+
+select *
+from user;</sql><current_tab id="3"/></tab_sql></sqlb_project>
