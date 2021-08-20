@@ -94,7 +94,7 @@ class MsgsModel(list):
 
         # 기 발송 검증
         if d["send_dtm"]:
-            return
+            return False
 
         # 중복 검증
         # {k: v for k, v in my_dict.items() if int(v) > 2000}
@@ -106,6 +106,8 @@ class MsgsModel(list):
 
         self.data.append(msg)
         self.applyModel()
+
+        return True
 
 
 class UserModel(list):
@@ -352,7 +354,21 @@ class LogsModel(list):
         self.applyModel()
 
     def findNextKey(self, key):
-        pass
+        mgr = HistoryMgr()
+        sql = f"SELECT dtm, name \n"
+        sql += f"FROM inout_history \n"
+        sql += f"WHERE \n"
+        sql += f"dtm >= '{key}' \n"
+        sql += f"order by dtm \n"
+        sql += f"limit 2 \n"
+
+        DEBUG(f"sql = [{sql}]")
+        datas = mgr.query(sql)
+
+        if len(datas) < 2:
+            return None
+        else:
+            return datas[1]["dtm"]
 
     def findRowIndex(self, key, find_text):
         for index, item in enumerate(self.data):
@@ -539,10 +555,10 @@ class LogViewModel:
             autoBtn.setText("자동 처리 중")
             autoBtn.setStyleSheet("background-color: red;")
             self.auto_current_key = self.model.getLastRowKey()
-            index = self.model.findRowIndex("dtm", self.auto_current_key)
-            if index:
-                self.view.selectRow(index)
-            self.add_msg(None)
+            # index = self.model.findRowIndex("dtm", self.auto_current_key)
+            # if index:
+            #     self.view.selectRow(index)
+            # self.add_msg(None)
         else:
             autoBtn.setText("자동처리")
             autoBtn.setStyleSheet("")
@@ -550,12 +566,20 @@ class LogViewModel:
     def auto_log_process(self):
         # 현재 페이지를 상대로 처리되지 않은 항목들에 대해 메시지를 발송한다.
         if self.auto_flag:
-            self.auto_current_key = self.model.findNextKey(self.auto_current_key)
-
             index = self.model.findRowIndex("dtm", self.auto_current_key)
             if index:
                 self.view.selectRow(index)
-            self.add_msg(None)
+                self.add_msg(None)
+
+            next_key = self.model.findNextKey(self.auto_current_key)
+
+            if next_key:
+                self.auto_current_key = next_key
+
+            # index = self.model.findRowIndex("dtm", self.auto_current_key)
+            # if index:
+            #     self.view.selectRow(index)
+            # self.add_msg(None)
 
 
     def show_detail_dialog(self):
@@ -684,6 +708,8 @@ class LogViewModel:
         self.model.query_page()
         self.paging_mapper.toFirst()
         self.adjust_log_view_column()
+        self.auto_flag = False
+        self.apply_auto_Btn()
 
     def del_msg(self, model):
         row = self.msg_view.currentIndex().row()
@@ -697,7 +723,9 @@ class LogViewModel:
         rows = self.model.getRows(row)
         DEBUG(f"rows = [{rows}]")
         if not rows["send_dtm"]:
-            self.msg_model.add_msg(rows)
+            if self.msg_model.add_msg(rows):
+                rows["send_dtm"] = "-"
+                self.model.applyModel()
 
     # scrap시 dup발생시 호출되는 함수
     def dup_handle(self, strlog, error):
@@ -734,11 +762,15 @@ class LogViewModel:
         self.model.before_page()
         self.paging_mapper.toFirst()
         self.adjust_log_view_column()
+        self.auto_flag = False
+        self.apply_auto_Btn()
 
     def next_page(self):
         self.model.next_page()
         self.paging_mapper.toFirst()
         self.adjust_log_view_column()
+        self.auto_flag = False
+        self.apply_auto_Btn()
 
     def removeConfirm(self):
         data = self.view.selectedIndexes()
