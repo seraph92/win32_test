@@ -99,9 +99,10 @@ class MsgsModel(list):
         # 중복 검증
         # {k: v for k, v in my_dict.items() if int(v) > 2000}
         # INFO(f"data = [{self.data}]")
-        names = (data["user"] for data in self.data)
+        # names = (data["user"] for data in self.data)
+        names = (f"{data['user']}({data['inout']})" for data in self.data)
         # INFO(f"names = [{names}]")
-        if d["name"] in names:
+        if f"{d['name']}({enter_exit})" in names:
             return
 
         self.data.append(msg)
@@ -377,7 +378,8 @@ class LogsModel(list):
         return None
 
     def getLastRowKey(self):
-        return self.data[len(self.data)-1]["dtm"]
+        return self.data[len(self.data) - 1]["dtm"]
+
     # def findNotSentRowIndex(self):
     #     item_count = len(self.data)
     #     #INFO(f"item_count = [{item_count}]")
@@ -387,7 +389,6 @@ class LogsModel(list):
     #         if item["send_dtm"] == None or item["send_dtm"] == "":
     #             return index
     #     return None
-
 
     def getRows(self, idx):
         return self.data[idx]
@@ -524,7 +525,7 @@ class LogViewModel:
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
         views["today_edit"].editingFinished.connect(self.date_change)
-        #views["keyword_edit"].editingFinished.connect(self.keyword_change)
+        # views["keyword_edit"].editingFinished.connect(self.keyword_change)
         views["keyword_edit"].hide()
         views["auto_button"].clicked.connect(self.set_auto_process)
 
@@ -580,7 +581,6 @@ class LogViewModel:
             # if index:
             #     self.view.selectRow(index)
             # self.add_msg(None)
-
 
     def show_detail_dialog(self):
         # 상세정보 창
@@ -726,6 +726,7 @@ class LogViewModel:
             if self.msg_model.add_msg(rows):
                 rows["send_dtm"] = "-"
                 self.model.applyModel()
+        self.adjust_log_view_column()
 
     # scrap시 dup발생시 호출되는 함수
     def dup_handle(self, strlog, error):

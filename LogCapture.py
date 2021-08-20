@@ -10,8 +10,8 @@ import sqlite3
 
 from BKLOG import *
 
-GLOBAL_WIN = "AGENT"
-#GLOBAL_WIN = "EDIT"
+# GLOBAL_WIN = "AGENT"
+GLOBAL_WIN = "EDIT"
 
 
 class HistoryMgr:
