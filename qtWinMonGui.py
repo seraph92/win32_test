@@ -19,6 +19,7 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QApplication,
     QMessageBox,
+    QPushButton,
     QTableView,
     QTextEdit,
 )
@@ -27,6 +28,8 @@ from PyQt5 import uic
 # signal processing importing
 from PyQt5.QtCore import (
     QThread,
+    QTime,
+    QTimer,
     pyqtSlot,
 )
 
@@ -51,7 +54,7 @@ class MsgsModel(list):
         for data in self.data:
             self.model.appendRow(
                 [
-                    QStandardItem(data["user"]),
+                    QStandardItem(f"{data['user']}({data['inout']})"),
                     QStandardItem(data["message"]),
                 ]
             )
@@ -82,6 +85,7 @@ class MsgsModel(list):
 
         msg = {
             "user": d["name"],
+            "inout": enter_exit,
             "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
             "dtm": d["dtm"],
         }
@@ -314,6 +318,7 @@ class LogsModel(list):
         sql = f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page\n"
         sql += f"from inout_history\n"
         sql += f"where date(dtm) = date('{today}')\n"
+        sql += f"and (del_yn is NULL or del_yn = 'N')\n"
         rslt = mgr.query(sql)
         return rslt[0]["total_page"]
 
@@ -334,6 +339,7 @@ class LogsModel(list):
         sql += f"WHERE \n"
         sql += f"name like '%%'\n"
         sql += f"and date(dtm) = date('{today}')\n"
+        sql += f"and (del_yn is NULL or del_yn = 'N')\n"
         sql += f"ORDER BY dtm desc\n"
         sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
 
@@ -344,6 +350,28 @@ class LogsModel(list):
         DEBUG(f"data = [{self.data}]")
 
         self.applyModel()
+
+    def findNextKey(self, key):
+        pass
+
+    def findRowIndex(self, key, find_text):
+        for index, item in enumerate(self.data):
+            if item[key] == find_text:
+                return index
+        return None
+
+    def getLastRowKey(self):
+        return self.data[len(self.data)-1]["dtm"]
+    # def findNotSentRowIndex(self):
+    #     item_count = len(self.data)
+    #     #INFO(f"item_count = [{item_count}]")
+    #     for index in reversed(range(item_count)):
+    #         item = self.data[index]
+    #         #INFO(f"item_count = [{item['send_dtm']}]")
+    #         if item["send_dtm"] == None or item["send_dtm"] == "":
+    #             return index
+    #     return None
+
 
     def getRows(self, idx):
         return self.data[idx]
@@ -442,6 +470,7 @@ class LogViewModel:
     def __init__(self, parent, views, models):
         self.parent = parent
         self.log_capture_loop = None
+        self.auto_flag = False
         self.views = views
 
         # Log Tab
@@ -479,6 +508,9 @@ class LogViewModel:
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
         views["today_edit"].editingFinished.connect(self.date_change)
+        #views["keyword_edit"].editingFinished.connect(self.keyword_change)
+        views["keyword_edit"].hide()
+        views["auto_button"].clicked.connect(self.set_auto_process)
 
         views["regist_user_button"].clicked.connect(self.show_regist_dialog)
         views["regist_user_button2"].clicked.connect(self.show_regist_dialog)
@@ -489,6 +521,42 @@ class LogViewModel:
 
         self.setup_log_capture_thread()
         # self.setup_send_msg_thread()
+
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.auto_log_process)
+        self.timer.start()
+
+    def set_auto_process(self):
+        self.auto_flag = not self.auto_flag
+
+        self.apply_auto_Btn()
+
+    def apply_auto_Btn(self):
+        autoBtn: QPushButton = self.views["auto_button"]
+
+        if self.auto_flag:
+            autoBtn.setText("자동 처리 중")
+            autoBtn.setStyleSheet("background-color: red;")
+            self.auto_current_key = self.model.getLastRowKey()
+            index = self.model.findRowIndex("dtm", self.auto_current_key)
+            if index:
+                self.view.selectRow(index)
+            self.add_msg(None)
+        else:
+            autoBtn.setText("자동처리")
+            autoBtn.setStyleSheet("")
+
+    def auto_log_process(self):
+        # 현재 페이지를 상대로 처리되지 않은 항목들에 대해 메시지를 발송한다.
+        if self.auto_flag:
+            self.auto_current_key = self.model.findNextKey(self.auto_current_key)
+
+            index = self.model.findRowIndex("dtm", self.auto_current_key)
+            if index:
+                self.view.selectRow(index)
+            self.add_msg(None)
+
 
     def show_detail_dialog(self):
         # 상세정보 창
@@ -603,6 +671,10 @@ class LogViewModel:
         data = self.msg_model.deque_msg()
         if data:
             self.msg_worker.user_msgs.append(data)
+
+    # def keyword_change(self):
+    #     keyword = self.views["keyword_edit"].text()
+    #     INFO(f"keyword changed = [{keyword}]")
 
     def date_change(self):
         self.model.today = self.views["today_edit"].text()
@@ -801,10 +873,12 @@ class MainWindow(QMainWindow, ui_form):
         self.views["table_view"] = self.logTableView
         self.views["page_edit"] = self.pageEdit
         self.views["today_edit"] = self.todayEdit
+        self.views["keyword_edit"] = self.keywordEdit
         self.views["before_button"] = self.beforeBtn
         self.views["before_button2"] = self.beforeBtn2
         self.views["next_button"] = self.nextBtn
         self.views["next_button2"] = self.nextBtn2
+        self.views["auto_button"] = self.autoBtn
 
         ## User Tab
         self.views["user_table_view"] = self.userTableView

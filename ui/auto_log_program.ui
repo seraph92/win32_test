@@ -68,7 +68,7 @@
         <item row="0" column="1">
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="logTab_2">
            <attribute name="title">
@@ -98,12 +98,29 @@
                </spacer>
               </item>
               <item>
+               <widget class="QPushButton" name="autoBtn">
+                <property name="text">
+                 <string>자동처리</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLineEdit" name="pageEdit">
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
                 <property name="readOnly">
                  <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="todayEdit">
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="readOnly">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -119,16 +136,6 @@
                  </size>
                 </property>
                </spacer>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="todayEdit">
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-                <property name="readOnly">
-                 <bool>false</bool>
-                </property>
-               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="nextBtn">
@@ -164,6 +171,16 @@
                <widget class="QPushButton" name="beforeBtn2">
                 <property name="text">
                  <string>이전</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="keywordEdit">
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="readOnly">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
