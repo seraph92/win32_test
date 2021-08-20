@@ -145,21 +145,30 @@ class UserModel(list):
         try:
             mgr = HistoryMgr()
             sql = f"INSERT INTO user(user_name, chat_room, reg_dtm) \n"
-            sql += f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now'))\n"
+            sql += f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))\n"
             rslt = mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
             raise sqlite3.IntegrityError("등록실패")
 
-    def update_user(self, user_name):
-        mgr = HistoryMgr()
-        sql = f"UPDATE user\n"
-        sql += f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now')\n"
-        sql += f"AND chat_room = '{self.data['chat_room']}'\n"
-        sql += f"where user_name = '{user_name}'\n"
-        rslt = mgr.execute(sql)
-        mgr.dbconn.commit()
+    def update_user(self, user):
+        user_name = user["user_name"]
+        chat_room = user["chat_room"]
+
+        try:
+            mgr = HistoryMgr()
+            sql = f"UPDATE user\n"
+            sql += f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')\n"
+            sql += f"  , chat_room = '{chat_room}'\n"
+            sql += f"where user_name = '{user_name}'\n"
+
+            INFO(f"sql = [{sql}]")
+            rslt = mgr.execute(sql)
+            mgr.dbconn.commit()
+        except:
+            mgr.dbconn.rollback()
+            raise sqlite3.Error("변경실패")
 
     # data를 model에 적용
     def applyModel(self):
@@ -217,6 +226,12 @@ class UsersModel(list):
         # INFO(f"data = [{self.data}]")
 
         self.applyModel()
+
+    def findRowIndex(self, key, find_text):
+        for index, item in enumerate(self.data):
+            if item[key] == find_text:
+                return index
+        return None
 
     def getRows(self, idx):
         return self.data[idx]
@@ -376,7 +391,7 @@ class LogsModel(list):
     def update_sent_dtm(self, user_msg):
         mgr = HistoryMgr()
         sql = f"UPDATE inout_history\n"
-        sql += f"SET send_dtm = strftime('%Y-%m-%d %H:%M:%f','now')\n"
+        sql += f"SET send_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')\n"
         sql += f"where dtm = '{user_msg['dtm']}'\n"
         rslt = mgr.execute(sql)
         mgr.dbconn.commit()
@@ -443,7 +458,7 @@ class LogViewModel:
 
         # User Tab
         self.user_view: QTableView = views["user_table_view"]
-        self.user_model: LogsModel = models["user_model"]
+        self.user_model: UsersModel = models["user_model"]
 
         # Left Top
         self.msg_view: QListView = views["msg_view"]
@@ -481,7 +496,12 @@ class LogViewModel:
         rows = self.user_model.getRows(row)
         INFO(f"rows = [{rows}]")
         dlg = UserDetailDlg(self.parent, rows["user_name"])
+        dlg.accepted.connect(self.regist_dialog_accept)
+        dlg.rejected.connect(self.regist_dialog_reject)
         dlg.exec()
+        index = self.user_model.findRowIndex("user_name", rows["user_name"])
+        if index:
+            self.user_view.selectRow(index)
 
     def show_regist_dialog(self):
         # self.views["user_detail_dialog"].exec()
@@ -489,12 +509,19 @@ class LogViewModel:
         dlg = UserDetailDlg(self.parent)
         dlg.accepted.connect(self.regist_dialog_accept)
         dlg.rejected.connect(self.regist_dialog_reject)
+        # dlg.finished.connect(self.regist_dialog_finished)
         dlg.exec()
+        # self.user_model.
+
+    def regist_dialog_finished(self):
+        INFO(f"다이얼로그 끝났어!!")
+        self.user_model.query_page()
+        self.adjust_user_view_column()
 
     def regist_dialog_accept(self):
         INFO(f"OK버튼 눌렀지?")
         self.user_model.query_page()
-        self.user_model.applyModel()
+        # self.user_model.applyModel()
         self.adjust_user_view_column()
 
     def regist_dialog_reject(self):
@@ -708,10 +735,18 @@ class UserDetailDlg(QDialog, UserDetailDialog):
             # self.reg_dtm_mapper.toFirst()
 
     def accept(self) -> None:
-        INFO(f"accept 내부에서 처리")
+        INFO(f"accept 내부에서 처리 [self.user_name]")
         if self.user_name:
             # 수정
-            self.models["user_model"].update_user(self.user_name)
+            user = {
+                "user_name": self.views["user_name_edit"].text(),
+                "chat_room": self.views["chat_room_edit"].text(),
+            }
+            try:
+                self.models["user_model"].update_user(user)
+            except sqlite3.Error as e:
+                ERROR(f"사용자정보 수정에 실패하였습니다. {e}]")
+                QMessageBox.about(self, "정보 변경 오류", "사용자정보 수정에 실패하였습니다.")
         else:
             # 등록
             # w = QLineEdit()
