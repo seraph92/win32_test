@@ -8,54 +8,16 @@ import re
 
 import sqlite3
 
+from dbm import HistoryMgr
 from BKLOG import *
 
 GLOBAL_WIN = "AGENT"
 #GLOBAL_WIN = "EDIT"
 
-
-class HistoryMgr:
-    # SELECT strftime('%Y-%m-%d %H:%M:%S','now') as dtm, strftime('%Y-%m-%d %H:%M:%f','now') as udtm, strftime('%s','now') as unixdtm, date('now') as dt
-    def __init__(self, dbconn=None):
-        self.INSERT_HISTORY = "INSERT INTO inout_history(dtm, name, temper, dtm2, reg_dtm) values (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%f','now'))"
-        self.dbconn = dbconn
-        if self.dbconn == None:
-            self.dbconn = sqlite3.connect("data/log.db")
-
-        self.cur = self.dbconn.cursor()
-
-    def execute_param(self, exec_str, param):
-        result = self.cur.execute(exec_str, param)
-        DEBUG(f"exec result=[{result}]")
-        return result
-
-    def execute(self, exec_str):
-        result = self.dbconn.execute(exec_str)
-        DEBUG(f"exec result=[{result}]")
-        return result
-
-    def query(self, exec_str):
-        cur = self.cur.execute(exec_str)
-        DEBUG(f"query result(cur)=[{cur}]")
-        rows = cur.fetchall()
-        return rows
-
-    def commit(self):
-        self.dbconn.commit()
-
-    def rollback(self):
-        self.dbconn.rollback()
-
-    def __del__(self):
-        self.dbconn.close()
-        DEBUG(f"db Connection Closed!!")
-
-
 class WindowsObject:
     def __init__(self, r_text=None, parent_hwnd=None):
         self.win_objs = []
         self.pattern = re.compile(r_text)
-        # win32gui.EnumWindows(self.__EnumWindowsHandler, r_text)
         win32gui.EnumWindows(self.__EnumWindowsHandler, None)
         if len(self.win_objs) < 1:
             raise ValueError("Windows Object를 발견하지 못하였습니다.")
@@ -68,20 +30,7 @@ class WindowsObject:
             return self.win_objs[0]
 
     def __EnumWindowsHandler(self, hwnd, find_text):
-        # def __EnumWindowsHandler(self, hwnd):
         wintext = win32gui.GetWindowText(hwnd)
-        # if find_text:
-        #     if wintext.find(find_text) != -1:
-        #         obj = {}
-        #         obj["handle"] = hwnd
-        #         obj["text"] = wintext
-        #         self.win_objs.append(obj)
-        # else:
-        #     obj = {}
-        #     obj["handle"] = hwnd
-        #     obj["text"] = wintext
-        #     self.win_objs.append(obj)
-        # print ("%08X: %s" % (hwnd, wintext))
         if self.pattern.match(wintext):
             obj = {}
             obj["handle"] = hwnd
@@ -96,13 +45,6 @@ def log_processing(compiled_pattern, strLog):
     # p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
     p = compiled_pattern
     m = p.match(strLog)
-
-    # DEBUG(f"m          = [{m}]")
-    # DEBUG(f"m.group(0) = [{m.group(0)}]")
-    # DEBUG(f"m.group(1) = [{m.group(1)}]")
-    # DEBUG(f"m.group(2) = [{m.group(2)}]")
-    # DEBUG(f"m.group(3) = [{m.group(3)}]")
-    # DEBUG(f"m.group(4) = [{m.group(4)}]")
 
     try:
         DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]")
@@ -157,14 +99,6 @@ def log_capture_main():
     DEBUG(f"w={w.win_objs}")
     DEBUG("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
 
-    # app = Application(backend="uia").start('notepad.exe') # process 실행
-    # app = Application(backend="uia").connect(handle=0x000808B4)
-    # app = Application(backend="win32").start('notepad.exe') # process 실행
-    # app = Application(backend="win32").start(r'C:\Program Files (x86)\드림시큐리티\KRC-EC100 에이전트\ACT Agent.exe') # process 실행
-    # app = Application(backend="win32").start(r'C:\Program Files (x86)\드림시큐리티\KRC-EC100 에이전트\ACT Agent.exe') # process 실행
-    # app = Application(backend="win32").connect(handle=0x000B0916)
-    # app = Application().connect(title_re=".*Notepad", class_name="Notepad")
-    # app = Application(backend="win32").connect(path=r"C:\Program Files (x86)\드림시큐리티\KRC-EC100 에이전트\ACT Agent.exe")
     hwnd = w.obj["handle"]
     app = Application(backend="win32").connect(handle=hwnd)
 
@@ -179,9 +113,6 @@ def log_capture_main():
     # logwin = dig.child_window(class_name="Edit")
 
     result = monitoring(logwin)
-
-    # DEBUG(f"메모장내용:[{logwin.text_block()}]")
-    # DEBUG(f"메모장내용:[{logwin.window_text()}]")
 
 
 class LogCaptureWin32Worker(QObject):
@@ -218,8 +149,6 @@ class LogCaptureWin32Worker(QObject):
         else:
             self.logwin = self.dig.child_window(class_name="Edit")
 
-        # result = monitoring(logwin)
-
     def stop(self):
         self.loop_flag = False
 
@@ -251,13 +180,6 @@ class LogCaptureWin32Worker(QObject):
         p = compiled_pattern
         m = p.match(strLog)
 
-        # DEBUG(f"m          = [{m}]")
-        # DEBUG(f"m.group(0) = [{m.group(0)}]")
-        # DEBUG(f"m.group(1) = [{m.group(1)}]")
-        # DEBUG(f"m.group(2) = [{m.group(2)}]")
-        # DEBUG(f"m.group(3) = [{m.group(3)}]")
-        # DEBUG(f"m.group(4) = [{m.group(4)}]")
-
         try:
             DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]")
             DEBUG(f"m.group(name)   = [{m.group('name')}]")
@@ -269,19 +191,39 @@ class LogCaptureWin32Worker(QObject):
             return
 
         # DB처리 (Cache 검증 및 insert)
-        try:
-            history_mgr.execute_param(
-                history_mgr.INSERT_HISTORY,
-                (m.group("dtm"), m.group("name"), m.group("temper"), m.group("dtm2")),
-            )
-        except sqlite3.IntegrityError as si:
-            # Insert 무결성은 무시
-            self.dupped.emit(strLog, str(si))
-            DEBUG(f"INSERT 무결성은 무시 [{si}]")
-        else:
-            history_mgr.commit()
-            self.inserted.emit(strLog)
-            INFO(f"로그등록:[{strLog}]")
+        # 등록하려는 정보의 앞뒤 1기간 가량안에 동일 사용자의 로그가 있다면 등록하지 않고 무시
+        sql  = f"SELECT count(*) cnt \n"
+        sql += f"FROM inout_history a \n"
+        sql += f"WHERE \n"
+        sql += f"name = '{m.group('name')}' \n"
+        sql += f"and datetime(a.dtm) BETWEEN datetime('{m.group('dtm')}', '-1 hours') and datetime('{m.group('dtm')}', '+1 hours') \n"
+
+        INFO(f"sql = [{sql}]")
+        # INFO(f"sql = [{sql}]")
+
+        datas = history_mgr.query(sql)
+
+        INFO(f"datas = [{datas}]")
+
+        dup_cnt = datas[0]["cnt"]
+
+        INFO(f"dup_cnt = [{dup_cnt}][{type(dup_cnt)}]")
+
+        if not dup_cnt:
+            try:
+                history_mgr.execute_param(
+                    history_mgr.INSERT_HISTORY,
+                    (m.group("dtm"), m.group("name"), m.group("temper"), m.group("dtm2")),
+                )
+            except sqlite3.IntegrityError as si:
+                # Insert 무결성은 무시
+                self.dupped.emit(strLog, str(si))
+                history_mgr.rollback()
+                DEBUG(f"INSERT 무결성은 무시 [{si}]")
+            else:
+                history_mgr.commit()
+                self.inserted.emit(strLog)
+                INFO(f"로그등록:[{strLog}]")
 
 
 def uac_require():

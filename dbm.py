@@ -69,6 +69,7 @@ class HistoryMgr:
         self.dbconn.rollback()
 
     def __del__(self):
+        self.cur.close()
         self.dbconn.close()
         DEBUG(f"db Connection Closed!!")
 
