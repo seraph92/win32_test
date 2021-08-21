@@ -17,7 +17,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from Config import CONFIG
 from BKLOG import *
 
+
 class ChannelMessageSending(QObject):
+    running = pyqtSignal()
     finished = pyqtSignal()
     inserted = pyqtSignal(str)
     dupped = pyqtSignal(str, str)
@@ -31,7 +33,7 @@ class ChannelMessageSending(QObject):
 
         self.setup_method()
         self.user_msgs = []
-        #self.users.append(user)
+        # self.users.append(user)
 
     def setup_method(self):
         options = Options()
@@ -54,8 +56,9 @@ class ChannelMessageSending(QObject):
         if len(wh_now) > len(wh_then):
             return set(wh_now).difference(set(wh_then)).pop()
 
-    #def sendMessage(self):
+    # def sendMessage(self):
     def run(self):
+        self.running.emit()
         # Test name: 메시지 발송 테스트2
         # Step # | name | target | value
         # 1 | open | / |
@@ -137,12 +140,13 @@ class ChannelMessageSending(QObject):
         self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
 
         while self.loop_flag:
+            self.running.emit()
             # msgList에서 발송 대상자를 가져온다.
             self.need_msg.emit()
             time.sleep(1)
             for user_msg in self.user_msgs:
                 try:
-                    #time.sleep(5)
+                    # time.sleep(5)
                     # 6 | click | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").click()
                     # self.driver.find_element(By.NAME, "keyword").click()
@@ -151,7 +155,7 @@ class ChannelMessageSending(QObject):
                     actions.double_click(element).perform()
 
                     # 7 | type | name=keyword |
-                    #self.driver.find_element(By.NAME, "keyword").send_keys(user_msg["user"])
+                    # self.driver.find_element(By.NAME, "keyword").send_keys(user_msg["user"])
                     self.driver.find_element(By.NAME, "keyword").send_keys("이범각")
                     # 8 | type | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").send_keys(user['name'])
@@ -178,11 +182,13 @@ class ChannelMessageSending(QObject):
                     # 15 | click | css=.btn_g |
                     self.driver.find_element(By.ID, "chatWrite").click()
                     # 16 | close |  |
-                    msg_list = user_msg["message"].split(sep='\n')
+                    msg_list = user_msg["message"].split(sep="\n")
                     for i, message in enumerate(msg_list):
                         self.driver.find_element(By.ID, "chatWrite").send_keys(message)
-                        if i != len(msg_list)-1:
-                            self.driver.find_element(By.ID, "chatWrite").send_keys(Keys.SHIFT + Keys.ENTER)
+                        if i != len(msg_list) - 1:
+                            self.driver.find_element(By.ID, "chatWrite").send_keys(
+                                Keys.SHIFT + Keys.ENTER
+                            )
                     self.driver.find_element(By.ID, "chatWrite").send_keys(Keys.ENTER)
                     time.sleep(1)
                     # 17 | selectWindow | handle=${root} |
@@ -224,7 +230,7 @@ class ChannelMessageSending(QObject):
             # self.driver.switch_to.window(self.vars["root"])
 
             # 10초간 sleep
-            #time.sleep(2)
+            # time.sleep(2)
 
         self.driver.close()
 
