@@ -74,7 +74,7 @@ class MsgsModel(list):
 
     def add_msg(self, d):
         enter_exit = "등원" if d["rnk"] % 2 else "하원"
-        INFO(f"rank = {d['rnk']} = {enter_exit}")
+        DEBUG(f"rank = {d['rnk']} = {enter_exit}")
 
         if enter_exit == "등원":
             enter_exit_msg = "도착했습니다.\n-READ101-"
@@ -333,8 +333,8 @@ class LogsModel(list):
         self.item_data["current_page"] = self.current_page
         self.item_data["total_page"] = self.total_page
         today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
-        INFO(f"self.today = {self.today}")
-        INFO(f"today = {today}")
+        DEBUG(f"self.today = {self.today}")
+        DEBUG(f"today = {today}")
         # 20210809
 
         sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm \n"
@@ -567,12 +567,15 @@ class LogViewModel:
     def auto_log_process(self):
         # 현재 페이지를 상대로 처리되지 않은 항목들에 대해 메시지를 발송한다.
         if self.auto_flag:
+            DEBUG(f"self.auto_current_key = [{self.auto_current_key}]")
             index = self.model.findRowIndex("dtm", self.auto_current_key)
-            if index:
+            DEBUG(f"index = [{index}]")
+            if index != None:
                 self.view.selectRow(index)
                 self.add_msg(None)
 
             next_key = self.model.findNextKey(self.auto_current_key)
+            DEBUG(f"self.next_key = [{next_key}]")
 
             if next_key:
                 self.auto_current_key = next_key
@@ -586,7 +589,7 @@ class LogViewModel:
         # 상세정보 창
         row = self.user_view.currentIndex().row()
         rows = self.user_model.getRows(row)
-        INFO(f"rows = [{rows}]")
+        DEBUG(f"rows = [{rows}]")
         dlg = UserDetailDlg(self.parent, rows["user_name"])
         dlg.accepted.connect(self.regist_dialog_accept)
         dlg.rejected.connect(self.regist_dialog_reject)
@@ -606,18 +609,18 @@ class LogViewModel:
         # self.user_model.
 
     def regist_dialog_finished(self):
-        INFO(f"다이얼로그 끝났어!!")
+        DEBUG(f"다이얼로그 끝났어!!")
         self.user_model.query_page()
         self.adjust_user_view_column()
 
     def regist_dialog_accept(self):
-        INFO(f"OK버튼 눌렀지?")
+        DEBUG(f"OK버튼 눌렀지?")
         self.user_model.query_page()
         # self.user_model.applyModel()
         self.adjust_user_view_column()
 
     def regist_dialog_reject(self):
-        INFO(f"Cancel버튼 눌렀지?")
+        DEBUG(f"Cancel버튼 눌렀지?")
 
     def adjust_user_view_column(self):
         header = self.user_view.horizontalHeader()
@@ -636,16 +639,11 @@ class LogViewModel:
         self.msg_worker.moveToThread(self.msg_thread)
 
         self.msg_thread.started.connect(self.msg_worker.run)
+        self.msg_worker.running.connect(self.change_msg_running_bg)
         self.msg_worker.finished.connect(self.msg_thread.quit)
+        self.msg_worker.finished.connect(self.change_msg_stop_bg)
         self.msg_worker.finished.connect(self.msg_worker.deleteLater)
         self.msg_thread.finished.connect(self.msg_thread.deleteLater)
-
-        self.msg_thread.started.connect(
-            lambda: self.views["msg_edit"].setStyleSheet("background: rightblue")
-        )
-        self.msg_thread.finished.connect(
-            lambda: self.views["msg_edit"].setStyleSheet("background-color: #f5d6c1;")
-        )
 
         # Step 6: Start the thread
         self.msg_thread.start()
@@ -662,17 +660,12 @@ class LogViewModel:
         self.worker.moveToThread(self.thread)
 
         self.thread.started.connect(self.worker.run)
+        self.worker.running.connect(self.change_log_running_bg)
         self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.change_log_stop_bg)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         # self.worker.progress.connect(self.reportProgress)
-
-        self.thread.started.connect(
-            lambda: self.views["log_edit"].setStyleSheet("background: rightblue")
-        )
-        self.thread.finished.connect(
-            lambda: self.views["log_edit"].setStyleSheet("background-color: #f5d6c1;")
-        )
 
         # Step 6: Start the thread
         self.thread.start()
@@ -680,6 +673,22 @@ class LogViewModel:
         # 중복 로그는 남기지 않음
         # self.worker.dupped.connect(self.dup_handle)
         self.worker.inserted.connect(self.inserted_handle)
+
+    def change_log_stop_bg(self):
+        edit: QTextEdit = self.views["log_edit"]
+        edit.setStyleSheet("background-color: #f5d6c1;")
+
+    def change_log_running_bg(self):
+        edit: QTextEdit = self.views["log_edit"]
+        edit.setStyleSheet("background-color: #bec5f7;")
+
+    def change_msg_stop_bg(self):
+        view: QListView = self.views["msg_view"]
+        view.setStyleSheet("background-color: #f5d6c1;")
+
+    def change_msg_running_bg(self):
+        edit: QTextEdit = self.views["msg_edit"]
+        edit.setStyleSheet("background-color: #bec5f7;")
 
     def __del__(self):
         # self.logCapture.loop_flag = False
@@ -840,7 +849,7 @@ class UserDetailDlg(QDialog, UserDetailDialog):
             # self.reg_dtm_mapper.toFirst()
 
     def accept(self) -> None:
-        INFO(f"accept 내부에서 처리 [self.user_name]")
+        DEBUG(f"accept 내부에서 처리 [self.user_name]")
         if self.user_name:
             # 수정
             user = {
@@ -868,7 +877,7 @@ class UserDetailDlg(QDialog, UserDetailDialog):
         return super().accept()
 
     def reject(self) -> None:
-        INFO(f"reject 내부에서 처리")
+        DEBUG(f"reject 내부에서 처리")
         return super().reject()
 
     def dataInit(self):
