@@ -94,7 +94,7 @@ class MsgsModel(list):
         INFO(f"msg = [{msg}]")
 
         # 기 발송 검증
-        #if d["send_dtm"]:
+        # if d["send_dtm"]:
         #    return False
 
         # 중복 검증
@@ -563,7 +563,7 @@ class LogViewModel:
         views["regist_user_button"].clicked.connect(self.show_regist_dialog)
         views["regist_user_button2"].clicked.connect(self.show_regist_dialog)
 
-        #self.view.doubleClicked.connect(self.add_msg)
+        # self.view.doubleClicked.connect(self.add_msg)
         self.view.doubleClicked.connect(self.log_view_double_click_handler)
         self.msg_view.doubleClicked.connect(self.del_msg)
         self.user_view.doubleClicked.connect(self.show_detail_dialog)
@@ -603,7 +603,7 @@ class LogViewModel:
                 #     self.view.selectRow(index)
                 # self.add_msg(None)
             except IndexError as ie:
-                self.auto_flag=False
+                self.auto_flag = False
         else:
             autoBtn.setText("자동처리")
             autoBtn.setStyleSheet("")
@@ -757,10 +757,11 @@ class LogViewModel:
         self.model.today = self.views["today_edit"].text()
         INFO(f"date changed = [{self.model.today}]")
         self.model.current_page = 1
-        self.model.query_total_page()
-        self.model.query_page()
-        self.paging_mapper.toFirst()
-        self.adjust_log_view_column()
+        self.refresh_log_view()
+        # self.model.query_total_page()
+        # self.model.query_page()
+        # self.paging_mapper.toFirst()
+        # self.adjust_log_view_column()
         self.auto_flag = False
         self.apply_auto_Btn()
 
@@ -770,14 +771,15 @@ class LogViewModel:
         self.msg_model.del_msg(row)
 
         # log view update
-        self.model.query_total_page()
-        self.model.query_page()
-        self.paging_mapper.toFirst()
-        self.adjust_log_view_column()
- 
+        self.refresh_log_view()
+        # self.model.query_total_page()
+        # self.model.query_page()
+        # self.paging_mapper.toFirst()
+        # self.adjust_log_view_column()
+
         DEBUG(f"delete row = [{row}]")
 
-    def log_view_double_click_handler(self, model:QModelIndex):
+    def log_view_double_click_handler(self, model: QModelIndex):
         self.add_msg(model)
 
     def add_msg(self, model):
@@ -812,10 +814,17 @@ class LogViewModel:
 
     # scrap시 insert발생시 호출되는 함수
     def inserted_handle(self, strlog):
+        self.refresh_log_view()
         self.views["log_edit"].append(f"[{strlog}]")
         self.views["log_edit"].verticalScrollBar().setValue(
             self.views["log_edit"].verticalScrollBar().maximum()
         )
+
+    def refresh_log_view(self):
+        # self.model.query_total_page()
+        self.model.query_page()
+        self.paging_mapper.toFirst()
+        self.adjust_log_view_column()
 
     def dataInit(self):
         # Log Tab
@@ -1037,8 +1046,9 @@ class MainWindow(QMainWindow, ui_form):
 
     def closeEvent(self, e):
         self.logViewModel.close(e)
-        #self.hide()
-        #self.thread.stop()
+        # self.hide()
+        # self.thread.stop()
+
 
 def uac_require():
     asadmin = "asadmin"

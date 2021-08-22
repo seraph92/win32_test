@@ -37,7 +37,7 @@ class ChannelMessageSending(QObject):
         # self.users.append(user)
 
     def __del__(self):
-        #INFO(f"채널 자동화 instance 삭제")
+        # INFO(f"채널 자동화 instance 삭제")
         self.teardown_method(None)
 
     def stop(self):
@@ -46,7 +46,7 @@ class ChannelMessageSending(QObject):
     def get_chat_room(self, user):
         mgr = HistoryMgr()
 
-        sql  = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
         sql += f"FROM user \n"
         sql += f"WHERE \n"
         sql += f"user_name = '{user}'\n"
@@ -61,10 +61,9 @@ class ChannelMessageSending(QObject):
         # INFO(f"data = [{self.data}]")
 
         if len(self.data) == 1:
-            return self.data[0]['chat_room']
+            return self.data[0]["chat_room"]
         else:
             return user
-
 
     def setup_method(self):
         options = Options()
@@ -180,7 +179,7 @@ class ChannelMessageSending(QObject):
                 try:
                     chat_room = self.get_chat_room(user_msg["user"])
                     INFO(f"chat_room = [{chat_room}]")
-                    #chat_room = "이범각"
+                    chat_room = "이범각"
                     # time.sleep(5)
                     # 6 | click | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").click()
@@ -191,6 +190,7 @@ class ChannelMessageSending(QObject):
 
                     # 7 | type | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").send_keys(user_msg["user"])
+                    self.driver.find_element(By.NAME, "keyword").clear()
                     self.driver.find_element(By.NAME, "keyword").send_keys(chat_room)
                     # 8 | type | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").send_keys(user['name'])
@@ -267,7 +267,7 @@ class ChannelMessageSending(QObject):
             # 10초간 sleep
             # time.sleep(2)
 
-        #self.driver.close()
+        # self.driver.close()
         self.teardown_method(None)
 
 
