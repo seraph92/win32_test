@@ -11,7 +11,6 @@ from PyQt5.QtWidgets import (
     QDataWidgetMapper,
     QDesktopWidget,
     QDialog,
-    QDialogButtonBox,
     QFrame,
     QHeaderView,
     QLineEdit,
@@ -27,6 +26,7 @@ from PyQt5 import uic
 
 # signal processing importing
 from PyQt5.QtCore import (
+    QModelIndex,
     QThread,
     QTime,
     QTimer,
@@ -60,6 +60,7 @@ class MsgsModel(list):
             )
 
     def del_msg(self, idx):
+        self.setRestoreReady(self.data[idx])
         del self.data[idx]
         self.applyModel()
 
@@ -93,8 +94,8 @@ class MsgsModel(list):
         INFO(f"msg = [{msg}]")
 
         # 기 발송 검증
-        if d["send_dtm"]:
-            return False
+        #if d["send_dtm"]:
+        #    return False
 
         # 중복 검증
         # {k: v for k, v in my_dict.items() if int(v) > 2000}
@@ -106,9 +107,39 @@ class MsgsModel(list):
             return
 
         self.data.append(msg)
+        self.setReadyToSend(msg)
         self.applyModel()
 
         return True
+
+    def setReadyToSend(self, msg):
+        try:
+            mgr = HistoryMgr()
+            sql = f"UPDATE inout_history\n"
+            sql += f"SET send_dtm = '-'\n"
+            sql += f"where dtm = '{msg['dtm']}'\n"
+
+            INFO(f"sql = [{sql}]")
+            rslt = mgr.execute(sql)
+            mgr.dbconn.commit()
+        except:
+            mgr.dbconn.rollback()
+            raise sqlite3.Error("변경실패")
+
+    def setRestoreReady(self, msg):
+        try:
+            mgr = HistoryMgr()
+            sql = f"UPDATE inout_history\n"
+            sql += f"SET send_dtm = ''\n"
+            sql += f"where dtm = '{msg['dtm']}'\n"
+            sql += f"and send_dtm = '-'\n"
+
+            INFO(f"sql = [{sql}]")
+            rslt = mgr.execute(sql)
+            mgr.dbconn.commit()
+        except:
+            mgr.dbconn.rollback()
+            raise sqlite3.Error("변경실패")
 
 
 class UserModel(list):
@@ -532,17 +563,27 @@ class LogViewModel:
         views["regist_user_button"].clicked.connect(self.show_regist_dialog)
         views["regist_user_button2"].clicked.connect(self.show_regist_dialog)
 
-        self.view.doubleClicked.connect(self.add_msg)
+        #self.view.doubleClicked.connect(self.add_msg)
+        self.view.doubleClicked.connect(self.log_view_double_click_handler)
         self.msg_view.doubleClicked.connect(self.del_msg)
         self.user_view.doubleClicked.connect(self.show_detail_dialog)
 
         self.setup_log_capture_thread()
-        # self.setup_send_msg_thread()
+        self.setup_send_msg_thread()
 
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.auto_log_process)
         self.timer.start()
+
+    def close(self, e):
+        INFO(f"ViewModel Closing!")
+        self.worker.stop()
+        self.msg_worker.stop()
+        self.thread.quit()
+        self.msg_thread.quit()
+        self.thread.wait()
+        self.msg_thread.wait()
 
     def set_auto_process(self):
         self.auto_flag = not self.auto_flag
@@ -553,13 +594,16 @@ class LogViewModel:
         autoBtn: QPushButton = self.views["auto_button"]
 
         if self.auto_flag:
-            autoBtn.setText("자동 처리 중")
-            autoBtn.setStyleSheet("background-color: red;")
-            self.auto_current_key = self.model.getLastRowKey()
-            # index = self.model.findRowIndex("dtm", self.auto_current_key)
-            # if index:
-            #     self.view.selectRow(index)
-            # self.add_msg(None)
+            try:
+                self.auto_current_key = self.model.getLastRowKey()
+                autoBtn.setText("자동 처리 중")
+                autoBtn.setStyleSheet("background-color: red;")
+                # index = self.model.findRowIndex("dtm", self.auto_current_key)
+                # if index:
+                #     self.view.selectRow(index)
+                # self.add_msg(None)
+            except IndexError as ie:
+                self.auto_flag=False
         else:
             autoBtn.setText("자동처리")
             autoBtn.setStyleSheet("")
@@ -634,7 +678,7 @@ class LogViewModel:
 
     def setup_send_msg_thread(self):
         # Log Capture Thread 설정
-        self.msg_thread = QThread()
+        self.msg_thread = QThread(self.parent)
         self.msg_worker = ChannelMessageSending()
         self.msg_worker.moveToThread(self.msg_thread)
 
@@ -687,7 +731,7 @@ class LogViewModel:
         view.setStyleSheet("background-color: #f5d6c1;")
 
     def change_msg_running_bg(self):
-        edit: QTextEdit = self.views["msg_edit"]
+        edit: QTextEdit = self.views["msg_view"]
         edit.setStyleSheet("background-color: #bec5f7;")
 
     def __del__(self):
@@ -724,7 +768,17 @@ class LogViewModel:
         row = self.msg_view.currentIndex().row()
         # column = self.view.currentIndex().column()
         self.msg_model.del_msg(row)
+
+        # log view update
+        self.model.query_total_page()
+        self.model.query_page()
+        self.paging_mapper.toFirst()
+        self.adjust_log_view_column()
+ 
         DEBUG(f"delete row = [{row}]")
+
+    def log_view_double_click_handler(self, model:QModelIndex):
+        self.add_msg(model)
 
     def add_msg(self, model):
         row = self.view.currentIndex().row()
@@ -735,6 +789,17 @@ class LogViewModel:
             if self.msg_model.add_msg(rows):
                 rows["send_dtm"] = "-"
                 self.model.applyModel()
+        elif rows["send_dtm"] == "-":
+            if not self.auto_flag:
+                msg = "메시지 발송을 시도 했지만, 처리되지 않았습니다. 다시 시도 할까요?"
+                rst = QMessageBox.question(
+                    None, "메시지 재 발송", msg, QMessageBox.Yes | QMessageBox.No
+                )
+                if rst == QMessageBox.Yes:
+                    if self.msg_model.add_msg(rows):
+                        rows["send_dtm"] = "-"
+                        self.model.applyModel()
+
         self.adjust_log_view_column()
 
     # scrap시 dup발생시 호출되는 함수
@@ -970,6 +1035,10 @@ class MainWindow(QMainWindow, ui_form):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
+    def closeEvent(self, e):
+        self.logViewModel.close(e)
+        #self.hide()
+        #self.thread.stop()
 
 def uac_require():
     asadmin = "asadmin"

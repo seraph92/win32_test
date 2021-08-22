@@ -14,6 +14,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 
+from dbm import HistoryMgr
 from Config import CONFIG
 from BKLOG import *
 
@@ -35,8 +36,39 @@ class ChannelMessageSending(QObject):
         self.user_msgs = []
         # self.users.append(user)
 
+    def __del__(self):
+        #INFO(f"채널 자동화 instance 삭제")
+        self.teardown_method(None)
+
+    def stop(self):
+        self.loop_flag = False
+
+    def get_chat_room(self, user):
+        mgr = HistoryMgr()
+
+        sql  = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql += f"FROM user \n"
+        sql += f"WHERE \n"
+        sql += f"user_name = '{user}'\n"
+        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+
+        DEBUG(f"sql = [{sql}]")
+        # INFO(f"sql = [{sql}]")
+
+        self.data = mgr.query(sql)
+
+        DEBUG(f"data = [{self.data}]")
+        # INFO(f"data = [{self.data}]")
+
+        if len(self.data) == 1:
+            return self.data[0]['chat_room']
+        else:
+            return user
+
+
     def setup_method(self):
         options = Options()
+        options.add_experimental_option("excludeSwitches", ["enable-logging"])
         # options.headless = True
 
         self.driver = webdriver.Chrome(
@@ -146,6 +178,9 @@ class ChannelMessageSending(QObject):
             time.sleep(1)
             for user_msg in self.user_msgs:
                 try:
+                    chat_room = self.get_chat_room(user_msg["user"])
+                    INFO(f"chat_room = [{chat_room}]")
+                    #chat_room = "이범각"
                     # time.sleep(5)
                     # 6 | click | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").click()
@@ -156,7 +191,7 @@ class ChannelMessageSending(QObject):
 
                     # 7 | type | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").send_keys(user_msg["user"])
-                    self.driver.find_element(By.NAME, "keyword").send_keys("이범각")
+                    self.driver.find_element(By.NAME, "keyword").send_keys(chat_room)
                     # 8 | type | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").send_keys(user['name'])
                     # 9 | sendKeys | name=keyword | ${KEY_ENTER}
@@ -232,7 +267,8 @@ class ChannelMessageSending(QObject):
             # 10초간 sleep
             # time.sleep(2)
 
-        self.driver.close()
+        #self.driver.close()
+        self.teardown_method(None)
 
 
 if __name__ == "__main__":

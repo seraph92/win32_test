@@ -1,0 +1,1 @@
+pyinstaller --uac-admin --noconsole qtWinMonGui.spec

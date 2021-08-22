@@ -11,8 +11,8 @@ import sqlite3
 from dbm import HistoryMgr
 from BKLOG import *
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 
 class WindowsObject:
