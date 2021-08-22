@@ -1,2 +1,6 @@
 *.json
 *.log
+*.zip
+*.exe
+*.db
+*.sqbpro
