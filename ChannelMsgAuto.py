@@ -179,7 +179,8 @@ class ChannelMessageSending(QObject):
                 try:
                     chat_room = self.get_chat_room(user_msg["user"])
                     INFO(f"chat_room = [{chat_room}]")
-                    chat_room = "이범각"
+                    if CONFIG["RUN_MODE"] != "REAL":
+                        chat_room = "이범각"
                     # time.sleep(5)
                     # 6 | click | name=keyword |
                     # self.driver.find_element(By.NAME, "keyword").click()

@@ -36,6 +36,7 @@ from PyQt5.QtCore import (
 import sqlite3
 
 from LogCapture import LogCaptureWin32Worker
+from Config import CONFIG
 from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
@@ -517,6 +518,8 @@ class LogsModel(list):
 class LogViewModel:
     def __init__(self, parent, views, models):
         self.parent = parent
+        now = datetime.datetime.now()
+        self.real_today = now.strftime("%Y%m%d")
         self.log_capture_loop = None
         self.auto_flag = False
         self.views = views
@@ -580,15 +583,25 @@ class LogViewModel:
         INFO(f"ViewModel Closing!")
         self.worker.stop()
         self.msg_worker.stop()
-        self.thread.quit()
-        self.msg_thread.quit()
+        try:
+            self.thread.quit()
+        except RuntimeError as re:
+            ERROR(f"error = [{re}]")
+
+        try:
+            self.msg_thread.quit()
+        except RuntimeError as re:
+            ERROR(f"error = [{re}]")
+
         self.thread.wait()
         self.msg_thread.wait()
 
     def set_auto_process(self):
-        self.auto_flag = not self.auto_flag
-
-        self.apply_auto_Btn()
+        if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
+            self.auto_flag = not self.auto_flag
+            self.apply_auto_Btn()
+        else:
+            self.auto_flag = False
 
     def apply_auto_Btn(self):
         autoBtn: QPushButton = self.views["auto_button"]
@@ -609,6 +622,12 @@ class LogViewModel:
             autoBtn.setStyleSheet("")
 
     def auto_log_process(self):
+        now = datetime.datetime.now()
+        self.real_today = now.strftime("%Y%m%d")
+
+        if self.real_today != self.model.today and CONFIG["RUN_MODE"] == "REAL":
+            self.auto_flag = False
+
         # 현재 페이지를 상대로 처리되지 않은 항목들에 대해 메시지를 발송한다.
         if self.auto_flag:
             DEBUG(f"self.auto_current_key = [{self.auto_current_key}]")
@@ -780,13 +799,15 @@ class LogViewModel:
         DEBUG(f"delete row = [{row}]")
 
     def log_view_double_click_handler(self, model: QModelIndex):
-        self.add_msg(model)
+        if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
+            self.add_msg(model)
 
     def add_msg(self, model):
         row = self.view.currentIndex().row()
         # column = self.view.currentIndex().column()
         rows = self.model.getRows(row)
         DEBUG(f"rows = [{rows}]")
+
         if not rows["send_dtm"]:
             if self.msg_model.add_msg(rows):
                 rows["send_dtm"] = "-"
