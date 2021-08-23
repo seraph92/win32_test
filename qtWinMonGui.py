@@ -1,4 +1,5 @@
 from PyQt5 import QtGui
+from PyQt5 import QtCore
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
@@ -34,6 +35,7 @@ from PyQt5.QtCore import (
 )
 
 import sqlite3
+import csv
 
 from LogCapture import LogCaptureWin32Worker
 from Config import CONFIG
@@ -558,6 +560,7 @@ class LogViewModel:
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
         views["next_button2"].clicked.connect(self.next_page)
+        views["today_button"].clicked.connect(self.set_today)
         views["today_edit"].editingFinished.connect(self.date_change)
         # views["keyword_edit"].editingFinished.connect(self.keyword_change)
         views["keyword_edit"].hide()
@@ -578,6 +581,28 @@ class LogViewModel:
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.auto_log_process)
         self.timer.start()
+
+    def loadUserCsv(self, fileName):
+        with open(fileName, "rb") as fileInput:
+            for row in csv.reader(fileInput):    
+                items = [
+                    QtGui.QStandardItem(field)
+                    for field in row
+                ]
+                self.user_model.model.appendRow(items)
+
+    def writeUserCsv(self, fileName):
+        with open(fileName, "wb") as fileOutput:
+            writer = csv.writer(fileOutput)
+            for rowNumber in range(self.user_model.model.rowCount()):
+                fields = [
+                    self.user_model.data(
+                        self.user_model.index(rowNumber, columnNumber),
+                        QtCore.Qt.DisplayRole
+                    )
+                    for columnNumber in range(self.user_model.columnCount())
+                ]
+                writer.writerow(fields)
 
     def close(self, e):
         INFO(f"ViewModel Closing!")
@@ -771,6 +796,11 @@ class LogViewModel:
     # def keyword_change(self):
     #     keyword = self.views["keyword_edit"].text()
     #     INFO(f"keyword changed = [{keyword}]")
+
+    def set_today(self):
+        edit: QLineEdit = self.views["today_edit"]
+        edit.setText(self.real_today)
+        self.date_change()
 
     def date_change(self):
         self.model.today = self.views["today_edit"].text()
@@ -1010,6 +1040,7 @@ class MainWindow(QMainWindow, ui_form):
         self.views["table_view"] = self.logTableView
         self.views["page_edit"] = self.pageEdit
         self.views["today_edit"] = self.todayEdit
+        self.views["today_button"] = self.todayBtn
         self.views["keyword_edit"] = self.keywordEdit
         self.views["before_button"] = self.beforeBtn
         self.views["before_button2"] = self.beforeBtn2
@@ -1092,7 +1123,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     myWindow = MainWindow()
-    myWindow.setWindowTitle("Log Monitor")
+    myWindow.setWindowTitle(f"Log Monitor [{CONFIG['RUN_MODE']}]")
     # myWindow.show()
     # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
     app.exec_()
