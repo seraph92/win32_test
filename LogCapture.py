@@ -1,5 +1,11 @@
 from PyQt5.QtCore import QObject, QRunnable, pyqtSignal
 import win32gui
+
+import sys
+import warnings
+warnings.simplefilter("ignore", UserWarning)
+sys.coinit_flags = 2
+
 from pywinauto.application import Application
 
 # import pywinauto
@@ -11,8 +17,8 @@ import sqlite3
 from dbm import HistoryMgr
 from BKLOG import *
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 
 class WindowsObject:
@@ -153,7 +159,9 @@ class LogCaptureWin32Worker(QObject):
 
             if GLOBAL_WIN == "AGENT":
                 self.logwin = self.dig.child_window(
-                    class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
+                    #class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
+                    #class_name="WindowsForms10.RichEdit20W."
+                    class_name=CONFIG["class_name"]
                 )
             else:
                 self.logwin = self.dig.child_window(class_name="Edit")

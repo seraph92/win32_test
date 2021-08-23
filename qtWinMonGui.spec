@@ -8,7 +8,7 @@ added_files = [
     ('./ui/auto_log_program.ui', './ui/') ,
     ('./ui/user_detail.ui', './ui/') ,
     ('./driver/chromedriver.exe', './driver/') ,
-    ('./data/log.db', './data/') ,
+#    ('./data/log.db', './data/') ,
     ('./log', './log') ,
 ]
 
