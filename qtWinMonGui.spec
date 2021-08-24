@@ -4,7 +4,7 @@
 block_cipher = None
 
 added_files = [ 
-    ('config.json', '.'),
+#    ('config.json', '.'),
     ('./ui/auto_log_program.ui', './ui/') ,
     ('./ui/user_detail.ui', './ui/') ,
     ('./driver/chromedriver.exe', './driver/') ,
