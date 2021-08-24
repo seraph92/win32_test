@@ -138,10 +138,21 @@ class ChannelMessageSending(QObject):
             # click | css=.link_title |
             # time.sleep(1)
             # self.driver.find_element(By.CSS_SELECTOR, ".link_title").click()
-            self.driver.find_element(
-                By.XPATH,
-                "//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')]",
-            ).click()
+            # self.driver.find_element(
+            #     By.XPATH,
+            #     "//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')]",
+            # ).click()
+
+            element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        "//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')]",
+                    )
+                )
+            )
+            element.click()
+
 
         elif dashboard_pattern.match(self.driver.current_url):
             # 이미 로그인 되어 있음

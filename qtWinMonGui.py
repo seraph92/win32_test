@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (
     QDataWidgetMapper,
     QDesktopWidget,
     QDialog,
-    QFrame,
+    QFileDialog,
     QHeaderView,
     QLineEdit,
     QListView,
@@ -29,13 +29,13 @@ from PyQt5 import uic
 from PyQt5.QtCore import (
     QModelIndex,
     QThread,
-    QTime,
     QTimer,
     pyqtSlot,
 )
 
 import sqlite3
 import csv
+import pandas as pd
 
 from LogCapture import LogCaptureWin32Worker
 from Config import CONFIG
@@ -156,7 +156,7 @@ class UserModel(list):
     def query_one(self, user_name):
         mgr = HistoryMgr()
 
-        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql = f"SELECT user_name, chat_room, reg_dtm \n"
         sql += f"FROM user \n"
         sql += f"WHERE \n"
         sql += f"user_name like '{user_name}'\n"
@@ -244,14 +244,14 @@ class UsersModel(list):
         super().__init__()
 
         self.model = QStandardItemModel()
-        self.model.setColumnCount(4)
+        self.model.setColumnCount(3)
         self.query_page()
 
     # 현재 Page 조회
     def query_page(self):
         mgr = HistoryMgr()
 
-        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
+        sql = f"SELECT user_name, chat_room, reg_dtm \n"
         sql += f"FROM user \n"
         sql += f"WHERE \n"
         sql += f"user_name like '%%'\n"
@@ -286,16 +286,34 @@ class UsersModel(list):
 
         return temp
 
+    def load_user(self, datas):
+        mgr = HistoryMgr()
+
+        try:
+            sql  = f"DELETE \n"
+            sql += f"FROM user \n"
+            rslt = mgr.execute(sql)
+
+            for data in datas:
+                sql = f"INSERT INTO user(user_name, chat_room, reg_dtm) \n"
+                sql += f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))\n"
+                rslt = mgr.execute(sql)
+            mgr.dbconn.commit()
+        except:
+            mgr.dbconn.rollback()
+            raise sqlite3.IntegrityError("등록실패")
+
+        self.query_page()
+
     # data를 model에 적용
     def applyModel(self):
         self.model.clear()
-        self.model.setColumnCount(4)
+        self.model.setColumnCount(3)
 
-        self.model.setHorizontalHeaderLabels(["no", "이름", "채팅방", "등록일시"])
+        self.model.setHorizontalHeaderLabels(["이름", "채팅방", "등록일시"])
         for data in self.data:
             self.model.appendRow(
                 [
-                    QStandardItem(str(data["no"])),
                     QStandardItem(data["user_name"]),
                     QStandardItem(data["chat_room"]),
                     QStandardItem(data["reg_dtm"]),
@@ -556,6 +574,7 @@ class LogViewModel:
         )
 
         # event 할당
+        # Log View
         views["before_button"].clicked.connect(self.before_page)
         views["before_button2"].clicked.connect(self.before_page)
         views["next_button"].clicked.connect(self.next_page)
@@ -563,46 +582,65 @@ class LogViewModel:
         views["today_button"].clicked.connect(self.set_today)
         views["today_edit"].editingFinished.connect(self.date_change)
         # views["keyword_edit"].editingFinished.connect(self.keyword_change)
-        views["keyword_edit"].hide()
+        #views["keyword_edit"].hide()
         views["auto_button"].clicked.connect(self.set_auto_process)
+        self.view.doubleClicked.connect(self.log_view_double_click_handler)
+        # self.view.doubleClicked.connect(self.add_msg)
 
+        # User View
         views["regist_user_button"].clicked.connect(self.show_regist_dialog)
         views["regist_user_button2"].clicked.connect(self.show_regist_dialog)
-
-        # self.view.doubleClicked.connect(self.add_msg)
-        self.view.doubleClicked.connect(self.log_view_double_click_handler)
-        self.msg_view.doubleClicked.connect(self.del_msg)
         self.user_view.doubleClicked.connect(self.show_detail_dialog)
+        views["save_button"].clicked.connect(self.save_user)
+        views["load_button"].clicked.connect(self.load_user)
 
+        # msg List
+        self.msg_view.doubleClicked.connect(self.del_msg)
+
+
+        ## Thread Setup
         self.setup_log_capture_thread()
         self.setup_send_msg_thread()
 
+        ## Auto Processing
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.auto_log_process)
         self.timer.start()
 
-    def loadUserCsv(self, fileName):
-        with open(fileName, "rb") as fileInput:
-            for row in csv.reader(fileInput):    
-                items = [
-                    QtGui.QStandardItem(field)
-                    for field in row
-                ]
-                self.user_model.model.appendRow(items)
-
-    def writeUserCsv(self, fileName):
-        with open(fileName, "wb") as fileOutput:
-            writer = csv.writer(fileOutput)
-            for rowNumber in range(self.user_model.model.rowCount()):
-                fields = [
-                    self.user_model.data(
-                        self.user_model.index(rowNumber, columnNumber),
-                        QtCore.Qt.DisplayRole
-                    )
-                    for columnNumber in range(self.user_model.columnCount())
-                ]
-                writer.writerow(fields)
+    def load_user(self):
+        # 파일 브라우저를 통해서 저장위치 결정
+        fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        DEBUG(f"선택파일: [{fname[0]}]")
+        df = pd.read_excel(fname[0])
+        DEBUG(f"df = [\n{df}]")
+        DEBUG(f"df.index = [\n{df.index}]")
+        DEBUG(f"df.columns = [\n{df.columns}]")
+        DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
+        DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
+        temp = self.user_model.data
+        self.user_model.data = []
+        for line in df.iloc:
+            self.user_model.data.append({
+                "user_name": line['user_name'],
+                "chat_room": line['chat_room'],
+                "reg_dtm"  : line['reg_dtm'],
+            })
+        del temp
+        self.user_model.load_user(df.iloc)
+        self.adjust_user_view_column()
+ 
+    def save_user(self):
+        # 파일 브라우저를 통해서 저장위치 결정
+        # xls 확장자, Default Name 적용(x)
+        fname = QFileDialog.getSaveFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        DEBUG(f"선택파일: [{fname[0]}]")
+        df = pd.DataFrame(self.user_model.data)
+        DEBUG(f"df = [\n{df}]")
+        DEBUG(f"df.index = [\n{df.index}]")
+        DEBUG(f"df.columns = [\n{df.columns}]")
+        DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
+        df.to_excel(fname[0], index=False)
 
     def close(self, e):
         INFO(f"ViewModel Closing!")
@@ -1052,6 +1090,8 @@ class MainWindow(QMainWindow, ui_form):
         self.views["user_table_view"] = self.userTableView
         self.views["regist_user_button"] = self.registUserBtn
         self.views["regist_user_button2"] = self.registUserBtn2
+        self.views["save_button"] = self.saveBtn
+        self.views["load_button"] = self.loadBtn
 
         ## Left Bottom List
         self.views["scrap_log_edit"] = self.scrapLogEdit
