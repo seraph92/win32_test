@@ -68,7 +68,7 @@
         <item row="0" column="1">
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="logTab_2">
            <attribute name="title">
@@ -304,7 +304,7 @@
               <item>
                <widget class="QPushButton" name="saveBtn">
                 <property name="text">
-                 <string>CSV저장</string>
+                 <string>Excel 저장</string>
                 </property>
                </widget>
               </item>
