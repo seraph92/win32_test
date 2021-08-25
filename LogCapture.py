@@ -1,12 +1,15 @@
-from PyQt5.QtCore import QObject, QRunnable, pyqtSignal
+import ctypes
+from PyQt5.QtCore import QObject, pyqtSignal
+import six
 import win32gui
+import win32con
 
 import sys
 import warnings
 warnings.simplefilter("ignore", UserWarning)
 sys.coinit_flags = 2
 
-from pywinauto.application import Application
+#from pywinauto.application import Application
 
 # import pywinauto
 import time
@@ -19,7 +22,6 @@ from BKLOG import *
 
 GLOBAL_WIN = "AGENT"
 #GLOBAL_WIN = "EDIT"
-
 
 class WindowsObject:
     def __init__(self, r_text=None):
@@ -48,8 +50,18 @@ class ChildObject:
     def __init__(self, parent_hwnd=None, match_class=None):
         self.parent_hwnd = parent_hwnd
         self.match_class = match_class
+        self.pattern = re.compile(self.match_class)
         self.win_objs = []
         win32gui.EnumChildWindows(parent_hwnd, self.__EnumChildWindowsHandler, None)
+        if len(self.win_objs) < 1:
+            raise ValueError("Windows Object를 발견하지 못하였습니다.")
+        self.obj = self.win_objs[0]
+
+    def getFirstObj(self):
+        if len(self.win_objs) < 1:
+            return None
+        else:
+            return self.win_objs[0]
 
     def __EnumChildWindowsHandler(self, hwnd, extra):
         ctrl_id = win32gui.GetDlgCtrlID(hwnd)
@@ -57,22 +69,34 @@ class ChildObject:
         wnd_clas = win32gui.GetClassName(hwnd)
 
         if self.match_class:
-            if wnd_clas.find(self.match_class) != -1:
+            if self.pattern.match(wnd_clas):
                 obj = {}
                 obj["handle"] = hwnd
                 obj["control_id"] = ctrl_id
                 obj["class_name"] = wnd_clas
                 obj["text"] = win_text
                 self.win_objs.append(obj)
-        else:
-            obj = {}
-            obj["handle"] = hwnd
-            obj["control_id"] = ctrl_id
-            obj["class_name"] = wnd_clas
-            obj["text"] = win_text
-            self.win_objs.append(obj)
 
+    def line_count(self):
+        control_hwnd = self.obj['handle']
+        linecnt = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINECOUNT, 0, 0)
+        return linecnt
 
+    def line_length(self, line_index):
+        control_hwnd = self.obj['handle']
+        char_index = win32gui.SendMessage(control_hwnd, win32con.EM_LINEINDEX, line_index, 0)
+        line_length = win32gui.SendMessage(control_hwnd, win32con.EM_LINELENGTH, char_index, 0)
+        return line_length
+
+    def get_line(self, line_index):
+        control_hwnd = self.obj['handle']
+        text_len = self.line_length(line_index)
+        # create a buffer and set the length at the start of the buffer
+        text = ctypes.create_unicode_buffer(text_len+3)
+        text[0] = six.unichr(text_len)
+
+        result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, text)
+        return text.value
 
 class LogCaptureWin32Worker(QObject):
     started = pyqtSignal()
@@ -102,6 +126,13 @@ class LogCaptureWin32Worker(QObject):
             )
 
             self.hwnd = self.w.obj["handle"]
+            if GLOBAL_WIN == "AGENT":
+                self.logwin = ChildObject(self.hwnd, CONFIG["class_name"])
+            else:
+                self.logwin = ChildObject(self.hwnd, r"Edit")
+
+            """
+            self.hwnd = self.w.obj["handle"]
             self.app = Application(backend="win32").connect(handle=self.hwnd)
 
             self.dig = self.app.window(handle=self.hwnd)
@@ -115,6 +146,7 @@ class LogCaptureWin32Worker(QObject):
                 )
             else:
                 self.logwin = self.dig.child_window(class_name="Edit")
+            """
 
         except ValueError as ve:
             self.loop_flag = False
