@@ -6,6 +6,7 @@ import win32api
 import win32con
 import ctypes
 import win32clipboard
+import six
 
 
 class WindowsObject:
@@ -62,6 +63,27 @@ class ChildObject:
                 obj["text"] = win_text
                 self.win_objs.append(obj)
 
+    def line_count(self):
+        control_hwnd = self.obj['handle']
+        linecnt = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINECOUNT, 0, 0)
+        return linecnt
+
+    def line_length(self, line_index):
+        control_hwnd = self.obj['handle']
+        char_index = win32gui.SendMessage(control_hwnd, win32con.EM_LINEINDEX, line_index, 0)
+        line_length = win32gui.SendMessage(control_hwnd, win32con.EM_LINELENGTH, char_index, 0)
+        return line_length
+
+    def get_line(self, line_index):
+        control_hwnd = self.obj['handle']
+        text_len = self.line_length(line_index)
+        # create a buffer and set the length at the start of the buffer
+        text = ctypes.create_unicode_buffer(text_len+3)
+        text[0] = six.unichr(text_len)
+
+        result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, text)
+        return text.value
+ 
 def getTextEditByClip(hwnd):
     # 원본 클립보드 값 저장하기
     try:
@@ -135,6 +157,16 @@ if __name__ == "__main__":
     # text = win32gui.GetWindowText(3086804)
     # print(f"text       =[{text}]")
 
+    line_cnt = children.line_count()
+    print(f"children.line_count = [{line_cnt}]")
+
+    #text = children.get_line(line_cnt - 1)
+    #print(f"text = [{text}]")
+
+    for i in range(0, line_cnt):
+        text = children.get_line(i)
+        print(f"text[{i}] = [{text}]")
+
     """
     GetTextRange and get the range by using GetTextLength
     EM_GETTEXTEX
@@ -142,20 +174,54 @@ if __name__ == "__main__":
     GetDlgItemText
     WM_GETETXT
     """
+    #############################################################################
+    #############################################################################
     # WM_GETTEXTLENGTH
-    bufLen = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXTLENGTH, 0, 0) + 1
-    print(f"bufLen = [{bufLen}]")
-    buf = " " * bufLen
+    # bufLen = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXTLENGTH, 0, 0) + 1
+    # print(f"bufLen = [{bufLen}]")
+    # buf = " " * bufLen
 
-    retval = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, 0, buf)
-    print(f"retval  =[{retval}]")
-    #print(f"buf  =[{buf}]")
+    # linecnt = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINECOUNT, 0, buf)
+    # print(f"linecnt  =[{linecnt}]")
+    # #print(f"buf  =[{buf}]")
+    # line_index = linecnt - 1
+    # char_index = win32gui.SendMessage(control_hwnd, win32con.EM_LINEINDEX, line_index, 0)
+    # print(f"line_index  =[{line_index}]")
+    # print(f"type(line_index)  =[{type(line_index)}]")
+    # print(f"char_index  =[{char_index}]")
 
+    # line_length = win32gui.SendMessage(control_hwnd, win32con.EM_LINELENGTH, char_index, 0)
+    # print(f"line_length  =[{line_length}]")
+
+    # text = ctypes.create_unicode_buffer(line_length + 3)
+    # text[0] = six.unichr(line_length)
+
+    # textline = " " * line_length
+
+    # # retrieve the line itself
+    # #result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, ctypes.byref(text))
+    # result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, text)
+    # #result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, textline)
+    # print(f"result  =[{result}]")
+    # print(f"textline  =[{textline}]")
+    # print(f"text.value  =[{text.value}]")
+    #############################################################################
+    #############################################################################
+
+ 
     # WM_GETTEXT
-    #length = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXT, bufLen, buf)
-    #print(f"buf  =[{buf}]")
-    #result = buf[:length]
-    #print(f"text  =[{result}]")
+    # length = win32gui.SendMessage(control_hwnd, win32con.WM_GETTEXT, bufLen, buf)
+    # print(f"length  =[{length}]")
+    # print(f"buf  =[{buf}]")
+    # result = buf[:length]
+    # print(f"text  =[{result}]")
+
+
+    # buf = ""
+    # retval = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, 0, buf)
+    # print(f"retval  =[{retval}]")
+    # print(f"buf  =[{buf}]")
+
 
     # GetWindowText
     #text = win32gui.GetWindowText(control_hwnd)
