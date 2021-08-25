@@ -22,7 +22,7 @@ GLOBAL_WIN = "AGENT"
 
 
 class WindowsObject:
-    def __init__(self, r_text=None, parent_hwnd=None):
+    def __init__(self, r_text=None):
         self.win_objs = []
         self.pattern = re.compile(r_text)
         win32gui.EnumWindows(self.__EnumWindowsHandler, None)
@@ -44,84 +44,34 @@ class WindowsObject:
             obj["text"] = wintext
             self.win_objs.append(obj)
 
+class ChildObject:
+    def __init__(self, parent_hwnd=None, match_class=None):
+        self.parent_hwnd = parent_hwnd
+        self.match_class = match_class
+        self.win_objs = []
+        win32gui.EnumChildWindows(parent_hwnd, self.__EnumChildWindowsHandler, None)
 
-"""
-def log_processing(compiled_pattern, strLog):
-    history_mgr = HistoryMgr()
-    DEBUG(f"strLog=[{strLog}]")
-    # 외부로 이동
-    # p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
-    p = compiled_pattern
-    m = p.match(strLog)
+    def __EnumChildWindowsHandler(self, hwnd, extra):
+        ctrl_id = win32gui.GetDlgCtrlID(hwnd)
+        win_text = win32gui.GetWindowText(hwnd)
+        wnd_clas = win32gui.GetClassName(hwnd)
 
-    try:
-        DEBUG(f"m.group(dtm)    = [{m.group('dtm')}]")
-        DEBUG(f"m.group(name)   = [{m.group('name')}]")
-        DEBUG(f"m.group(temper) = [{m.group('temper')}]")
-        DEBUG(f"m.group(dtm2)   = [{m.group('dtm2')}]")
-    except AttributeError as ae:
-        # 파싱 오류
-        DEBUG(f"파싱 오류 무시 DB처리 하지 않음 [{ae}]")
-        return
+        if self.match_class:
+            if wnd_clas.find(self.match_class) != -1:
+                obj = {}
+                obj["handle"] = hwnd
+                obj["control_id"] = ctrl_id
+                obj["class_name"] = wnd_clas
+                obj["text"] = win_text
+                self.win_objs.append(obj)
+        else:
+            obj = {}
+            obj["handle"] = hwnd
+            obj["control_id"] = ctrl_id
+            obj["class_name"] = wnd_clas
+            obj["text"] = win_text
+            self.win_objs.append(obj)
 
-    # DB처리 (Cache 검증 및 insert)
-    try:
-        history_mgr.execute_param(
-            history_mgr.INSERT_HISTORY,
-            (m.group("dtm"), m.group("name"), m.group("temper"), m.group("dtm2")),
-        )
-    except sqlite3.IntegrityError as si:
-        # Insert 무결성은 무시
-        DEBUG(f"INSERT 무결성은 무시 [{si}]")
-    else:
-        history_mgr.commit()
-        INFO(f"로그등록:[{strLog}]")
-
-
-def monitoring(edit_control, loop_flag=True):
-    loop_flag = True
-    processing_pattern = re.compile(
-        r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)"
-    )
-
-    while loop_flag:
-        #        try:
-        line_cnt = edit_control.line_count()
-        DEBUG(f"line_cnt:[{line_cnt}]")
-
-        for i in range(0, line_cnt):
-            # INFO(f"Line[{i}]:[{edit_control.get_line(i)}]")
-            log_processing(processing_pattern, edit_control.get_line(i))
-        DEBUG("")
-        time.sleep(3)
-    #        except:
-    #            loop_flag=False
-
-    return loop_flag
-
-
-def log_capture_main():
-    w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
-    # w = WindowsObject("sample.txt - Windows 메모장")
-
-    DEBUG(f"w={w.win_objs}")
-    DEBUG("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
-
-    hwnd = w.obj["handle"]
-    app = Application(backend="win32").connect(handle=hwnd)
-
-    # dig = app.window(title='KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]')
-    dig = app.window(handle=hwnd)
-    # dig.print_control_identifiers()
-
-    # WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1
-    logwin = dig.child_window(
-        class_name="WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1"
-    )
-    # logwin = dig.child_window(class_name="Edit")
-
-    result = monitoring(logwin)
-"""
 
 
 class LogCaptureWin32Worker(QObject):
@@ -176,7 +126,7 @@ class LogCaptureWin32Worker(QObject):
     def run(self):
         self.running.emit()
         processing_pattern = re.compile(
-            r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)"
+            r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{3,5}) 출입시간 : (?P<dtm2>.{19})\)"
         )
 
         if self.loop_flag:
