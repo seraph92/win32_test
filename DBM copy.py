@@ -4,97 +4,13 @@ import sqlite3
 from typing import Any, Iterable
 
 
-class DBMgr:
-    def __init__(self):
-        self.INSERT_HISTORY: str = "INSERT INTO inout_history(dtm, name, temper, dtm2, reg_dtm) values (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%f','now'))"
-        self.db_path = "data/log.db"
-        # self.dbconn = None
-
-    def __enter__(self):
-        dbconn = sqlite3.connect(self.db_path)
-        dbconn.row_factory = self.dic_factory
-        self.dbconn = dbconn
-        return dbconn
-
-    def __exit__(self, type, value, traceback):
-        self.dbconn.close()
-        # INFO(f"[자원반납]db Connection Closed!!")
-
-    def dic_factory(self, cursor, row) -> dict:
-        d: dict = {}
-
-        for idx, col in enumerate(cursor.description):
-            d[col[0]] = row[idx]
-
-        return d
-
-    def execute_param(self, exec_str: str, param: Iterable[Any]) -> list:
-        cur: Cursor = self.dbconn.cursor()
-        try:
-            if param != None:
-                cur.execute(exec_str, param)
-            else:
-                cur.execute(exec_str)
-            datas: list = cur.fetchall()
-            return datas
-        finally:
-            cur.close()
-
-    def execute(self, exec_str: str) -> list:
-        cursor: Cursor = self.dbconn.execute(exec_str)
-        try:
-            datas: list = cursor.fetchall()
-            DEBUG(f"exec data=[{datas}]")
-            return datas
-        finally:
-            cursor.close()
-
-    def query(self, exec_str: str, param: Iterable[Any] = None):
-        cur: Cursor = self.dbconn.cursor()
-        try:
-            if param != None:
-                cur.execute(exec_str, param)
-            else:
-                cur.execute(exec_str)
-                # INFO(f"refcnt of dbconn = [{sys.getrefcount(self.dbconn)}]")
-
-            # DEBUG(f"query result=[{result}]")
-            rows: list = cur.fetchall()
-            return rows
-        finally:
-            cur.close()
-
-    def query_param(self, exec_str: str, param: Iterable[Any] = None):
-        cur: Cursor = self.dbconn.cursor()
-        try:
-            if param != None:
-                cur.execute(exec_str, param)
-            else:
-                cur.execute(exec_str)
-
-            # DEBUG(f"query result=[{result}]")
-            rows = cur.fetchall()
-            return rows
-        finally:
-            cur.close()
-
-    def commit(self):
-        self.dbconn.commit()
-
-    def rollback(self):
-        self.dbconn.rollback()
-
-    def __del__(self):
-        # self.dbconn.close()
-        INFO(f"[자원반납]객체 반납!!")
-
-
 class HistoryMgr:
     # SELECT strftime('%Y-%m-%d %H:%M:%S','now') as dtm, strftime('%Y-%m-%d %H:%M:%f','now') as udtm, strftime('%s','now') as unixdtm, date('now') as dt
     # def __init__(self, dbconn: Connection = None):
     def __init__(self):
         self.INSERT_HISTORY: str = "INSERT INTO inout_history(dtm, name, temper, dtm2, reg_dtm) values (?, ?, ?, ?, strftime('%Y-%m-%d %H:%M:%f','now'))"
         self.dbconn = sqlite3.connect("data/log.db")
+
         self.dbconn.row_factory = self.dic_factory
 
         # self.cur = self.dbconn.cursor()

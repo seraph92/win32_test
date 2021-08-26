@@ -14,7 +14,7 @@ import time
 import re
 import sqlite3
 
-from DBM import HistoryMgr, DBMgr
+from DBM import HistoryMgr
 from BKLOG import DEBUG, INFO, ERROR
 
 from WindowsObject import WindowsObject, ChildObject
@@ -185,7 +185,7 @@ class LogCaptureWin32Worker(QObject):
         self.finished.emit()
 
     def log_processing(self, compiled_pattern, strLog):
-        dbm = DBMgr()
+        history_mgr = HistoryMgr()
         DEBUG(f"strLog=[{strLog}]")
         # 외부로 이동
         # p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")
@@ -214,8 +214,7 @@ class LogCaptureWin32Worker(QObject):
             )
         )
 
-        with dbm as conn:
-            datas = dbm.query(sql)
+        datas = history_mgr.query(sql)
 
         dup_cnt = datas[0]["cnt"]
 
@@ -225,28 +224,27 @@ class LogCaptureWin32Worker(QObject):
             DEBUG(f"dup_cnt = [{dup_cnt}][{type(dup_cnt)}]")
 
         if not dup_cnt:
-            with dbm as conn:
-                try:
-                    dbm.execute_param(
-                        dbm.INSERT_HISTORY,
-                        (
-                            m.group("dtm"),
-                            m.group("name"),
-                            m.group("temper"),
-                            m.group("dtm2"),
-                        ),
-                    )
-                except sqlite3.IntegrityError as si:
-                    # Insert 무결성은 무시
-                    self.dupped.emit(strLog, str(si))
-                    conn.rollback()
-                    DEBUG(f"INSERT 무결성은 무시 [{si}]")
-                else:
-                    conn.commit()
-                    self.inserted.emit(strLog)
-                    INFO(f"로그등록:[{strLog}]")
-        # history_mgr.close()
-        # del history_mgr
+            try:
+                history_mgr.execute_param(
+                    history_mgr.INSERT_HISTORY,
+                    (
+                        m.group("dtm"),
+                        m.group("name"),
+                        m.group("temper"),
+                        m.group("dtm2"),
+                    ),
+                )
+            except sqlite3.IntegrityError as si:
+                # Insert 무결성은 무시
+                self.dupped.emit(strLog, str(si))
+                history_mgr.rollback()
+                DEBUG(f"INSERT 무결성은 무시 [{si}]")
+            else:
+                history_mgr.commit()
+                self.inserted.emit(strLog)
+                INFO(f"로그등록:[{strLog}]")
+        history_mgr.close()
+        del history_mgr
 
 
 if __name__ == "__main__":
