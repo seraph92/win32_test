@@ -1,9 +1,7 @@
 from sqlite3.dbapi2 import Connection, Cursor, Error
-import sys
 from BKLOG import DEBUG, ERROR, INFO
 import sqlite3
 from typing import Any, Iterable
-
 
 class HistoryMgr:
     # SELECT strftime('%Y-%m-%d %H:%M:%S','now') as dtm, strftime('%Y-%m-%d %H:%M:%f','now') as udtm, strftime('%s','now') as unixdtm, date('now') as dt

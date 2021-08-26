@@ -3,9 +3,9 @@ from PyQt5 import QtCore
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
-import win32com.shell.shell as shell
+#import win32com.shell.shell as shell
 
-from dbm import HistoryMgr
+from DBM import HistoryMgr
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
@@ -33,6 +33,7 @@ from PyQt5.QtCore import (
     pyqtSlot,
 )
 
+from typing import Literal
 import sqlite3
 import csv
 import pandas as pd
@@ -49,10 +50,10 @@ class MsgsModel(list):
     def __init__(self, l=[]):
         super().__init__()
 
-        self.data = []
-        self.model = QStandardItemModel()
+        self.data: list[dict] = []
+        self.model: QStandardItemModel = QStandardItemModel()
 
-    def applyModel(self):
+    def applyModel(self) -> None:
         self.model.clear()
         for data in self.data:
             self.model.appendRow(
@@ -62,22 +63,23 @@ class MsgsModel(list):
                 ]
             )
 
-    def del_msg(self, idx):
+    def del_msg(self, idx: int) -> None:
         self.setRestoreReady(self.data[idx])
         del self.data[idx]
         self.applyModel()
 
-    def deque_msg(self):
+    def deque_msg(self) -> dict:
         try:
             data = self.data[0]
             del self.data[0]
             self.applyModel()
         except IndexError as ie:
+            ERROR(f"index참조 오류: [{ie}]")
             data = None
         return data
 
-    def add_msg(self, d):
-        enter_exit = "등원" if d["rnk"] % 2 else "하원"
+    def add_msg(self, d: dict) -> bool:
+        enter_exit: Literal['등원', '하원'] = "등원" if d["rnk"] % 2 else "하원"
         DEBUG(f"rank = {d['rnk']} = {enter_exit}")
 
         if enter_exit == "등원":
@@ -87,7 +89,7 @@ class MsgsModel(list):
         else:
             enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
 
-        msg = {
+        msg: dict = {
             "user": d["name"],
             "inout": enter_exit,
             "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
@@ -107,7 +109,7 @@ class MsgsModel(list):
         names = (f"{data['user']}({data['inout']})" for data in self.data)
         # INFO(f"names = [{names}]")
         if f"{d['name']}({enter_exit})" in names:
-            return
+            return False
 
         self.data.append(msg)
         self.setReadyToSend(msg)
@@ -115,30 +117,34 @@ class MsgsModel(list):
 
         return True
 
-    def setReadyToSend(self, msg):
+    def setReadyToSend(self, msg: dict) -> None:
         try:
             mgr = HistoryMgr()
-            sql = f"UPDATE inout_history\n"
-            sql += f"SET send_dtm = '-'\n"
-            sql += f"where dtm = '{msg['dtm']}'\n"
+            sql = " \n".join((
+                f"UPDATE inout_history",
+                f"SET send_dtm = '-'",
+                f"where dtm = '{msg['dtm']}'",
+            ))
 
             INFO(f"sql = [{sql}]")
-            rslt = mgr.execute(sql)
+            mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
             raise sqlite3.Error("변경실패")
 
-    def setRestoreReady(self, msg):
+    def setRestoreReady(self, msg:dict) -> None:
         try:
             mgr = HistoryMgr()
-            sql = f"UPDATE inout_history\n"
-            sql += f"SET send_dtm = ''\n"
-            sql += f"where dtm = '{msg['dtm']}'\n"
-            sql += f"and send_dtm = '-'\n"
+            sql = " \n".join((
+                f"UPDATE inout_history",
+                f"SET send_dtm = ''",
+                f"where dtm = '{msg['dtm']}'",
+                f"and send_dtm = '-'",
+            )) 
 
             INFO(f"sql = [{sql}]")
-            rslt = mgr.execute(sql)
+            mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
@@ -146,27 +152,30 @@ class MsgsModel(list):
 
 
 class UserModel(list):
-    def __init__(self, l=[]):
+    #def __init__(self, l=[]):
+    def __init__(self):
         super().__init__()
         self.model = QStandardItemModel(1, 3)
         # self.user_name_model = QStandardItemModel()
         # self.chat_room_model = QStandardItemModel()
         # self.reg_dtm_model = QStandardItemModel()
 
-    def query_one(self, user_name):
+    def query_one(self, user_name: str) -> None:
         mgr = HistoryMgr()
 
-        sql = f"SELECT user_name, chat_room, reg_dtm \n"
-        sql += f"FROM user \n"
-        sql += f"WHERE \n"
-        sql += f"user_name like '{user_name}'\n"
-        sql += f"ORDER BY user_name \n"
-        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+        sql = " \n".jogin((
+            f"SELECT user_name, chat_room, reg_dtm",
+            f"FROM user",
+            f"WHERE",
+            f"user_name like '{user_name}'",
+            f"ORDER BY user_name",
+            # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+        ))
 
         INFO(f"sql = [{sql}]")
         # INFO(f"sql = [{sql}]")
 
-        datas = mgr.query(sql)
+        datas: list[dict] = mgr.query(sql)
 
         INFO(f"datas = [{datas}]")
 
@@ -177,108 +186,93 @@ class UserModel(list):
 
         self.applyModel()
 
-    def regist_user(self, user):
+    def regist_user(self, user: dict) -> None:
         # user_name = self.model.item(0, 1).accessibleText()
         # chat_room = self.model.item(0, 2).accessibleText()
-        user_name = user["user_name"]
-        chat_room = user["chat_room"]
+        user_name: str = user["user_name"]
+        chat_room: str = user["chat_room"]
 
         try:
             mgr = HistoryMgr()
-            sql = f"INSERT INTO user(user_name, chat_room, reg_dtm) \n"
-            sql += f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))\n"
-            rslt = mgr.execute(sql)
+            sql = " \n".join((
+                f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+                f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+            )) 
+            mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
             raise sqlite3.IntegrityError("등록실패")
 
-    def update_user(self, user):
-        user_name = user["user_name"]
-        chat_room = user["chat_room"]
+    def update_user(self, user:dict) -> None:
+        user_name: str = user["user_name"]
+        chat_room: str = user["chat_room"]
 
         try:
             mgr = HistoryMgr()
-            sql = f"UPDATE user\n"
-            sql += f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')\n"
-            sql += f"  , chat_room = '{chat_room}'\n"
-            sql += f"where user_name = '{user_name}'\n"
+            sql = " \n".join((
+                f"UPDATE user",
+                f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
+                f"  , chat_room = '{chat_room}'",
+                f"where user_name = '{user_name}'",
+            ))
 
             INFO(f"sql = [{sql}]")
-            rslt = mgr.execute(sql)
+            mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
             raise sqlite3.Error("변경실패")
 
     # data를 model에 적용
-    def applyModel(self):
+    def applyModel(self) -> None:
         self.model.clear()
-        # self.user_name_model.clear()
-        # self.chat_room_model.clear()
-        # self.reg_dtm_model.clear()
 
         self.model.setItem(0, 0, QStandardItem(f"{self.data['user_name']}"))
         self.model.setItem(0, 1, QStandardItem(f"{self.data['chat_room']}"))
         self.model.setItem(0, 2, QStandardItem(f"{self.data['reg_dtm']}"))
 
-        # self.user_name_model.appendRow(
-        #     [
-        #         QStandardItem(f"{self.data['user_name']}"),
-        #     ]
-        # )
-        # self.chat_room_model.appendRow(
-        #     [
-        #         QStandardItem(f"{self.data['chat_room']}"),
-        #     ]
-        # )
-        # self.reg_dtm_model.appendRow(
-        #     [
-        #         QStandardItem(f"{self.data['reg_dtm']}"),
-        #     ]
-        # )
-
-
 class UsersModel(list):
-    def __init__(self, l=[]):
+    #def __init__(self, l=[]):
+    def __init__(self):
         super().__init__()
+
+        self.data: list[dict] = []
 
         self.model = QStandardItemModel()
         self.model.setColumnCount(3)
         self.query_page()
 
     # 현재 Page 조회
-    def query_page(self):
+    def query_page(self) -> None:
         mgr = HistoryMgr()
 
-        sql = f"SELECT user_name, chat_room, reg_dtm \n"
-        sql += f"FROM user \n"
-        sql += f"WHERE \n"
-        sql += f"user_name like '%%'\n"
-        sql += f"ORDER BY user_name \n"
-        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
-
+        sql = " \n".join((
+            f"SELECT user_name, chat_room, reg_dtm",
+            f"FROM user",
+            f"WHERE",
+            f"user_name like '%%'",
+            f"ORDER BY user_name",
+            # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
+        ))
         DEBUG(f"sql = [{sql}]")
-        # INFO(f"sql = [{sql}]")
 
         self.data = mgr.query(sql)
-
         DEBUG(f"data = [{self.data}]")
-        # INFO(f"data = [{self.data}]")
 
         self.applyModel()
 
-    def findRowIndex(self, key, find_text):
+    def findRowIndex(self, key: str, find_text: str) -> int:
         for index, item in enumerate(self.data):
             if item[key] == find_text:
                 return index
         return None
 
-    def getRows(self, idx):
+    def getRows(self, idx: int) -> dict:
         return self.data[idx]
 
     # remove Button 클릭시 호출됨 (하지만 현재 사용하지 않음)
-    def remove(self, idx):
+    def remove(self, idx: int) -> dict:
         DEBUG(f"remove index= [{idx}]")
         temp = self.data[idx]
         del self.data[idx]
@@ -290,14 +284,18 @@ class UsersModel(list):
         mgr = HistoryMgr()
 
         try:
-            sql  = f"DELETE \n"
-            sql += f"FROM user \n"
-            rslt = mgr.execute(sql)
+            sql  = " \n".join((
+                f"DELETE",
+                f"FROM user",
+            ))
+            mgr.execute(sql)
 
             for data in datas:
-                sql = f"INSERT INTO user(user_name, chat_room, reg_dtm) \n"
-                sql += f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))\n"
-                rslt = mgr.execute(sql)
+                sql = " \n".join((
+                    f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+                    f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+                ))
+                mgr.execute(sql)
             mgr.dbconn.commit()
         except:
             mgr.dbconn.rollback()
@@ -322,14 +320,17 @@ class UsersModel(list):
 
 
 class LogsModel(list):
-    def __init__(self, l=[]):
+    #def __init__(self, l=[]):
+    def __init__(self):
         super().__init__()
 
         now = datetime.datetime.now()
-        self.today = now.strftime("%Y%m%d")
+        self.today: str = now.strftime("%Y%m%d")
         # self.PAGE_SIZE = 20
         self.PAGE_SIZE = 15
         self.current_page = 1
+
+        self.data: list[dict] = []
 
         self.item_data = {}
         self.item_data["current_page"] = 1
@@ -340,45 +341,22 @@ class LogsModel(list):
         self.today_model = QStandardItemModel()
         self.query_page()
 
-        """
-        mgr = HistoryMgr()
-        self.total_page = mgr.query_total_page(self.PAGE_SIZE)
-        self.item_data["total_page"] = self.total_page
-
-        #DEBUG(f"self.item_data=[{self.item_data}]")
-        #DEBUG(f"total_page = [{self.item_data['total_page']}]")
-
-        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, send_dtm \n"
-        sql += f"FROM inout_history \n"
-        sql += f"WHERE \n"
-        sql += f"name like '%%'"
-        sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
-
-        self.data = mgr.query(sql)
-
-        DEBUG(f"data = [{self.data}]")
-
-        self.model = QStandardItemModel()
-        self.model.setColumnCount(7)
-        self.aggregation_model = QStandardItemModel()
-
-        self.applyModel()
-        """
-
     # Total Page 조회
-    def query_total_page(self):
+    def query_total_page(self) -> int:
         page = self.PAGE_SIZE
         today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
         mgr = HistoryMgr()
-        sql = f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page\n"
-        sql += f"from inout_history\n"
-        sql += f"where date(dtm) = date('{today}')\n"
-        sql += f"and (del_yn is NULL or del_yn = 'N')\n"
+        sql = " \n".join((
+            f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page",
+            f"from inout_history",
+            f"where date(dtm) = date('{today}')",
+            f"and (del_yn is NULL or del_yn = 'N')",
+        ))
         rslt = mgr.query(sql)
         return rslt[0]["total_page"]
 
     # 현재 Page 조회
-    def query_page(self):
+    def query_page(self) -> None:
         mgr = HistoryMgr()
         # self.total_page = mgr.query_total_page(self.PAGE_SIZE)
         self.total_page = self.query_total_page()
@@ -389,31 +367,33 @@ class LogsModel(list):
         DEBUG(f"today = {today}")
         # 20210809
 
-        sql = f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm \n"
-        sql += f"FROM inout_history \n"
-        sql += f"WHERE \n"
-        sql += f"name like '%%'\n"
-        sql += f"and date(dtm) = date('{today}')\n"
-        sql += f"and (del_yn is NULL or del_yn = 'N')\n"
-        sql += f"ORDER BY dtm desc\n"
-        sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
-
+        sql = " \n".join((
+            f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm",
+            f"FROM inout_history",
+            f"WHERE",
+            f"name like '%%'",
+            f"and date(dtm) = date('{today}')",
+            f"and (del_yn is NULL or del_yn = 'N')",
+            f"ORDER BY dtm desc",
+            f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
+        ))
         DEBUG(f"sql = [{sql}]")
 
         self.data = mgr.query(sql)
-
         DEBUG(f"data = [{self.data}]")
 
         self.applyModel()
 
-    def findNextKey(self, key):
+    def findNextKey(self, key) -> str:
         mgr = HistoryMgr()
-        sql = f"SELECT dtm, name \n"
-        sql += f"FROM inout_history \n"
-        sql += f"WHERE \n"
-        sql += f"dtm >= '{key}' \n"
-        sql += f"order by dtm \n"
-        sql += f"limit 2 \n"
+        sql = " \n".join((
+            f"SELECT dtm, name",
+            f"FROM inout_history",
+            f"WHERE",
+            f"dtm >= '{key}'",
+            f"order by dtm",
+            f"limit 2"
+        ))
 
         DEBUG(f"sql = [{sql}]")
         datas = mgr.query(sql)
@@ -423,13 +403,13 @@ class LogsModel(list):
         else:
             return datas[1]["dtm"]
 
-    def findRowIndex(self, key, find_text):
+    def findRowIndex(self, key: str, find_text: str) -> int:
         for index, item in enumerate(self.data):
             if item[key] == find_text:
                 return index
         return None
 
-    def getLastRowKey(self):
+    def getLastRowKey(self) -> str:
         return self.data[len(self.data) - 1]["dtm"]
 
     # def findNotSentRowIndex(self):
@@ -442,45 +422,33 @@ class LogsModel(list):
     #             return index
     #     return None
 
-    def getRows(self, idx):
+    def getRows(self, idx) -> dict:
         return self.data[idx]
 
     # before Button 클릭시 호출됨
-    def before_page(self):
+    def before_page(self) -> None:
         self.current_page -= 1
         if self.current_page < 1:
             self.current_page = 1
 
         DEBUG(f"before current_page=[{self.current_page}]")
-        # self.model.clear()
-        # self.aggregation_model.clear()
         self.query_page()
 
     # next Button 클릭시 호출됨
-    def next_page(self):
+    def next_page(self) -> None:
         self.current_page += 1
         if self.current_page > self.total_page:
             self.current_page = self.total_page
 
         DEBUG(f"next current_page=[{self.current_page}]")
-        # self.model.clear()
-        # self.aggregation_model.clear()
         self.query_page()
 
     # remove Button 클릭시 호출됨 (하지만 현재 사용하지 않음)
-    def remove(self, idx):
+    def remove(self, idx: int) -> dict:
         DEBUG(f"remove index= [{idx}]")
         temp = self.data[idx]
         del self.data[idx]
-        # last_idx = len(self.data) - 1
-        # DEBUG(f"remove last_Index [{last_idx}]")
 
-        # self.data[idx] = self.data[last_idx]
-        # self.data[last_idx] = temp
-        # self.data.pop()
-
-        # self.model.clear()
-        # self.aggregation_model.clear()
         self.applyModel()
 
         return temp
@@ -600,7 +568,7 @@ class LogViewModel:
 
         ## Thread Setup
         self.setup_log_capture_thread()
-        self.setup_send_msg_thread()
+        #self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()

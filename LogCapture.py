@@ -13,7 +13,7 @@ import time
 import re
 import sqlite3
 
-from dbm import HistoryMgr
+from DBM import HistoryMgr
 from BKLOG import DEBUG, INFO, ERROR
 
 from WindowsObject import WindowsObject, ChildObject
@@ -241,29 +241,7 @@ class LogCaptureWin32Worker(QObject):
         del history_mgr
 
 
-def uac_require():
-    asadmin = "asadmin"
-    try:
-        if sys.argv[-1] != asadmin:
-            script = os.path.abspath(sys.argv[0])
-            params = " ".join([script] + sys.argv[1:] + [asadmin])
-            shell.ShellExecuteEx(
-                lpVerb="runas", lpFile=sys.executable, lpParameters=params
-            )
-            sys.exit()
-        return True
-    except:
-        return False
-
-
 if __name__ == "__main__":
-    import win32com.shell.shell as shell
-    import os, sys
-
-    if uac_require():
-        INFO("continue")
-    else:
-        ERROR("error message")
     logCapture = LogCaptureWin32Worker()
     logCapture.run()
     # log_capture_main()

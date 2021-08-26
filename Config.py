@@ -1,4 +1,5 @@
 import json
+import typing
 
 temp = {}
 
@@ -16,9 +17,9 @@ class SingletonInstane:
     return cls.__instance
 
 class Config(dict, SingletonInstane):
-    def __init__(self, file_path="./config.json", *arg, **kw):
+    def __init__(self, file_path: str="./config.json", *arg, **kw):
         super(Config, self).__init__(*arg, **kw)
-        self.file_path = file_path
+        self.file_path: str = file_path
         print(f"file_path = [{self.file_path}]")
         self.reload(self.file_path)
 
@@ -73,7 +74,7 @@ class Config(dict, SingletonInstane):
     def __unicode__(self):
         return unicode(repr(self.__dict__))
 
-    def reload(self, file_path):
+    def reload(self, file_path: str):
         self.clear()
         print(f"file_path = [{file_path}]")
         if file_path:
