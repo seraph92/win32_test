@@ -1,8 +1,5 @@
-import ctypes
+from MemTrace import MemTrace
 from PyQt5.QtCore import QObject, pyqtSignal
-import six
-import win32gui
-import win32con
 
 import sys
 import warnings
@@ -14,15 +11,18 @@ sys.coinit_flags = 2
 # import pywinauto
 import time
 import re
-
 import sqlite3
 
 from dbm import HistoryMgr
-from BKLOG import *
+from BKLOG import DEBUG, INFO, ERROR
+
+from WindowsObject import WindowsObject, ChildObject
+from Config import CONFIG
 
 GLOBAL_WIN = "AGENT"
 #GLOBAL_WIN = "EDIT"
 
+"""
 class WindowsObject:
     def __init__(self, r_text=None):
         self.win_objs = []
@@ -97,6 +97,7 @@ class ChildObject:
 
         result = win32gui.SendMessage(control_hwnd, win32con.EM_GETLINE, line_index, text)
         return text.value
+"""
 
 class LogCaptureWin32Worker(QObject):
     started = pyqtSignal()
@@ -164,6 +165,8 @@ class LogCaptureWin32Worker(QObject):
         if self.loop_flag:
             edit_control = self.logwin
 
+        mt = MemTrace()
+
         while self.loop_flag:
             line_cnt = edit_control.line_count()
             INFO(f"line_cnt:[{line_cnt}]")
@@ -174,6 +177,7 @@ class LogCaptureWin32Worker(QObject):
             DEBUG("")
             self.in_processing.emit(line_cnt)
             time.sleep(3)
+            mt.end_print()
 
         self.finished.emit()
 
@@ -197,11 +201,13 @@ class LogCaptureWin32Worker(QObject):
 
         # DB처리 (Cache 검증 및 insert)
         # 등록하려는 정보의 앞뒤 1기간 가량안에 동일 사용자의 로그가 있다면 등록하지 않고 무시
-        sql = f"SELECT count(*) cnt \n"
-        sql += f"FROM inout_history a \n"
-        sql += f"WHERE \n"
-        sql += f"name = '{m.group('name')}' \n"
-        sql += f"and datetime(a.dtm) BETWEEN datetime('{m.group('dtm')}', '-1 hours') and datetime('{m.group('dtm')}', '+1 hours') \n"
+        sql = ' \n'.join((
+            f"SELECT count(*) cnt" ,
+            f"FROM inout_history a",
+            f"WHERE",
+            f"name = '{m.group('name')}'",
+            f"and datetime(a.dtm) BETWEEN datetime('{m.group('dtm')}', '-1 hours') and datetime('{m.group('dtm')}', '+1 hours')",
+        ))
 
         datas = history_mgr.query(sql)
 
@@ -232,6 +238,7 @@ class LogCaptureWin32Worker(QObject):
                 history_mgr.commit()
                 self.inserted.emit(strLog)
                 INFO(f"로그등록:[{strLog}]")
+        del history_mgr
 
 
 def uac_require():

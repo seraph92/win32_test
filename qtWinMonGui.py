@@ -581,8 +581,8 @@ class LogViewModel:
         views["next_button2"].clicked.connect(self.next_page)
         views["today_button"].clicked.connect(self.set_today)
         views["today_edit"].editingFinished.connect(self.date_change)
-        # views["keyword_edit"].editingFinished.connect(self.keyword_change)
-        #views["keyword_edit"].hide()
+        views["keyword_edit"].editingFinished.connect(self.keyword_change)
+        views["keyword_edit"].hide()
         views["auto_button"].clicked.connect(self.set_auto_process)
         self.view.doubleClicked.connect(self.log_view_double_click_handler)
         # self.view.doubleClicked.connect(self.add_msg)
@@ -831,9 +831,9 @@ class LogViewModel:
         if data:
             self.msg_worker.user_msgs.append(data)
 
-    # def keyword_change(self):
-    #     keyword = self.views["keyword_edit"].text()
-    #     INFO(f"keyword changed = [{keyword}]")
+    def keyword_change(self):
+        keyword = self.views["keyword_edit"].text()
+        INFO(f"keyword changed = [{keyword}]")
 
     def set_today(self):
         edit: QLineEdit = self.views["today_edit"]
@@ -1161,9 +1161,14 @@ if __name__ == "__main__":
     # else:
     #    ERROR("error message")
 
+    #mt = MemTrace()
+
     app = QApplication(sys.argv)
     myWindow = MainWindow()
     myWindow.setWindowTitle(f"Log Monitor [{CONFIG['RUN_MODE']}]")
     # myWindow.show()
     # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
     app.exec_()
+
+    #mt.end_print()
+

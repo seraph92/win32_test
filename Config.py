@@ -2,8 +2,20 @@ import json
 
 temp = {}
 
+class SingletonInstane:
+  __instance = None
 
-class Config(dict):
+  @classmethod
+  def __getInstance(cls):
+    return cls.__instance
+
+  @classmethod
+  def instance(cls, *args, **kargs):
+    cls.__instance = cls(*args, **kargs)
+    cls.instance = cls.__getInstance
+    return cls.__instance
+
+class Config(dict, SingletonInstane):
     def __init__(self, file_path="./config.json", *arg, **kw):
         super(Config, self).__init__(*arg, **kw)
         self.file_path = file_path
@@ -117,7 +129,7 @@ class Config(dict):
                 json.dump(dict(self.values), f)
 
 
-CONFIG = Config()
+CONFIG = Config.instance()
 
 if __name__ == "__main__":
     conf = Config()

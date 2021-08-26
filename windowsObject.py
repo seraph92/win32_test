@@ -7,12 +7,13 @@ import win32con
 import ctypes
 import win32clipboard
 import six
+from typing import Pattern
 
 
 class WindowsObject:
     def __init__(self, r_text=None):
-        self.win_objs = []
-        self.pattern = re.compile(r_text)
+        self.win_objs: list = []
+        self.pattern: Pattern = re.compile(r_text)
         win32gui.EnumWindows(self.__EnumWindowsHandler, None)
         if len(self.win_objs) < 1:
             raise ValueError("Windows Object를 발견하지 못하였습니다.")
@@ -27,7 +28,7 @@ class WindowsObject:
     def __EnumWindowsHandler(self, hwnd, find_text):
         wintext = win32gui.GetWindowText(hwnd)
         if self.pattern.match(wintext):
-            obj = {}
+            obj: dict = {}
             obj["handle"] = hwnd
             obj["text"] = wintext
             self.win_objs.append(obj)
@@ -36,8 +37,8 @@ class ChildObject:
     def __init__(self, parent_hwnd=None, match_class=None):
         self.parent_hwnd = parent_hwnd
         self.match_class = match_class
-        self.pattern = re.compile(self.match_class)
-        self.win_objs = []
+        self.pattern: Pattern = re.compile(self.match_class)
+        self.win_objs: list = []
         win32gui.EnumChildWindows(parent_hwnd, self.__EnumChildWindowsHandler, None)
         if len(self.win_objs) < 1:
             raise ValueError("Windows Object를 발견하지 못하였습니다.")
