@@ -8,6 +8,7 @@ class PoolSingleton:
     # {
     #   'obj': instance
     #   'run': [True|False]
+    #   'tid': thread id
     # }
     __instance: list[dict] = []
     __MAX = 3

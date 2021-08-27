@@ -9,7 +9,7 @@ added_files = [
     ('./ui/user_detail.ui', './ui/') ,
     ('./driver/chromedriver.exe', './driver/') ,
 #    ('./data/log.db', './data/') ,
-    ('./log', './log') ,
+#    ('./log', './log') ,
 ]
 
 a = Analysis(['qtWinMonGui.py'],
