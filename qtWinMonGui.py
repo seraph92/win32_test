@@ -6,7 +6,7 @@ import sys
 import threading
 #import win32com.shell.shell as shell
 
-from DBM import DBMgr, HistoryMgr
+from DBM import DBMgr
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
