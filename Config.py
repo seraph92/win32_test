@@ -2,21 +2,23 @@ import json
 
 temp = {}
 
+
 class SingletonInstane:
-  __instance = None
+    __instance = {}
 
-  @classmethod
-  def __getInstance(cls):
-    return cls.__instance
+    @classmethod
+    def __getInstance(cls):
+        return cls.__instance
 
-  @classmethod
-  def instance(cls, *args, **kargs):
-    cls.__instance = cls(*args, **kargs)
-    cls.instance = cls.__getInstance
-    return cls.__instance
+    @classmethod
+    def instance(cls, *args, **kargs):
+        cls.__instance = cls(*args, **kargs)
+        cls.instance = cls.__getInstance
+        return cls.__instance
+
 
 class Config(dict, SingletonInstane):
-    def __init__(self, file_path: str="./config.json", *arg, **kw):
+    def __init__(self, file_path: str = "./config.json", *arg, **kw):
         super(Config, self).__init__(*arg, **kw)
         self.file_path: str = file_path
         print(f"file_path = [{self.file_path}]")
@@ -70,7 +72,7 @@ class Config(dict, SingletonInstane):
     def __iter__(self):
         return iter(self.__dict__)
 
-    #def __str__(self):
+    # def __str__(self):
     #    return unicode(self).encode('utf-8')
 
     def reload(self, file_path: str):
@@ -134,8 +136,8 @@ CONFIG = Config.instance()
 if __name__ == "__main__":
 
     print(f"config = [{CONFIG.values}]")
-    #conf = Config()
-    #print(f"user_id = [{conf['user_id']}]")
+    # conf = Config()
+    # print(f"user_id = [{conf['user_id']}]")
 
     # conf.values = {
     #     "user_id": "seraph92",

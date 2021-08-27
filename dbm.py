@@ -4,21 +4,22 @@ import sqlite3
 from typing import Any, Iterable
 import threading
 
+
 class PoolSingleton:
     # {
     #   'obj': instance
     #   'run': [True|False]
     #   'tid': thread id
     # }
-    __instance: list[dict] = []
+    __instance = []
     __MAX = 3
 
     @classmethod
     def __getInstance(cls):
         for instance in cls.__instance:
-            if instance['tid'] == threading.get_ident():
+            if instance["tid"] == threading.get_ident():
                 DEBUG(f"현재 thread instance 있음 [{instance}] [{threading.get_ident()}]")
-                return instance['obj']
+                return instance["obj"]
         ERROR(f"instance 없음  th:[{threading.get_ident()}]")
         cls.print_status()
         return None
@@ -31,17 +32,17 @@ class PoolSingleton:
     @classmethod
     def __getAvailableInstance(cls):
         for instance in cls.__instance:
-            if not instance['run']:
+            if not instance["run"]:
                 DEBUG(f"가용 instance 있음 [{instance}] [{threading.get_ident()}]")
                 # 사용자 thread_id기록
-                instance['tid'] = threading.get_ident()
-                return instance['obj']
+                instance["tid"] = threading.get_ident()
+                return instance["obj"]
         return None
 
     @classmethod
     def instance(cls, *args, **kargs):
         # 가용Pool확인
-        #instance = cls.__getAvailableInstance()
+        # instance = cls.__getAvailableInstance()
         instance = cls.__getInstance()
 
         # 해당 thread에 맞는 Pool이 없다면 추가 slot이 남아 있나?
@@ -58,18 +59,20 @@ class PoolSingleton:
 
                 cls.__instance.append(instance_dict)
                 INFO(f"instance 추가 [{threading.get_ident()}]")
-                #cls.instance = cls.__getInstance
-                return instance_dict['obj']
+                # cls.instance = cls.__getInstance
+                return instance_dict["obj"]
             else:
                 # 가용Pool도 없고 추가 slot도 없으면, Error 발생
                 raise Error("가용Pool이 남아 있지 않습니다.")
-        
+
         return instance
+
 
 class DBPool(PoolSingleton):
     def __init__(self):
         self.db_path = "data/log.db"
         self.dbconn = sqlite3.connect(self.db_path)
+
 
 class DBMgr(PoolSingleton):
     def __init__(self):
@@ -82,9 +85,9 @@ class DBMgr(PoolSingleton):
         return self.dbconn
 
     def __exit__(self, type, value, traceback):
-        #INFO(f"[자원반납] 지금은 할게 없음")
+        # INFO(f"[자원반납] 지금은 할게 없음")
         pass
-        #self.dbconn.close()
+        # self.dbconn.close()
         # INFO(f"[자원반납]db Connection Closed!!")
 
     def dic_factory(self, cursor, row) -> dict:

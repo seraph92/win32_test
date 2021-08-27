@@ -20,8 +20,9 @@ from BKLOG import DEBUG, INFO, ERROR
 from WindowsObject import WindowsObject, ChildObject
 from Config import CONFIG
 
-GLOBAL_WIN = "AGENT"
-#GLOBAL_WIN = "EDIT"
+# GLOBAL_WIN = "AGENT"
+GLOBAL_WIN = "EDIT"
+
 
 class LogCaptureWin32Worker(QObject):
     started = pyqtSignal()
@@ -72,7 +73,7 @@ class LogCaptureWin32Worker(QObject):
         if self.loop_flag:
             edit_control = self.logwin
 
-        #mt = MemTrace()
+        # mt = MemTrace()
 
         while self.loop_flag:
             line_cnt = edit_control.line_count()
@@ -84,8 +85,8 @@ class LogCaptureWin32Worker(QObject):
             DEBUG("")
             self.in_processing.emit(line_cnt)
             time.sleep(3)
-            #mt.end_print(5)
-            #mt.print_mem_trace()
+            # mt.end_print(5)
+            # mt.print_mem_trace()
 
         self.finished.emit()
 
