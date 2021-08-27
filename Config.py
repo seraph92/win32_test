@@ -1,5 +1,4 @@
 import json
-import typing
 
 temp = {}
 
@@ -62,8 +61,8 @@ class Config(dict, SingletonInstane):
     def pop(self, *args):
         return self.__dict__.pop(*args)
 
-    def __cmp__(self, dict_):
-        return self.__cmp__(self.__dict__, dict_)
+    def __eq__(self, dict_):
+        return self.__dict__ == dict_
 
     def __contains__(self, item):
         return item in self.__dict__
@@ -71,8 +70,8 @@ class Config(dict, SingletonInstane):
     def __iter__(self):
         return iter(self.__dict__)
 
-    def __unicode__(self):
-        return unicode(repr(self.__dict__))
+    #def __str__(self):
+    #    return unicode(self).encode('utf-8')
 
     def reload(self, file_path: str):
         self.clear()
@@ -133,17 +132,19 @@ class Config(dict, SingletonInstane):
 CONFIG = Config.instance()
 
 if __name__ == "__main__":
-    conf = Config()
+
+    print(f"config = [{CONFIG.values}]")
+    #conf = Config()
     #print(f"user_id = [{conf['user_id']}]")
 
-    conf.values = {
-        "user_id": "seraph92",
-        "user_pw": "123456",
-        "options": {
-            "option1": "op_value1",
-            "option2": "op_value2",
-        },
-    }
-    conf.update_each({"options": {"add_key": "add_value"}})
+    # conf.values = {
+    #     "user_id": "seraph92",
+    #     "user_pw": "123456",
+    #     "options": {
+    #         "option1": "op_value1",
+    #         "option2": "op_value2",
+    #     },
+    # }
+    # conf.update_each({"options": {"add_key": "add_value"}})
 
-    conf.export()
+    # conf.export()

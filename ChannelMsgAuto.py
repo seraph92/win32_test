@@ -13,7 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from DBM import DBMgr
 from Config import CONFIG
-from BKLOG import *
+from BKLOG import DEBUG, INFO, ERROR
 
 
 class ChannelMessageSending(QObject):
