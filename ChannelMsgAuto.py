@@ -160,8 +160,6 @@ class ChannelMessageSending(QObject):
             # 3 | click | css=.tit_invite |
             self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
             # 3 | click | css=.tit_invite |
-            # self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
-            # self.driver.find_element(By.XPATH, "//strong[contains(.,\'리드101송도학원\')]").click()
         else:
             # 3 | click | css=.tit_invite |
             self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
@@ -192,11 +190,8 @@ class ChannelMessageSending(QObject):
                     chat_room = self.get_chat_room(user_msg["user"])
                     INFO(f"chat_room = [{chat_room}]")
                     if CONFIG["RUN_MODE"] != "REAL":
-                        chat_room = "이범각"
-                    # time.sleep(5)
+                        chat_room = "시은아빠"
                     # 6 | click | name=keyword |
-                    # self.driver.find_element(By.NAME, "keyword").click()
-                    # self.driver.find_element(By.NAME, "keyword").click()
                     element = self.driver.find_element(By.NAME, "keyword")
                     actions = ActionChains(self.driver)
                     actions.double_click(element).perform()
@@ -240,7 +235,6 @@ class ChannelMessageSending(QObject):
                     self.driver.find_element(By.ID, "chatWrite").send_keys(Keys.ENTER)
                     time.sleep(1)
                     # 17 | selectWindow | handle=${root} |
-                    # self.driver.find_element(By.CSS_SELECTOR, ".btn_g").click()
                     # 18 | click | name=keyword |
                     self.driver.close()
                     # 19 | click | css=.box_tf |
@@ -253,34 +247,6 @@ class ChannelMessageSending(QObject):
                 finally:
                     del self.user_msgs[0]
 
-            # # 20 | type | name=keyword | 이시은
-            # self.driver.find_element(By.NAME, "keyword").click()
-            # # 21 | sendKeys | name=keyword | ${KEY_ENTER}
-            # self.driver.find_element(By.CSS_SELECTOR, ".box_tf").click()
-            # # 22 | click | css=.txt_info:nth-child(1) |
-            # self.driver.find_element(By.NAME, "keyword").send_keys("이시은")
-            # # 23 | selectWindow | handle=${win4320} |
-            # self.driver.find_element(By.NAME, "keyword").send_keys(Keys.ENTER)
-            # # 24 | click | id=chatWrite |
-            # self.vars["window_handles"] = self.driver.window_handles
-            # # 25 | type | id=chatWrite | test
-            # self.driver.find_element(By.CSS_SELECTOR, ".txt_info:nth-child(1)").click()
-            # # 26 | click | css=.btn_g |
-            # self.vars["win4320"] = self.wait_for_window(2000)
-            # # 27 | close |  |
-            # self.driver.switch_to.window(self.vars["win4320"])
-            # # 28 | selectWindow | handle=${root} |
-            # self.driver.find_element(By.ID, "chatWrite").click()
-            # # 29 | close |  |
-            # self.driver.find_element(By.ID, "chatWrite").send_keys("test")
-            # self.driver.find_element(By.CSS_SELECTOR, ".btn_g").click()
-            # self.driver.close()
-            # self.driver.switch_to.window(self.vars["root"])
-
-            # 10초간 sleep
-            # time.sleep(2)
-
-        # self.driver.close()
         self.teardown_method(None)
 
 
