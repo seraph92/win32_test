@@ -14,7 +14,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support import expected_conditions as EC
 
-from DBM import HistoryMgr
+from DBM import DBMgr
 from Config import CONFIG
 from BKLOG import *
 
@@ -44,18 +44,19 @@ class ChannelMessageSending(QObject):
         self.loop_flag = False
 
     def get_chat_room(self, user):
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
 
-        sql = f"SELECT no, user_name, chat_room, reg_dtm \n"
-        sql += f"FROM user \n"
-        sql += f"WHERE \n"
-        sql += f"user_name = '{user}'\n"
-        # sql += f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
-
+        sql = " \n".join((
+            f"SELECT no, user_name, chat_room, reg_dtm",
+            f"FROM user",
+            f"WHERE",
+            f"user_name = '{user}'",
+            # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
+        ))
         DEBUG(f"sql = [{sql}]")
-        # INFO(f"sql = [{sql}]")
 
-        self.data = mgr.query(sql)
+        with dbm as conn:
+            self.data = dbm.query(sql)
 
         DEBUG(f"data = [{self.data}]")
         # INFO(f"data = [{self.data}]")

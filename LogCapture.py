@@ -14,14 +14,14 @@ import time
 import re
 import sqlite3
 
-from DBM import HistoryMgr, DBMgr
+from DBM import DBMgr
 from BKLOG import DEBUG, INFO, ERROR
 
 from WindowsObject import WindowsObject, ChildObject
 from Config import CONFIG
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 """
 class WindowsObject:
@@ -167,7 +167,7 @@ class LogCaptureWin32Worker(QObject):
         if self.loop_flag:
             edit_control = self.logwin
 
-        mt = MemTrace()
+        #mt = MemTrace()
 
         while self.loop_flag:
             line_cnt = edit_control.line_count()
@@ -179,13 +179,13 @@ class LogCaptureWin32Worker(QObject):
             DEBUG("")
             self.in_processing.emit(line_cnt)
             time.sleep(3)
-            # mt.end_print(5)
-            mt.print_mem_trace()
+            #mt.end_print(5)
+            #mt.print_mem_trace()
 
         self.finished.emit()
 
     def log_processing(self, compiled_pattern, strLog):
-        dbm = DBMgr()
+        dbm = DBMgr.instance()
         DEBUG(f"strLog=[{strLog}]")
         # 외부로 이동
         # p = re.compile(r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{5}) 출입시간 : (?P<dtm2>.{19})\)")

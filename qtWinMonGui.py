@@ -3,9 +3,10 @@ from PyQt5 import QtCore
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
+import threading
 #import win32com.shell.shell as shell
 
-from DBM import HistoryMgr
+from DBM import DBMgr, HistoryMgr
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (
@@ -74,7 +75,7 @@ class MsgsModel(list):
             del self.data[0]
             self.applyModel()
         except IndexError as ie:
-            ERROR(f"index참조 오류: [{ie}]")
+            DEBUG(f"index참조 오류: [{ie}]")
             data = None
         return data
 
@@ -118,37 +119,38 @@ class MsgsModel(list):
         return True
 
     def setReadyToSend(self, msg: dict) -> None:
-        try:
-            mgr = HistoryMgr()
-            sql = " \n".join((
-                f"UPDATE inout_history",
-                f"SET send_dtm = '-'",
-                f"where dtm = '{msg['dtm']}'",
-            ))
+        dbm = DBMgr.instance()
+        sql = " \n".join((
+            f"UPDATE inout_history",
+            f"SET send_dtm = '-'",
+            f"where dtm = '{msg['dtm']}'",
+        ))
 
-            INFO(f"sql = [{sql}]")
-            mgr.execute(sql)
-            mgr.dbconn.commit()
-        except:
-            mgr.dbconn.rollback()
-            raise sqlite3.Error("변경실패")
+        INFO(f"sql = [{sql}]")
+        with dbm as conn:
+            try:
+                dbm.execute(sql)
+                conn.commit()
+            except:
+                conn.rollback()
+                raise sqlite3.Error("변경실패")
 
     def setRestoreReady(self, msg:dict) -> None:
-        try:
-            mgr = HistoryMgr()
-            sql = " \n".join((
-                f"UPDATE inout_history",
-                f"SET send_dtm = ''",
-                f"where dtm = '{msg['dtm']}'",
-                f"and send_dtm = '-'",
-            )) 
-
-            INFO(f"sql = [{sql}]")
-            mgr.execute(sql)
-            mgr.dbconn.commit()
-        except:
-            mgr.dbconn.rollback()
-            raise sqlite3.Error("변경실패")
+        dbm = DBMgr.instance()
+        sql = " \n".join((
+            f"UPDATE inout_history",
+            f"SET send_dtm = ''",
+            f"where dtm = '{msg['dtm']}'",
+            f"and send_dtm = '-'",
+        )) 
+        INFO(f"sql = [{sql}]")
+        with dbm as conn:
+            try:
+                dbm.execute(sql)
+                conn.commit()
+            except:
+                conn.rollback()
+                raise sqlite3.Error("변경실패")
 
 
 class UserModel(list):
@@ -161,7 +163,7 @@ class UserModel(list):
         # self.reg_dtm_model = QStandardItemModel()
 
     def query_one(self, user_name: str) -> None:
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
 
         sql = " \n".jogin((
             f"SELECT user_name, chat_room, reg_dtm",
@@ -175,7 +177,8 @@ class UserModel(list):
         INFO(f"sql = [{sql}]")
         # INFO(f"sql = [{sql}]")
 
-        datas: list[dict] = mgr.query(sql)
+        with dbm as conn:
+            datas: list[dict] = dbm.query(sql)
 
         INFO(f"datas = [{datas}]")
 
@@ -192,37 +195,42 @@ class UserModel(list):
         user_name: str = user["user_name"]
         chat_room: str = user["chat_room"]
 
-        try:
-            mgr = HistoryMgr()
-            sql = " \n".join((
-                f"INSERT INTO user(user_name, chat_room, reg_dtm)",
-                f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
-            )) 
-            mgr.execute(sql)
-            mgr.dbconn.commit()
-        except:
-            mgr.dbconn.rollback()
-            raise sqlite3.IntegrityError("등록실패")
+        dbm = DBMgr.instance()
+
+        sql = " \n".join((
+            f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+            f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+        )) 
+
+        with dbm as conn:
+            try:
+                dbm.execute(sql)
+                conn.commit()
+            except:
+                conn.rollback()
+                raise sqlite3.IntegrityError("등록실패")
 
     def update_user(self, user:dict) -> None:
         user_name: str = user["user_name"]
         chat_room: str = user["chat_room"]
 
-        try:
-            mgr = HistoryMgr()
-            sql = " \n".join((
-                f"UPDATE user",
-                f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
-                f"  , chat_room = '{chat_room}'",
-                f"where user_name = '{user_name}'",
-            ))
+        dbm = DBMgr.instance()
 
-            INFO(f"sql = [{sql}]")
-            mgr.execute(sql)
-            mgr.dbconn.commit()
-        except:
-            mgr.dbconn.rollback()
-            raise sqlite3.Error("변경실패")
+        sql = " \n".join((
+            f"UPDATE user",
+            f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
+            f"  , chat_room = '{chat_room}'",
+            f"where user_name = '{user_name}'",
+        ))
+        INFO(f"sql = [{sql}]")
+
+        with dbm as conn:
+            try:
+                dbm.execute(sql)
+                conn.commit()
+            except:
+                conn.rollback()
+                raise sqlite3.Error("변경실패")
 
     # data를 model에 적용
     def applyModel(self) -> None:
@@ -245,7 +253,7 @@ class UsersModel(list):
 
     # 현재 Page 조회
     def query_page(self) -> None:
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
 
         sql = " \n".join((
             f"SELECT user_name, chat_room, reg_dtm",
@@ -257,8 +265,9 @@ class UsersModel(list):
         ))
         DEBUG(f"sql = [{sql}]")
 
-        self.data = mgr.query(sql)
-        DEBUG(f"data = [{self.data}]")
+        with dbm as conn:
+            self.data = dbm.query(sql)
+            DEBUG(f"data = [{self.data}]")
 
         self.applyModel()
 
@@ -281,27 +290,29 @@ class UsersModel(list):
         return temp
 
     def load_user(self, datas):
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
 
-        try:
-            sql  = " \n".join((
-                f"DELETE",
-                f"FROM user",
-            ))
-            mgr.execute(sql)
+        sql  = " \n".join((
+            f"DELETE",
+            f"FROM user",
+        ))
 
-            for data in datas:
-                sql = " \n".join((
-                    f"INSERT INTO user(user_name, chat_room, reg_dtm)",
-                    f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
-                ))
-                mgr.execute(sql)
-            mgr.dbconn.commit()
-        except:
-            mgr.dbconn.rollback()
-            raise sqlite3.IntegrityError("등록실패")
+        with dbm as conn:
+            try:
+                dbm.execute(sql)
 
-        self.query_page()
+                for data in datas:
+                    sql = " \n".join((
+                        f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+                        f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+                    ))
+                    dbm.execute(sql)
+                conn.commit()
+            except:
+                conn.rollback()
+                raise sqlite3.IntegrityError("등록실패")
+
+            self.query_page()
 
     # data를 model에 적용
     def applyModel(self):
@@ -345,19 +356,23 @@ class LogsModel(list):
     def query_total_page(self) -> int:
         page = self.PAGE_SIZE
         today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
+
         sql = " \n".join((
             f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page",
             f"from inout_history",
             f"where date(dtm) = date('{today}')",
             f"and (del_yn is NULL or del_yn = 'N')",
         ))
-        rslt = mgr.query(sql)
-        return rslt[0]["total_page"]
+
+        with dbm as conn:
+            rslt = dbm.query(sql)
+            return rslt[0]["total_page"]
 
     # 현재 Page 조회
     def query_page(self) -> None:
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
+
         # self.total_page = mgr.query_total_page(self.PAGE_SIZE)
         self.total_page = self.query_total_page()
         self.item_data["current_page"] = self.current_page
@@ -379,13 +394,15 @@ class LogsModel(list):
         ))
         DEBUG(f"sql = [{sql}]")
 
-        self.data = mgr.query(sql)
-        DEBUG(f"data = [{self.data}]")
+        with dbm as conn:
+            self.data = dbm.query(sql)
+            DEBUG(f"data = [{self.data}]")
 
         self.applyModel()
 
     def findNextKey(self, key) -> str:
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
+
         sql = " \n".join((
             f"SELECT dtm, name",
             f"FROM inout_history",
@@ -396,7 +413,9 @@ class LogsModel(list):
         ))
 
         DEBUG(f"sql = [{sql}]")
-        datas = mgr.query(sql)
+
+        with dbm as conn:
+            datas = dbm.query(sql)
 
         if len(datas) < 2:
             return None
@@ -454,12 +473,16 @@ class LogsModel(list):
         return temp
 
     def update_sent_dtm(self, user_msg):
-        mgr = HistoryMgr()
+        dbm = DBMgr.instance()
+
         sql = f"UPDATE inout_history\n"
         sql += f"SET send_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')\n"
         sql += f"where dtm = '{user_msg['dtm']}'\n"
-        rslt = mgr.execute(sql)
-        mgr.dbconn.commit()
+
+        with dbm as conn:
+            rslt = dbm.execute(sql)
+            conn.commit()
+
         self.query_page()
         self.applyModel()
 
@@ -568,7 +591,7 @@ class LogViewModel:
 
         ## Thread Setup
         self.setup_log_capture_thread()
-        #self.setup_send_msg_thread()
+        self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()
@@ -580,24 +603,27 @@ class LogViewModel:
         # 파일 브라우저를 통해서 저장위치 결정
         fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
         DEBUG(f"선택파일: [{fname[0]}]")
-        df = pd.read_excel(fname[0])
-        DEBUG(f"df = [\n{df}]")
-        DEBUG(f"df.index = [\n{df.index}]")
-        DEBUG(f"df.columns = [\n{df.columns}]")
-        DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
-        DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
-        temp = self.user_model.data
-        self.user_model.data = []
-        for line in df.iloc:
-            self.user_model.data.append({
-                "user_name": line['user_name'],
-                "chat_room": line['chat_room'],
-                "reg_dtm"  : line['reg_dtm'],
-            })
-        del temp
-        self.user_model.load_user(df.iloc)
-        self.adjust_user_view_column()
- 
+        try:
+            df = pd.read_excel(fname[0])
+            DEBUG(f"df = [\n{df}]")
+            DEBUG(f"df.index = [\n{df.index}]")
+            DEBUG(f"df.columns = [\n{df.columns}]")
+            DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
+            DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
+            temp = self.user_model.data
+            self.user_model.data = []
+            for line in df.iloc:
+                self.user_model.data.append({
+                    "user_name": line['user_name'],
+                    "chat_room": line['chat_room'],
+                    "reg_dtm"  : line['reg_dtm'],
+                })
+            del temp
+            self.user_model.load_user(df.iloc)
+            self.adjust_user_view_column()
+        except FileNotFoundError as fnfe:
+            pass
+    
     def save_user(self):
         # 파일 브라우저를 통해서 저장위치 결정
         # xls 확장자, Default Name 적용(x)
@@ -608,7 +634,10 @@ class LogViewModel:
         DEBUG(f"df.index = [\n{df.index}]")
         DEBUG(f"df.columns = [\n{df.columns}]")
         DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
-        df.to_excel(fname[0], index=False)
+        try:
+            df.to_excel(fname[0], index=False)
+        except ValueError as ve:
+            pass
 
     def close(self, e):
         INFO(f"ViewModel Closing!")
@@ -1136,6 +1165,7 @@ if __name__ == "__main__":
     myWindow.setWindowTitle(f"Log Monitor [{CONFIG['RUN_MODE']}]")
     # myWindow.show()
     # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
+    INFO(f"current thread id :[{threading.get_ident()}]")
     app.exec_()
 
     #mt.end_print()
