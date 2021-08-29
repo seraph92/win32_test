@@ -36,7 +36,6 @@ from PyQt5.QtCore import (
 
 from typing import Literal
 import sqlite3
-import csv
 import pandas as pd
 
 from LogCapture import LogCaptureWin32Worker
