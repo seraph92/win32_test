@@ -20,8 +20,8 @@ from BKLOG import DEBUG, INFO, ERROR
 from WindowsObject import WindowsObject, ChildObject
 from Config import CONFIG
 
-# GLOBAL_WIN = "AGENT"
-GLOBAL_WIN = "EDIT"
+GLOBAL_WIN = "AGENT"
+#GLOBAL_WIN = "EDIT"
 
 
 class LogCaptureWin32Worker(QObject):
