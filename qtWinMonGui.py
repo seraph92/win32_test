@@ -239,6 +239,52 @@ class UserModel(list):
         self.model.setItem(0, 1, QStandardItem(f"{self.data['chat_room']}"))
         self.model.setItem(0, 2, QStandardItem(f"{self.data['reg_dtm']}"))
 
+class WeeklyModel(list):
+    def __init__(self):
+        super().__init__()
+
+        self.data: list[dict] = []
+
+        self.model = QStandardItemModel()
+        self.model.setColumnCount(18)
+
+    # 현재 Page 조회
+    def query_page(self) -> None:
+        #self.data = dbm.query(sql)
+
+        self.applyModel()
+
+    def findRowIndex(self, key: str, find_text: str) -> int:
+        for index, item in enumerate(self.data):
+            if item[key] == find_text:
+                return index
+        return None
+
+    def getRows(self, idx: int) -> dict:
+        return self.data[idx]
+
+    def load_user(self, datas):
+        #
+        self.query_page()
+
+    # data를 model에 적용
+    def applyModel(self):
+        self.model.clear()
+        self.model.setColumnCount(18)
+
+        # Header Setting
+        # 18개 헤더 세팅
+        self.model.setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
+        for data in self.data:
+            self.model.appendRow(
+                [
+                    QStandardItem(data["user_name"]),
+                    QStandardItem(data["chat_room"]),
+                    QStandardItem(data["reg_dtm"]),
+                ]
+            )
+
+
 class UsersModel(list):
     #def __init__(self, l=[]):
     def __init__(self):
@@ -550,6 +596,10 @@ class LogViewModel:
         self.user_view: QTableView = views["user_table_view"]
         self.user_model: UsersModel = models["user_model"]
 
+        # Weekly Tab
+        self.weekly_view: QTableView = views["weekly_table_view"]
+        self.weekly_model: WeeklyModel = models["weekly_model"]
+
         # Left Top
         self.msg_view: QListView = views["msg_view"]
         self.msg_model: MsgsModel = models["msg_model"]
@@ -584,19 +634,71 @@ class LogViewModel:
         views["save_button"].clicked.connect(self.save_user)
         views["load_button"].clicked.connect(self.load_user)
 
+        # Weekly View
+        self.weekly_view.doubleClicked.connect(self.weekly_view_double_click_handler)
+        views["save_weekly_button"].clicked.connect(self.save_weekly_plan)
+        views["load_weekly_button"].clicked.connect(self.load_weekly_plan)
+
+
         # msg List
         self.msg_view.doubleClicked.connect(self.del_msg)
 
 
         ## Thread Setup
-        self.setup_log_capture_thread()
-        self.setup_send_msg_thread()
+        #self.setup_log_capture_thread()
+        #self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.timeout.connect(self.auto_log_process)
         self.timer.start()
+
+    def weekly_view_double_click_handler(self, model: QModelIndex):
+        pass
+        # if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
+        #     self.add_msg(model)
+
+    def load_weekly_plan(self):
+        # 파일 브라우저를 통해서 저장위치 결정
+        fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        DEBUG(f"선택파일: [{fname[0]}]")
+        try:
+            df = pd.read_excel(fname[0])
+            DEBUG(f"df = [\n{df}]")
+            DEBUG(f"df.index = [\n{df.index}]")
+            DEBUG(f"df.columns = [\n{df.columns}]")
+            DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
+            DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
+            # temp = self.weekly_model.data
+            # self.weekly_model.data = []
+            # for line in df.iloc:
+            #     self.weekly_model.data.append({
+            #         "time": line['time'],
+            #         "user": line['user'],
+            #         "snd_dtm": line['snd_dtm'],
+            #     })
+            # del temp
+            # self.weekly_model.load_user(df.iloc)
+            # self.adjust_user_view_column()
+        except FileNotFoundError as fnfe:
+            pass
+    
+    def save_weekly_plan(self):
+        # 파일 브라우저를 통해서 저장위치 결정
+        # xls 확장자, Default Name 적용(x)
+        fname = QFileDialog.getSaveFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        DEBUG(f"선택파일: [{fname[0]}]")
+        df = pd.DataFrame(self.weekly_model.data)
+        DEBUG(f"df = [\n{df}]")
+        DEBUG(f"df.index = [\n{df.index}]")
+        DEBUG(f"df.columns = [\n{df.columns}]")
+        DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
+        # try:
+        #     df.to_excel(fname[0], index=False)
+        # except ValueError as ve:
+        #     pass
+
 
     def load_user(self):
         # 파일 브라우저를 통해서 저장위치 결정
@@ -1089,6 +1191,12 @@ class MainWindow(QMainWindow, ui_form):
         self.views["save_button"] = self.saveBtn
         self.views["load_button"] = self.loadBtn
 
+        ## Weekly Tab
+        self.views["weekly_table_view"] = self.weeklyTableView
+        self.views["save_weekly_button"] = self.saveWeeklyBtn
+        self.views["load_weekly_button"] = self.loadWeeklyBtn
+
+
         ## Left Bottom List
         self.views["scrap_log_edit"] = self.scrapLogEdit
         ## Right Bottom List
@@ -1106,6 +1214,8 @@ class MainWindow(QMainWindow, ui_form):
         self.models["msg_model"] = MsgsModel()
         ## user_table_view의 모델
         self.models["user_model"] = UsersModel()
+        ## weekly_table_view의 모델
+        self.models["weekly_model"] = WeeklyModel()
 
         self.logViewModel = LogViewModel(self, self.views, self.models)
 
