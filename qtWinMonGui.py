@@ -4,7 +4,8 @@ from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
 import threading
-#import win32com.shell.shell as shell
+
+# import win32com.shell.shell as shell
 
 from DBM import DBMgr
 from PyQt5 import QtWidgets
@@ -80,7 +81,7 @@ class MsgsModel(list):
         return data
 
     def add_msg(self, d: dict) -> bool:
-        enter_exit: Literal['등원', '하원'] = "등원" if d["rnk"] % 2 else "하원"
+        enter_exit: Literal["등원", "하원"] = "등원" if d["rnk"] % 2 else "하원"
         DEBUG(f"rank = {d['rnk']} = {enter_exit}")
 
         if enter_exit == "등원":
@@ -120,11 +121,13 @@ class MsgsModel(list):
 
     def setReadyToSend(self, msg: dict) -> None:
         dbm = DBMgr.instance()
-        sql = " \n".join((
-            f"UPDATE inout_history",
-            f"SET send_dtm = '-'",
-            f"where dtm = '{msg['dtm']}'",
-        ))
+        sql = " \n".join(
+            (
+                f"UPDATE inout_history",
+                f"SET send_dtm = '-'",
+                f"where dtm = '{msg['dtm']}'",
+            )
+        )
 
         INFO(f"sql = [{sql}]")
         with dbm as conn:
@@ -135,14 +138,16 @@ class MsgsModel(list):
                 conn.rollback()
                 raise sqlite3.Error("변경실패")
 
-    def setRestoreReady(self, msg:dict) -> None:
+    def setRestoreReady(self, msg: dict) -> None:
         dbm = DBMgr.instance()
-        sql = " \n".join((
-            f"UPDATE inout_history",
-            f"SET send_dtm = ''",
-            f"where dtm = '{msg['dtm']}'",
-            f"and send_dtm = '-'",
-        )) 
+        sql = " \n".join(
+            (
+                f"UPDATE inout_history",
+                f"SET send_dtm = ''",
+                f"where dtm = '{msg['dtm']}'",
+                f"and send_dtm = '-'",
+            )
+        )
         INFO(f"sql = [{sql}]")
         with dbm as conn:
             try:
@@ -154,7 +159,7 @@ class MsgsModel(list):
 
 
 class UserModel(list):
-    #def __init__(self, l=[]):
+    # def __init__(self, l=[]):
     def __init__(self):
         super().__init__()
         self.model = QStandardItemModel(1, 3)
@@ -165,14 +170,16 @@ class UserModel(list):
     def query_one(self, user_name: str) -> None:
         dbm = DBMgr.instance()
 
-        sql = " \n".jogin((
-            f"SELECT user_name, chat_room, reg_dtm",
-            f"FROM user",
-            f"WHERE",
-            f"user_name like '{user_name}'",
-            f"ORDER BY user_name",
-            # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
-        ))
+        sql = " \n".jogin(
+            (
+                f"SELECT user_name, chat_room, reg_dtm",
+                f"FROM user",
+                f"WHERE",
+                f"user_name like '{user_name}'",
+                f"ORDER BY user_name",
+                # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}"
+            )
+        )
 
         INFO(f"sql = [{sql}]")
         # INFO(f"sql = [{sql}]")
@@ -197,10 +204,12 @@ class UserModel(list):
 
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"INSERT INTO user(user_name, chat_room, reg_dtm)",
-            f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
-        )) 
+        sql = " \n".join(
+            (
+                f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+                f"VALUES ( '{user_name}', '{chat_room}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+            )
+        )
 
         with dbm as conn:
             try:
@@ -210,18 +219,20 @@ class UserModel(list):
                 conn.rollback()
                 raise sqlite3.IntegrityError("등록실패")
 
-    def update_user(self, user:dict) -> None:
+    def update_user(self, user: dict) -> None:
         user_name: str = user["user_name"]
         chat_room: str = user["chat_room"]
 
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"UPDATE user",
-            f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
-            f"  , chat_room = '{chat_room}'",
-            f"where user_name = '{user_name}'",
-        ))
+        sql = " \n".join(
+            (
+                f"UPDATE user",
+                f"SET reg_dtm = strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
+                f"  , chat_room = '{chat_room}'",
+                f"where user_name = '{user_name}'",
+            )
+        )
         INFO(f"sql = [{sql}]")
 
         with dbm as conn:
@@ -240,6 +251,7 @@ class UserModel(list):
         self.model.setItem(0, 1, QStandardItem(f"{self.data['chat_room']}"))
         self.model.setItem(0, 2, QStandardItem(f"{self.data['reg_dtm']}"))
 
+
 class WeeklyModel(list):
     def __init__(self):
         super().__init__()
@@ -247,56 +259,69 @@ class WeeklyModel(list):
         self.head_data = {}
         self.data = {}
 
-        self.head_model = {} #QStandardItemModel()
-        self.model = {} #QStandardItemModel()
+        self.head_model = {}  # QStandardItemModel()
+        self.model = {}  # QStandardItemModel()
 
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
         for wabbr in week_abbr:
             self.head_model[wabbr] = QStandardItemModel()
             self.model[wabbr] = QStandardItemModel()
-        #self.model.setColumnCount(18)
+        # self.model.setColumnCount(18)
 
     # 현재 Page 조회
     def query_page(self) -> None:
-        #self.data = dbm.query(sql)
+        # self.data = dbm.query(sql)
 
         self.applyModel()
 
-    def findRowIndex(self, key: str, find_text: str) -> int:
-        for index, item in enumerate(self.data):
-            if item[key] == find_text:
-                return index
-        return None
+    # def findRowIndex(self, key: str, find_text: str) -> int:
+    #     for index, item in enumerate(self.data):
+    #         if item[key] == find_text:
+    #             return index
+    #     return None
 
-    def getRows(self, idx: int) -> dict:
-        return self.data[idx]
-
-    def load_user(self, datas):
-        #
-        self.query_page()
+    # def getRows(self, idx: int) -> dict:
+    #     return self.data[idx]
 
     # data를 model에 적용
     def applyModel(self):
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
         for wabbr in week_abbr:
             self.head_model[wabbr].clear()
             self.model[wabbr].clear()
             self.model[wabbr].setColumnCount(3)
             # Header Setting
-            self.model.setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
+            self.model[wabbr].setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
 
-            for data in self.data[wabbr]:
+            INFO(f"self.data[{wabbr}] = [{self.data[wabbr]}]")
+
+            for idx, row in self.data[wabbr].iterrows():
+                INFO(f"row = [{row}]")
                 self.model[wabbr].appendRow(
                     [
-                        QStandardItem(data["user_name"]),
-                        QStandardItem(data["chat_room"]),
-                        QStandardItem(data["reg_dtm"]),
+                        QStandardItem(str(row["time"])),
+                        QStandardItem(row["user"]),
+                        QStandardItem(str(row["snd_dtm"])),
                     ]
                 )
 
 
 class UsersModel(list):
-    #def __init__(self, l=[]):
+    # def __init__(self, l=[]):
     def __init__(self):
         super().__init__()
 
@@ -310,14 +335,16 @@ class UsersModel(list):
     def query_page(self) -> None:
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"SELECT user_name, chat_room, reg_dtm",
-            f"FROM user",
-            f"WHERE",
-            f"user_name like '%%'",
-            f"ORDER BY user_name",
-            # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
-        ))
+        sql = " \n".join(
+            (
+                f"SELECT user_name, chat_room, reg_dtm",
+                f"FROM user",
+                f"WHERE",
+                f"user_name like '%%'",
+                f"ORDER BY user_name",
+                # f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
+            )
+        )
         DEBUG(f"sql = [{sql}]")
 
         with dbm as conn:
@@ -347,20 +374,24 @@ class UsersModel(list):
     def load_user(self, datas):
         dbm = DBMgr.instance()
 
-        sql  = " \n".join((
-            f"DELETE",
-            f"FROM user",
-        ))
+        sql = " \n".join(
+            (
+                f"DELETE",
+                f"FROM user",
+            )
+        )
 
         with dbm as conn:
             try:
                 dbm.execute(sql)
 
                 for data in datas:
-                    sql = " \n".join((
-                        f"INSERT INTO user(user_name, chat_room, reg_dtm)",
-                        f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
-                    ))
+                    sql = " \n".join(
+                        (
+                            f"INSERT INTO user(user_name, chat_room, reg_dtm)",
+                            f"VALUES ( '{data['user_name']}', '{data['chat_room']}', strftime('%Y-%m-%d %H:%M:%f','now', 'localtime'))",
+                        )
+                    )
                     dbm.execute(sql)
                 conn.commit()
             except:
@@ -386,7 +417,7 @@ class UsersModel(list):
 
 
 class LogsModel(list):
-    #def __init__(self, l=[]):
+    # def __init__(self, l=[]):
     def __init__(self):
         super().__init__()
 
@@ -413,12 +444,14 @@ class LogsModel(list):
         today = f"{self.today[:4]}-{self.today[4:6]}-{self.today[6:8]}"
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page",
-            f"from inout_history",
-            f"where date(dtm) = date('{today}')",
-            f"and (del_yn is NULL or del_yn = 'N')",
-        ))
+        sql = " \n".join(
+            (
+                f"select count(*) / {page} + case count(*) % {page} when 0 then 0 else 1 END as total_page",
+                f"from inout_history",
+                f"where date(dtm) = date('{today}')",
+                f"and (del_yn is NULL or del_yn = 'N')",
+            )
+        )
 
         with dbm as conn:
             rslt = dbm.query(sql)
@@ -437,16 +470,18 @@ class LogsModel(list):
         DEBUG(f"today = {today}")
         # 20210809
 
-        sql = " \n".join((
-            f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm",
-            f"FROM inout_history",
-            f"WHERE",
-            f"name like '%%'",
-            f"and date(dtm) = date('{today}')",
-            f"and (del_yn is NULL or del_yn = 'N')",
-            f"ORDER BY dtm desc",
-            f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
-        ))
+        sql = " \n".join(
+            (
+                f"SELECT dtm, name, temper, dtm2, reg_dtm, rank() over (PARTITION BY name ORDER by dtm) as rnk, send_dtm",
+                f"FROM inout_history",
+                f"WHERE",
+                f"name like '%%'",
+                f"and date(dtm) = date('{today}')",
+                f"and (del_yn is NULL or del_yn = 'N')",
+                f"ORDER BY dtm desc",
+                f"LIMIT {self.PAGE_SIZE} OFFSET {self.PAGE_SIZE*(self.current_page-1)}",
+            )
+        )
         DEBUG(f"sql = [{sql}]")
 
         with dbm as conn:
@@ -458,14 +493,16 @@ class LogsModel(list):
     def findNextKey(self, key) -> str:
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"SELECT dtm, name",
-            f"FROM inout_history",
-            f"WHERE",
-            f"dtm >= '{key}'",
-            f"order by dtm",
-            f"limit 2"
-        ))
+        sql = " \n".join(
+            (
+                f"SELECT dtm, name",
+                f"FROM inout_history",
+                f"WHERE",
+                f"dtm >= '{key}'",
+                f"order by dtm",
+                f"limit 2",
+            )
+        )
 
         DEBUG(f"sql = [{sql}]")
 
@@ -607,7 +644,7 @@ class LogViewModel:
         self.user_model: UsersModel = models["user_model"]
 
         # Weekly Tab
-        #self.weekly_view: QTableView = views["weekly_table_view"]
+        # self.weekly_view: QTableView = views["weekly_table_view"]
         self.weekly_views = views["weekly_reserve"]
         self.weekly_model: WeeklyModel = models["weekly_model"]
 
@@ -646,8 +683,15 @@ class LogViewModel:
         views["load_button"].clicked.connect(self.load_user)
 
         # Weekly View
-        #self.weekly_view.doubleClicked.connect(self.weekly_view_double_click_handler)
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        # self.weekly_view.doubleClicked.connect(self.weekly_view_double_click_handler)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
         self.weekly_mapper = {}
         for wabbr in week_abbr:
             self.weekly_mapper[wabbr] = QDataWidgetMapper()
@@ -664,14 +708,12 @@ class LogViewModel:
         views["save_weekly_button"].clicked.connect(self.save_weekly_plan)
         views["load_weekly_button"].clicked.connect(self.load_weekly_plan)
 
-
         # msg List
         self.msg_view.doubleClicked.connect(self.del_msg)
 
-
         ## Thread Setup
-        #self.setup_log_capture_thread()
-        #self.setup_send_msg_thread()
+        # self.setup_log_capture_thread()
+        # self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()
@@ -686,7 +728,9 @@ class LogViewModel:
 
     def load_weekly_plan(self):
         # 파일 브라우저를 통해서 저장위치 결정
-        fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        fname = QFileDialog.getOpenFileName(
+            self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+        )
         DEBUG(f"선택파일: [{fname[0]}]")
         try:
             df = pd.read_excel(fname[0], header=None)
@@ -694,21 +738,28 @@ class LogViewModel:
             INFO(f"df.index = [\n{df.index}]")
             INFO(f"df.columns = [\n{df.columns}]")
             INFO(f"df.iloc[0] = [\n{df.iloc[0]}]")
-            week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+            week_abbr = (
+                "mon",
+                "tue",
+                "wed",
+                "thir",
+                "fri",
+                "sat",
+            )
             for i, wabbr in enumerate(week_abbr):
                 heads = []
-                heads.append(df.iloc[0, i*3])
-                heads.append(df.iloc[1, i*3])
+                heads.append(df.iloc[0, i * 3])
+                heads.append(df.iloc[1, i * 3])
                 self.weekly_model.head_data[wabbr] = heads
-                #slice = df[i*3:i*3+2].iloc[3:]
-                _slice = df.iloc[3:,i*3:i*3+3]
-                _slice.columns = ['time','user','snd_dtm']
+                # slice = df[i*3:i*3+2].iloc[3:]
+                _slice = df.iloc[3:, i * 3 : i * 3 + 3]
+                _slice.columns = ["time", "user", "snd_dtm"]
                 INFO(f"_slice({wabbr}) = [{_slice}]")
-                slice = _slice.sort_values(by=['time', 'user'], axis=0)
+                slice = _slice.sort_values(by=["time", "user"], axis=0)
                 INFO(f"slice({wabbr}) = [{slice}]")
                 self.weekly_model.data[wabbr] = slice
-    
-            #DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
+
+            # DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
             # temp = self.weekly_model.data
             # self.weekly_model.data = []
             # for line in df.iloc:
@@ -720,13 +771,16 @@ class LogViewModel:
             # del temp
             # self.weekly_model.load_user(df.iloc)
             # self.adjust_user_view_column()
+            self.weekly_model.query_page()
         except FileNotFoundError as fnfe:
             pass
-    
+
     def save_weekly_plan(self):
         # 파일 브라우저를 통해서 저장위치 결정
         # xls 확장자, Default Name 적용(x)
-        fname = QFileDialog.getSaveFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        fname = QFileDialog.getSaveFileName(
+            self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+        )
         DEBUG(f"선택파일: [{fname[0]}]")
         df = pd.DataFrame(self.weekly_model.data)
         DEBUG(f"df = [\n{df}]")
@@ -738,10 +792,11 @@ class LogViewModel:
         # except ValueError as ve:
         #     pass
 
-
     def load_user(self):
         # 파일 브라우저를 통해서 저장위치 결정
-        fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        fname = QFileDialog.getOpenFileName(
+            self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+        )
         DEBUG(f"선택파일: [{fname[0]}]")
         try:
             df = pd.read_excel(fname[0])
@@ -753,21 +808,25 @@ class LogViewModel:
             temp = self.user_model.data
             self.user_model.data = []
             for line in df.iloc:
-                self.user_model.data.append({
-                    "user_name": line['user_name'],
-                    "chat_room": line['chat_room'],
-                    "reg_dtm"  : line['reg_dtm'],
-                })
+                self.user_model.data.append(
+                    {
+                        "user_name": line["user_name"],
+                        "chat_room": line["chat_room"],
+                        "reg_dtm": line["reg_dtm"],
+                    }
+                )
             del temp
             self.user_model.load_user(df.iloc)
             self.adjust_user_view_column()
         except FileNotFoundError as fnfe:
             pass
-    
+
     def save_user(self):
         # 파일 브라우저를 통해서 저장위치 결정
         # xls 확장자, Default Name 적용(x)
-        fname = QFileDialog.getSaveFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
+        fname = QFileDialog.getSaveFileName(
+            self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+        )
         DEBUG(f"선택파일: [{fname[0]}]")
         df = pd.DataFrame(self.user_model.data)
         DEBUG(f"df = [\n{df}]")
@@ -1231,21 +1290,27 @@ class MainWindow(QMainWindow, ui_form):
         self.views["load_button"] = self.loadBtn
 
         ## Weekly Tab
-        #self.views["weekly_table_view"] = self.weeklyTableView
+        # self.views["weekly_table_view"] = self.weeklyTableView
         self.views["save_weekly_button"] = self.saveWeeklyBtn
         self.views["load_weekly_button"] = self.loadWeeklyBtn
 
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
 
         weekly_columns = {}
 
         for wabbr in week_abbr:
             weekly_columns[wabbr] = {
-                    "date": getattr(self,f"dateHeaderLineEdit_{wabbr}"),
-                    "week": getattr(self,f"weekHeaderLineEdit_{wabbr}"),
-                    "view": getattr(self,f"reserveView_{wabbr}"),
+                "date": getattr(self, f"dateHeaderLineEdit_{wabbr}"),
+                "week": getattr(self, f"weekHeaderLineEdit_{wabbr}"),
+                "view": getattr(self, f"reserveView_{wabbr}"),
             }
-
 
         # weekly_columns = {
         #     "mon": {
@@ -1280,12 +1345,11 @@ class MainWindow(QMainWindow, ui_form):
         #     },
         # }
 
-        #viewAttrs(self)
-        
+        # viewAttrs(self)
+
         self.views["weekly_reserve"] = weekly_columns
         INFO(f"weekly_columns = [{weekly_columns}]")
         INFO(f"self.views['weekly_reserve'] = [{self.views['weekly_reserve']}]")
-
 
         ## Left Bottom List
         self.views["scrap_log_edit"] = self.scrapLogEdit
@@ -1319,7 +1383,7 @@ class MainWindow(QMainWindow, ui_form):
         frame: QFrame = self.frame_2
 
         self.scrollArea.setWidget(frame)
-        frame.setFixedWidth(1024)
+        frame.setFixedWidth(2048)
         frame.setFixedHeight(1024)
 
     def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
@@ -1356,12 +1420,14 @@ def uac_require():
     # except:
     #    return False
 
+
 def viewAttrs(obj):
     for ar in dir(obj):
-        if callable(getattr(obj,ar)):
-            print("Callable >> %s : %s\n\n" % (ar, getattr(obj,ar).__doc__))
+        if callable(getattr(obj, ar)):
+            print("Callable >> %s : %s\n\n" % (ar, getattr(obj, ar).__doc__))
         else:
-            print("Property >> %s : %s\n\n" % (ar, getattr(obj,ar).__doc__))
+            print("Property >> %s : %s\n\n" % (ar, getattr(obj, ar).__doc__))
+
 
 if __name__ == "__main__":
     # if uac_require():
@@ -1369,7 +1435,7 @@ if __name__ == "__main__":
     # else:
     #    ERROR("error message")
 
-    #mt = MemTrace()
+    # mt = MemTrace()
 
     app = QApplication(sys.argv)
     myWindow = MainWindow()
@@ -1379,5 +1445,4 @@ if __name__ == "__main__":
     INFO(f"current thread id :[{threading.get_ident()}]")
     app.exec_()
 
-    #mt.end_print()
-
+    # mt.end_print()
