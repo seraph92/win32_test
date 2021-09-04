@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (
     QDesktopWidget,
     QDialog,
     QFileDialog,
+    QFrame,
     QHeaderView,
     QLineEdit,
     QListView,
@@ -243,10 +244,17 @@ class WeeklyModel(list):
     def __init__(self):
         super().__init__()
 
-        self.data: list[dict] = []
+        self.head_data = {}
+        self.data = {}
 
-        self.model = QStandardItemModel()
-        self.model.setColumnCount(18)
+        self.head_model = {} #QStandardItemModel()
+        self.model = {} #QStandardItemModel()
+
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        for wabbr in week_abbr:
+            self.head_model[wabbr] = QStandardItemModel()
+            self.model[wabbr] = QStandardItemModel()
+        #self.model.setColumnCount(18)
 
     # 현재 Page 조회
     def query_page(self) -> None:
@@ -269,20 +277,22 @@ class WeeklyModel(list):
 
     # data를 model에 적용
     def applyModel(self):
-        self.model.clear()
-        self.model.setColumnCount(18)
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        for wabbr in week_abbr:
+            self.head_model[wabbr].clear()
+            self.model[wabbr].clear()
+            self.model[wabbr].setColumnCount(3)
+            # Header Setting
+            self.model.setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
 
-        # Header Setting
-        # 18개 헤더 세팅
-        self.model.setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
-        for data in self.data:
-            self.model.appendRow(
-                [
-                    QStandardItem(data["user_name"]),
-                    QStandardItem(data["chat_room"]),
-                    QStandardItem(data["reg_dtm"]),
-                ]
-            )
+            for data in self.data[wabbr]:
+                self.model[wabbr].appendRow(
+                    [
+                        QStandardItem(data["user_name"]),
+                        QStandardItem(data["chat_room"]),
+                        QStandardItem(data["reg_dtm"]),
+                    ]
+                )
 
 
 class UsersModel(list):
@@ -597,7 +607,8 @@ class LogViewModel:
         self.user_model: UsersModel = models["user_model"]
 
         # Weekly Tab
-        self.weekly_view: QTableView = views["weekly_table_view"]
+        #self.weekly_view: QTableView = views["weekly_table_view"]
+        self.weekly_views = views["weekly_reserve"]
         self.weekly_model: WeeklyModel = models["weekly_model"]
 
         # Left Top
@@ -635,7 +646,21 @@ class LogViewModel:
         views["load_button"].clicked.connect(self.load_user)
 
         # Weekly View
-        self.weekly_view.doubleClicked.connect(self.weekly_view_double_click_handler)
+        #self.weekly_view.doubleClicked.connect(self.weekly_view_double_click_handler)
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        self.weekly_mapper = {}
+        for wabbr in week_abbr:
+            self.weekly_mapper[wabbr] = QDataWidgetMapper()
+            head_model = models["weekly_model"].head_model[wabbr]
+            self.weekly_mapper[wabbr].setModel(head_model)
+            thead: QLineEdit = self.weekly_views[wabbr]["date"]
+            tweek: QLineEdit = self.weekly_views[wabbr]["week"]
+            tview: QTableView = self.weekly_views[wabbr]["view"]
+            self.weekly_mapper[wabbr].addMapping(thead, 0)
+            self.weekly_mapper[wabbr].addMapping(tweek, 1)
+            tview.setModel(models["weekly_model"].model[wabbr])
+            tview.clicked.connect(self.weekly_view_double_click_handler)
+
         views["save_weekly_button"].clicked.connect(self.save_weekly_plan)
         views["load_weekly_button"].clicked.connect(self.load_weekly_plan)
 
@@ -664,12 +689,26 @@ class LogViewModel:
         fname = QFileDialog.getOpenFileName(self.parent, 'Open file', './', 'Excel File(*.xlsx *.xls);; All File(*)')
         DEBUG(f"선택파일: [{fname[0]}]")
         try:
-            df = pd.read_excel(fname[0])
-            DEBUG(f"df = [\n{df}]")
-            DEBUG(f"df.index = [\n{df.index}]")
-            DEBUG(f"df.columns = [\n{df.columns}]")
-            DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
-            DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
+            df = pd.read_excel(fname[0], header=None)
+            INFO(f"df = [\n{df}]")
+            INFO(f"df.index = [\n{df.index}]")
+            INFO(f"df.columns = [\n{df.columns}]")
+            INFO(f"df.iloc[0] = [\n{df.iloc[0]}]")
+            week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+            for i, wabbr in enumerate(week_abbr):
+                heads = []
+                heads.append(df.iloc[0, i*3])
+                heads.append(df.iloc[1, i*3])
+                self.weekly_model.head_data[wabbr] = heads
+                #slice = df[i*3:i*3+2].iloc[3:]
+                _slice = df.iloc[3:,i*3:i*3+3]
+                _slice.columns = ['time','user','snd_dtm']
+                INFO(f"_slice({wabbr}) = [{_slice}]")
+                slice = _slice.sort_values(by=['time', 'user'], axis=0)
+                INFO(f"slice({wabbr}) = [{slice}]")
+                self.weekly_model.data[wabbr] = slice
+    
+            #DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
             # temp = self.weekly_model.data
             # self.weekly_model.data = []
             # for line in df.iloc:
@@ -1192,9 +1231,60 @@ class MainWindow(QMainWindow, ui_form):
         self.views["load_button"] = self.loadBtn
 
         ## Weekly Tab
-        self.views["weekly_table_view"] = self.weeklyTableView
+        #self.views["weekly_table_view"] = self.weeklyTableView
         self.views["save_weekly_button"] = self.saveWeeklyBtn
         self.views["load_weekly_button"] = self.loadWeeklyBtn
+
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+
+        weekly_columns = {}
+
+        for wabbr in week_abbr:
+            weekly_columns[wabbr] = {
+                    "date": getattr(self,f"dateHeaderLineEdit_{wabbr}"),
+                    "week": getattr(self,f"weekHeaderLineEdit_{wabbr}"),
+                    "view": getattr(self,f"reserveView_{wabbr}"),
+            }
+
+
+        # weekly_columns = {
+        #     "mon": {
+        #         "date": self.dateHeaderLineEdit_mon,
+        #         "week": self.weekHeaderLineEdit_mon,
+        #         "view": self.reserveView_mon,
+        #     },
+        #     "tue": {
+        #         "date": self.dateHeaderLineEdit_tue,
+        #         "week": self.weekHeaderLineEdit_tue,
+        #         "view": self.reserveView_tue,
+        #     },
+        #     "wed": {
+        #         "date": self.dateHeaderLineEdit_wed,
+        #         "week": self.weekHeaderLineEdit_wed,
+        #         "view": self.reserveView_wed,
+        #     },
+        #     "thir": {
+        #         "date": self.dateHeaderLineEdit_thir,
+        #         "week": self.weekHeaderLineEdit_thir,
+        #         "view": self.reserveView_thir,
+        #     },
+        #     "fri": {
+        #         "date": self.dateHeaderLineEdit_fri,
+        #         "week": self.weekHeaderLineEdit_fri,
+        #         "view": self.reserveView_fri,
+        #     },
+        #     "sat": {
+        #         "date": self.dateHeaderLineEdit_sat,
+        #         "week": self.weekHeaderLineEdit_sat,
+        #         "view": self.reserveView_sat,
+        #     },
+        # }
+
+        #viewAttrs(self)
+        
+        self.views["weekly_reserve"] = weekly_columns
+        INFO(f"weekly_columns = [{weekly_columns}]")
+        INFO(f"self.views['weekly_reserve'] = [{self.views['weekly_reserve']}]")
 
 
         ## Left Bottom List
@@ -1225,6 +1315,12 @@ class MainWindow(QMainWindow, ui_form):
         self.setGeometry(300, 300, 1024, 768)
         self.center()
         self.show()
+
+        frame: QFrame = self.frame_2
+
+        self.scrollArea.setWidget(frame)
+        frame.setFixedWidth(1024)
+        frame.setFixedHeight(1024)
 
     def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
         self.frame.setFixedSize(resizeEvent.size())
@@ -1260,6 +1356,12 @@ def uac_require():
     # except:
     #    return False
 
+def viewAttrs(obj):
+    for ar in dir(obj):
+        if callable(getattr(obj,ar)):
+            print("Callable >> %s : %s\n\n" % (ar, getattr(obj,ar).__doc__))
+        else:
+            print("Property >> %s : %s\n\n" % (ar, getattr(obj,ar).__doc__))
 
 if __name__ == "__main__":
     # if uac_require():

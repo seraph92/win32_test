@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1339</width>
+    <width>1338</width>
     <height>856</height>
    </rect>
   </property>
@@ -24,8 +24,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1051</width>
-     <height>831</height>
+     <width>1041</width>
+     <height>811</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -358,22 +358,20 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QTableView" name="weeklyTableView">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="alternatingRowColors">
+             <widget class="QScrollArea" name="scrollArea">
+              <property name="widgetResizable">
                <bool>true</bool>
               </property>
-              <property name="selectionBehavior">
-               <enum>QAbstractItemView::SelectRows</enum>
-              </property>
-              <attribute name="horizontalHeaderDefaultSectionSize">
-               <number>50</number>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>791</width>
+                 <height>548</height>
+                </rect>
+               </property>
+              </widget>
              </widget>
             </item>
             <item>
@@ -432,6 +430,153 @@
          </layout>
         </item>
        </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>1070</x>
+     <y>400</y>
+     <width>1051</width>
+     <height>421</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_8">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_mon"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_mon"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_mon"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_9">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_tue"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_tue"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_tue"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_10">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_wed"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_wed"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_wed"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_12">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_thir"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_thir"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_thir"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_13">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_fri"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_fri"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_fri"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_14">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_sat"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_sat"/>
+      </item>
+      <item>
+       <widget class="QTableView" name="reserveView_sat"/>
       </item>
      </layout>
     </item>
