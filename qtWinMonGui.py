@@ -83,6 +83,64 @@ class MsgsModel(list):
             data = None
         return data
 
+    def add_reserve_msg(self, d: dict) -> bool:
+        # [ㅌㅌㅌ] 학생의 수업이 [ 2020.09.01(수) 13시 ]에 예약 되어 있습니다. 전일 오후 6시 전까지 취소를 하셔야 합니다.
+        # enter_exit: Literal["등원", "하원"] = "등원" if d["rnk"] % 2 else "하원"
+        enter_exit = "예약"
+
+        if enter_exit == "등원":
+            enter_exit_msg = "도착했습니다.\n-READ101-"
+        elif enter_exit == "하원":
+            enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
+        else:
+            enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
+
+        reserve_msg = f"예약 변경 및 취소는 하루 전 오후9시까지 가능합니다.\n-READ101-"
+
+        # 9/6(월) 7시 노아,수아 예약되어 있습니다.
+
+        INFO(f"d['date'] = [{d['date']}], d['time'] = [{d['time']}]")
+        tdate = datetime.datetime.strptime(str(d["date"]), "%Y%m%d").date()
+        if len(str(d["time"])) == 8:
+            ttime = datetime.datetime.strptime(str(d["time"]), "%H:%M:%S").time()
+        else:
+            ttime = datetime.datetime.strptime(str(d["time"]), "%H:%M").time()
+
+        INFO(f"tdate = [{tdate}]")
+        w = ["월", "화", "수", "목", "금", "토", "일"]
+        kw = w[tdate.weekday()]
+        date_str = f"{tdate.strftime('%Y.%m.%d')}({kw})"
+        INFO(f"date_str = [{date_str}]")
+        time_str = ttime.strftime("%H:%M")
+
+        msg: dict = {
+            "user": d["user"],
+            "inout": enter_exit,
+            "message": f"[{d['user']}]학생의 수업이 [{date_str} {time_str}]에 에약 되어 있습니다.  { reserve_msg }",
+            "dtm": "",
+        }
+
+        INFO(f"msg = [{msg}]")
+
+        # 기 발송 검증
+        # if d["send_dtm"]:
+        #    return False
+
+        # 중복 검증
+        # {k: v for k, v in my_dict.items() if int(v) > 2000}
+        # INFO(f"data = [{self.data}]")
+        # names = (data["user"] for data in self.data)
+        names = (f"{data['user']}({data['inout']})" for data in self.data)
+        # INFO(f"names = [{names}]")
+        if f"{d['user']}({enter_exit})" in names:
+            return False
+
+        self.data.append(msg)
+        # self.setReadyToSend(msg)
+        self.applyModel()
+
+        return True
+
     def add_msg(self, d: dict) -> bool:
         enter_exit: Literal["등원", "하원"] = "등원" if d["rnk"] % 2 else "하원"
         DEBUG(f"rank = {d['rnk']} = {enter_exit}")
@@ -274,7 +332,7 @@ class WeeklyModel(list):
             "sat",
         )
         for wabbr in week_abbr:
-            self.head_model[wabbr] = QStandardItemModel(1,2)
+            self.head_model[wabbr] = QStandardItemModel(1, 2)
             self.model[wabbr] = QStandardItemModel()
         # self.model.setColumnCount(18)
 
@@ -312,7 +370,7 @@ class WeeklyModel(list):
             self.model[wabbr].clear()
             self.model[wabbr].setColumnCount(3)
             # Header Setting
-            self.model[wabbr].setHorizontalHeaderLabels(["Time", "User", "snd_dtm"])
+            self.model[wabbr].setHorizontalHeaderLabels(["Time", "User", "send_dtm"])
 
             INFO(f"self.data[{wabbr}] = [{self.data[wabbr]}]")
 
@@ -322,7 +380,7 @@ class WeeklyModel(list):
                     [
                         QStandardItem(str(row["time"])),
                         QStandardItem(str(row["user"])),
-                        QStandardItem(str(row["snd_dtm"])),
+                        QStandardItem(str(row["send_dtm"])),
                     ]
                 )
 
@@ -710,7 +768,9 @@ class LogViewModel:
             self.weekly_mapper[wabbr].addMapping(thead, 0)
             self.weekly_mapper[wabbr].addMapping(tweek, 1)
             tview.setModel(models["weekly_model"].model[wabbr])
-            tview.clicked.connect(self.weekly_view_double_click_handler)
+            tview.doubleClicked.connect(
+                self.get_weekly_view_double_click_handler(wabbr)
+            )
 
         views["save_weekly_button"].clicked.connect(self.save_weekly_plan)
         views["load_weekly_button"].clicked.connect(self.load_weekly_plan)
@@ -720,7 +780,7 @@ class LogViewModel:
 
         ## Thread Setup
         # self.setup_log_capture_thread()
-        # self.setup_send_msg_thread()
+        self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()
@@ -728,12 +788,14 @@ class LogViewModel:
         self.timer.timeout.connect(self.auto_log_process)
         self.timer.start()
 
-    def weekly_view_double_click_handler(self, model: QModelIndex):
-        INFO(f"model(QModelIndex) = [{model}]")
-        INFO(f"model.data = [{model.data}]")
-        pass
-        # if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
-        #     self.add_msg(model)
+    def get_weekly_view_double_click_handler(self, wabbr):
+        this = self
+        # def weekly_view_double_click_handler(self, model: QModelIndex):
+        def weekly_view_double_click_handler(self):
+            INFO(f"double_clicked = [{wabbr}]")
+            this.add_reserve_msg(wabbr)
+
+        return weekly_view_double_click_handler
 
     def load_weekly_plan(self):
         # 파일 브라우저를 통해서 저장위치 결정
@@ -762,14 +824,17 @@ class LogViewModel:
                 week = df.iloc[1, i * 3]
                 heads.append(week)
                 self.weekly_model.head_data[wabbr] = heads
-                _slice = df.iloc[3:, i * 3 : i * 3 + 3]
-                _slice.columns = ["time", "user", "snd_dtm"]
-                _slice.fillna({'snd_dtm':''}, inplace=True)
+                # index를 새로 부여하기 위해 vaules를 이용하여 df를 다시 만듬
+                _slice = DataFrame(df.iloc[3:, i * 3 : i * 3 + 3].values)
+                _slice.columns = ["time", "user", "send_dtm"]
+                _slice.drop_duplicates(["time", "user"], inplace=True)
+                _slice.fillna({"send_dtm": ""}, inplace=True)
+                # 각 아이템에 날짜 정보를 부여하기 위해 Series를 만들어서 붙임
                 date_array = np.full((len(_slice.values)), str(date))
-                date_series = pd.Series(date_array, name='date')
+                date_series = pd.Series(date_array, name="date")
                 INFO(f"date_series({wabbr}) = [{date_series}]")
                 _slice = pd.concat([_slice, date_series], axis=1)
-                #_slice.fillna({'date':date}, inplace=True)
+                # _slice.fillna({'date':date}, inplace=True)
                 _slice.dropna(inplace=True)
                 INFO(f"_slice({wabbr}) = [{_slice}]")
                 slice = _slice.sort_values(by=["time", "user"], axis=0)
@@ -788,30 +853,40 @@ class LogViewModel:
             self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
         )
         DEBUG(f"선택파일: [{fname[0]}]")
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
 
         df = pd.DataFrame()
         for i, wabbr in enumerate(week_abbr):
             df_week = pd.DataFrame()
-            df_week.colunms = ['time', 'user', 'snd_dtm']
+            df_week.colunms = ["time", "user", "send_dtm"]
             date = self.weekly_model.head_data[wabbr][0]
-            df_week = df_week.append(pd.Series([date, '', '']), ignore_index=True)
+            df_week = df_week.append(pd.Series([date, "", ""]), ignore_index=True)
             week = self.weekly_model.head_data[wabbr][1]
-            df_week = df_week.append(pd.Series([week, '', '']), ignore_index=True)
-            df_week = df_week.append(pd.Series(['time', 'user', 'snd_dtm']), ignore_index=True)
-            INFO(f"self.weekly_model.data[{wabbr}] = [\n{self.weekly_model.data[wabbr].iloc[0:,0:2]}\n]")
-            data = DataFrame(self.weekly_model.data[wabbr].iloc[0:,0:2].values)
+            df_week = df_week.append(pd.Series([week, "", ""]), ignore_index=True)
+            df_week = df_week.append(
+                pd.Series(["time", "user", "send_dtm"]), ignore_index=True
+            )
+            INFO(
+                f"self.weekly_model.data[{wabbr}] = [\n{self.weekly_model.data[wabbr].iloc[0:,0:2]}\n]"
+            )
+            data = DataFrame(self.weekly_model.data[wabbr].iloc[0:, 0:2].values)
             INFO(f"data({wabbr}) = [\n{data}\n]")
-            #df_week = df_week.append(data, ignore_index=True)
+            # df_week = df_week.append(data, ignore_index=True)
             df_week = pd.concat([df_week, data], ignore_index=True)
 
             # for idx, row in self.weekly_model.data[wabbr].iterrows():
             #     df.iloc[3 + idx, i*3] = row['time']
             #     df.iloc[3 + idx, i*3+1] = row['user']
-            #     df.iloc[3 + idx, i*3+2] = row['snd_dtm']
+            #     df.iloc[3 + idx, i*3+2] = row['send_dtm']
             INFO(f"df_week = [\n{df_week}\n]")
             df = pd.concat([df, df_week], axis=1, ignore_index=True)
-
 
         INFO(f"df = [\n{df}\n]")
         try:
@@ -869,20 +944,26 @@ class LogViewModel:
 
     def close(self, e):
         INFO(f"ViewModel Closing!")
-        self.worker.stop()
-        self.msg_worker.stop()
+        if hasattr(self, "worker"):
+            self.worker.stop()
+        if hasattr(self, "msg_worker"):
+            self.msg_worker.stop()
         try:
-            self.thread.quit()
+            if hasattr(self, "thread"):
+                self.thread.quit()
         except RuntimeError as re:
             ERROR(f"error = [{re}]")
 
         try:
-            self.msg_thread.quit()
+            if hasattr(self, "msg_thread"):
+                self.msg_thread.quit()
         except RuntimeError as re:
             ERROR(f"error = [{re}]")
 
-        self.thread.wait()
-        self.msg_thread.wait()
+        if hasattr(self, "thread"):
+            self.thread.wait()
+        if hasattr(self, "msg_thread"):
+            self.msg_thread.wait()
 
     def set_auto_process(self):
         if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
@@ -974,12 +1055,21 @@ class LogViewModel:
         DEBUG(f"Cancel버튼 눌렀지?")
 
     def adjust_weekly_view_column(self):
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
         for i, wabbr in enumerate(week_abbr):
             self.weekly_mapper[wabbr].toFirst()
             header = self.weekly_views[wabbr]["view"].horizontalHeader()
             header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
-            header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
+            header.setSectionResizeMode(
+                header.count() - 1, QtWidgets.QHeaderView.Stretch
+            )
 
     def adjust_user_view_column(self):
         header = self.user_view.horizontalHeader()
@@ -1102,6 +1192,28 @@ class LogViewModel:
     def log_view_double_click_handler(self, model: QModelIndex):
         if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
             self.add_msg(model)
+
+    def add_reserve_msg(self, week):
+        row = self.weekly_views[week]["view"].currentIndex().row()
+        # column = self.view.currentIndex().column()
+        rows = self.weekly_model.data[week].iloc[row]
+        DEBUG(f"rows = [{rows}]")
+
+        if not rows["send_dtm"]:
+            if self.msg_model.add_reserve_msg(rows):
+                rows["send_dtm"] = "-"
+                self.weekly_model.applyModel()
+        elif rows["send_dtm"] == "-":
+            msg = "메시지 발송을 시도 했지만, 처리되지 않았습니다. 다시 시도 할까요?"
+            rst = QMessageBox.question(
+                None, "메시지 재 발송", msg, QMessageBox.Yes | QMessageBox.No
+            )
+            if rst == QMessageBox.Yes:
+                if self.msg_model.add_reserve_msg(rows):
+                    rows["send_dtm"] = "-"
+                    self.weekly_model.applyModel()
+
+        self.adjust_weekly_view_column()
 
     def add_msg(self, model):
         row = self.view.currentIndex().row()
@@ -1426,7 +1538,7 @@ class MainWindow(QMainWindow, ui_form):
         self.scrollArea.setWidget(frame)
         frame.setFixedWidth(2048)
         self.resizeWeeklyFrame()
-        #frame.setFixedHeight(500)
+        # frame.setFixedHeight(500)
 
     def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
         self.frame.setFixedSize(resizeEvent.size())
@@ -1435,13 +1547,11 @@ class MainWindow(QMainWindow, ui_form):
     def resizeWeeklyFrame(self):
         scrollArea: QScrollArea = self.scrollArea
         weekly_frame: QFrame = self.frame_2
-        margin = scrollArea.getContentsMargins() # contentsMargins()
+        margin = scrollArea.getContentsMargins()  # contentsMargins()
         DEBUG(f"margin = [{margin}]")
         rect = scrollArea.geometry()
         DEBUG(f"rect = [{rect}]")
-        weekly_frame.setFixedHeight(rect.height() - ( rect.y() * 2 + margin[1] * 2 )) 
-
-
+        weekly_frame.setFixedHeight(rect.height() - (rect.y() * 2 + margin[1] * 2))
 
     @pyqtSlot()
     def adjustColumnSize(self):
