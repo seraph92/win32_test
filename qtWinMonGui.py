@@ -1,5 +1,7 @@
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from pandas.core.frame import DataFrame
+import numpy as np
 from ChannelMsgAuto import ChannelMessageSending
 import os
 import sys
@@ -23,6 +25,7 @@ from PyQt5.QtWidgets import (
     QApplication,
     QMessageBox,
     QPushButton,
+    QScrollArea,
     QTableView,
     QTextEdit,
 )
@@ -170,7 +173,7 @@ class UserModel(list):
     def query_one(self, user_name: str) -> None:
         dbm = DBMgr.instance()
 
-        sql = " \n".jogin(
+        sql = " \n".join(
             (
                 f"SELECT user_name, chat_room, reg_dtm",
                 f"FROM user",
@@ -271,7 +274,7 @@ class WeeklyModel(list):
             "sat",
         )
         for wabbr in week_abbr:
-            self.head_model[wabbr] = QStandardItemModel()
+            self.head_model[wabbr] = QStandardItemModel(1,2)
             self.model[wabbr] = QStandardItemModel()
         # self.model.setColumnCount(18)
 
@@ -302,6 +305,10 @@ class WeeklyModel(list):
         )
         for wabbr in week_abbr:
             self.head_model[wabbr].clear()
+            for i, head in enumerate(self.head_data[wabbr]):
+                INFO(f"head({wabbr}) = [{head}]")
+                self.head_model[wabbr].setItem(0, i, QStandardItem(str(head)))
+
             self.model[wabbr].clear()
             self.model[wabbr].setColumnCount(3)
             # Header Setting
@@ -314,7 +321,7 @@ class WeeklyModel(list):
                 self.model[wabbr].appendRow(
                     [
                         QStandardItem(str(row["time"])),
-                        QStandardItem(row["user"]),
+                        QStandardItem(str(row["user"])),
                         QStandardItem(str(row["snd_dtm"])),
                     ]
                 )
@@ -722,6 +729,8 @@ class LogViewModel:
         self.timer.start()
 
     def weekly_view_double_click_handler(self, model: QModelIndex):
+        INFO(f"model(QModelIndex) = [{model}]")
+        INFO(f"model.data = [{model.data}]")
         pass
         # if self.real_today == self.model.today or CONFIG["RUN_MODE"] != "REAL":
         #     self.add_msg(model)
@@ -748,30 +757,27 @@ class LogViewModel:
             )
             for i, wabbr in enumerate(week_abbr):
                 heads = []
-                heads.append(df.iloc[0, i * 3])
-                heads.append(df.iloc[1, i * 3])
+                date = df.iloc[0, i * 3]
+                heads.append(date)
+                week = df.iloc[1, i * 3]
+                heads.append(week)
                 self.weekly_model.head_data[wabbr] = heads
-                # slice = df[i*3:i*3+2].iloc[3:]
                 _slice = df.iloc[3:, i * 3 : i * 3 + 3]
                 _slice.columns = ["time", "user", "snd_dtm"]
+                _slice.fillna({'snd_dtm':''}, inplace=True)
+                date_array = np.full((len(_slice.values)), str(date))
+                date_series = pd.Series(date_array, name='date')
+                INFO(f"date_series({wabbr}) = [{date_series}]")
+                _slice = pd.concat([_slice, date_series], axis=1)
+                #_slice.fillna({'date':date}, inplace=True)
+                _slice.dropna(inplace=True)
                 INFO(f"_slice({wabbr}) = [{_slice}]")
                 slice = _slice.sort_values(by=["time", "user"], axis=0)
                 INFO(f"slice({wabbr}) = [{slice}]")
                 self.weekly_model.data[wabbr] = slice
 
-            # DEBUG(f"df.iloc[0][user_name] = [\n{df.iloc[0]['user_name']}]")
-            # temp = self.weekly_model.data
-            # self.weekly_model.data = []
-            # for line in df.iloc:
-            #     self.weekly_model.data.append({
-            #         "time": line['time'],
-            #         "user": line['user'],
-            #         "snd_dtm": line['snd_dtm'],
-            #     })
-            # del temp
-            # self.weekly_model.load_user(df.iloc)
-            # self.adjust_user_view_column()
             self.weekly_model.query_page()
+            self.adjust_weekly_view_column()
         except FileNotFoundError as fnfe:
             pass
 
@@ -782,15 +788,38 @@ class LogViewModel:
             self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
         )
         DEBUG(f"선택파일: [{fname[0]}]")
-        df = pd.DataFrame(self.weekly_model.data)
-        DEBUG(f"df = [\n{df}]")
-        DEBUG(f"df.index = [\n{df.index}]")
-        DEBUG(f"df.columns = [\n{df.columns}]")
-        DEBUG(f"df.iloc[0] = [\n{df.iloc[0]}]")
-        # try:
-        #     df.to_excel(fname[0], index=False)
-        # except ValueError as ve:
-        #     pass
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+
+        df = pd.DataFrame()
+        for i, wabbr in enumerate(week_abbr):
+            df_week = pd.DataFrame()
+            df_week.colunms = ['time', 'user', 'snd_dtm']
+            date = self.weekly_model.head_data[wabbr][0]
+            df_week = df_week.append(pd.Series([date, '', '']), ignore_index=True)
+            week = self.weekly_model.head_data[wabbr][1]
+            df_week = df_week.append(pd.Series([week, '', '']), ignore_index=True)
+            df_week = df_week.append(pd.Series(['time', 'user', 'snd_dtm']), ignore_index=True)
+            INFO(f"self.weekly_model.data[{wabbr}] = [\n{self.weekly_model.data[wabbr].iloc[0:,0:2]}\n]")
+            data = DataFrame(self.weekly_model.data[wabbr].iloc[0:,0:2].values)
+            INFO(f"data({wabbr}) = [\n{data}\n]")
+            #df_week = df_week.append(data, ignore_index=True)
+            df_week = pd.concat([df_week, data], ignore_index=True)
+
+            # for idx, row in self.weekly_model.data[wabbr].iterrows():
+            #     df.iloc[3 + idx, i*3] = row['time']
+            #     df.iloc[3 + idx, i*3+1] = row['user']
+            #     df.iloc[3 + idx, i*3+2] = row['snd_dtm']
+            INFO(f"df_week = [\n{df_week}\n]")
+            df = pd.concat([df, df_week], axis=1, ignore_index=True)
+
+
+        INFO(f"df = [\n{df}\n]")
+        try:
+            df.to_excel(fname[0], index=False, header=False)
+        except ValueError as ve:
+            pass
+        except PermissionError as pe:
+            pass
 
     def load_user(self):
         # 파일 브라우저를 통해서 저장위치 결정
@@ -943,6 +972,14 @@ class LogViewModel:
 
     def regist_dialog_reject(self):
         DEBUG(f"Cancel버튼 눌렀지?")
+
+    def adjust_weekly_view_column(self):
+        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        for i, wabbr in enumerate(week_abbr):
+            self.weekly_mapper[wabbr].toFirst()
+            header = self.weekly_views[wabbr]["view"].horizontalHeader()
+            header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+            header.setSectionResizeMode(header.count() - 1, QtWidgets.QHeaderView.Stretch)
 
     def adjust_user_view_column(self):
         header = self.user_view.horizontalHeader()
@@ -1311,6 +1348,10 @@ class MainWindow(QMainWindow, ui_form):
                 "week": getattr(self, f"weekHeaderLineEdit_{wabbr}"),
                 "view": getattr(self, f"reserveView_{wabbr}"),
             }
+            dateLineEdit: QLineEdit = weekly_columns[wabbr]["date"]
+            dateLineEdit.setStyleSheet("background-color: #EBF1DE;")
+            weekLineEdit: QLineEdit = weekly_columns[wabbr]["week"]
+            weekLineEdit.setStyleSheet("background-color: #FDE9D9;")
 
         # weekly_columns = {
         #     "mon": {
@@ -1384,10 +1425,23 @@ class MainWindow(QMainWindow, ui_form):
 
         self.scrollArea.setWidget(frame)
         frame.setFixedWidth(2048)
-        frame.setFixedHeight(1024)
+        self.resizeWeeklyFrame()
+        #frame.setFixedHeight(500)
 
     def resizeEvent(self, resizeEvent: QtGui.QResizeEvent) -> None:
         self.frame.setFixedSize(resizeEvent.size())
+        self.resizeWeeklyFrame()
+
+    def resizeWeeklyFrame(self):
+        scrollArea: QScrollArea = self.scrollArea
+        weekly_frame: QFrame = self.frame_2
+        margin = scrollArea.getContentsMargins() # contentsMargins()
+        DEBUG(f"margin = [{margin}]")
+        rect = scrollArea.geometry()
+        DEBUG(f"rect = [{rect}]")
+        weekly_frame.setFixedHeight(rect.height() - ( rect.y() * 2 + margin[1] * 2 )) 
+
+
 
     @pyqtSlot()
     def adjustColumnSize(self):
