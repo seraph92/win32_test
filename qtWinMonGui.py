@@ -88,14 +88,14 @@ class MsgsModel(list):
         # enter_exit: Literal["등원", "하원"] = "등원" if d["rnk"] % 2 else "하원"
         enter_exit = "예약"
 
-        if enter_exit == "등원":
-            enter_exit_msg = "도착했습니다.\n-READ101-"
-        elif enter_exit == "하원":
-            enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
-        else:
-            enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
+        # if enter_exit == "등원":
+        #     enter_exit_msg = "도착했습니다.\n-READ101-"
+        # elif enter_exit == "하원":
+        #     enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
+        # else:
+        #     enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
 
-        reserve_msg = f"예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
+        # reserve_msg = f"예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
 
         # 9/6(월) 7시 노아,수아 예약되어 있습니다.
 
@@ -113,16 +113,18 @@ class MsgsModel(list):
         INFO(f"date_str = [{date_str}]")
         time_str = ttime.strftime("%H:%M")
 
-        #format_string = "[{date} {time}] {name}학생 예약 되어 있습니다.  예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
+        # format_string = "[{date} {time}] {name}학생 예약 되어 있습니다.  예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
         format_string = CONFIG["reserv_msg"]
 
         msg: dict = {
             "user": d["user"],
             "inout": enter_exit,
-            #"message": f"[{date_str} {time_str}] {d['user']}학생 예약 되어 있습니다.  { reserve_msg }",
-            "message": format_string.format(date=date_str, time=time_str, name=d['user']),
+            # "message": f"[{date_str} {time_str}] {d['user']}학생 예약 되어 있습니다.  { reserve_msg }",
+            "message": format_string.format(
+                date=date_str, time=time_str, name=d["user"]
+            ),
             "dtm": "",
-            "rdate": tdate.strftime('%Y%m%d'),
+            "rdate": tdate.strftime("%Y%m%d"),
             "rtime": ttime.strftime("%H:%M:%S"),
         }
 
@@ -151,17 +153,27 @@ class MsgsModel(list):
         enter_exit: Literal["등원", "하원"] = "등원" if d["rnk"] % 2 else "하원"
         DEBUG(f"rank = {d['rnk']} = {enter_exit}")
 
+        # if enter_exit == "등원":
+        #     enter_exit_msg = "도착했습니다.\n-READ101-"
+        # elif enter_exit == "하원":
+        #     enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
+        # else:
+        #     enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
+
+        # format_string = "[{date} {time}] {name}학생 예약 되어 있습니다.  예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
+        # format_string = "[{d['dtm']}] {d['name']}학생 { enter_exit_msg }"
+        # format_string = "[{datetime}] {name}학생 도착했습니다.\n-READ101-"
+        # format_string = "[{datetime}] {name}학생 수업이 끝났습니다.(출발)\n-READ101-"
         if enter_exit == "등원":
-            enter_exit_msg = "도착했습니다.\n-READ101-"
+            format_string = CONFIG["in_msg"]
         elif enter_exit == "하원":
-            enter_exit_msg = "수업이 끝났습니다.(출발)\n-READ101-"
-        else:
-            enter_exit_msg = "출입 체크 되었습니다.\n-READ101-"
+            format_string = CONFIG["out_msg"]
 
         msg: dict = {
             "user": d["name"],
             "inout": enter_exit,
-            "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
+            # "message": f"[{d['dtm']}] {d['name']}학생 { enter_exit_msg }",
+            "message": format_string.format(datetime=d["dtm"], name=d["name"]),
             "dtm": d["dtm"],
         }
 
@@ -347,13 +359,15 @@ class WeeklyModel(list):
         dbm = DBMgr.instance()
 
         relate_tables = "reserve_msg_history"
-        sql = ' \n'.join((
-            f"SELECT name",
-            f"FROM sqlite_master",
-            f"WHERE",
-            f"    type='table'",
-            f"AND name='{relate_tables}'",
-        ))
+        sql = " \n".join(
+            (
+                f"SELECT name",
+                f"FROM sqlite_master",
+                f"WHERE",
+                f"    type='table'",
+                f"AND name='{relate_tables}'",
+            )
+        )
 
         DEBUG(f"sql = [{sql}]")
 
@@ -363,15 +377,17 @@ class WeeklyModel(list):
 
         if len(result) == 0:
             # Table 생성
-            sql = ' \n'.join((
-                f'CREATE TABLE "reserve_msg_history" (',
-                f'    "user"	TEXT,',
-                f'    "rdate"	TEXT,',
-                f'    "rtime"	TEXT,',
-                f'    "send_dtm"	TEXT,',
-                f'    PRIMARY KEY("user","rdate","rtime")',
-                f')',
-            ))
+            sql = " \n".join(
+                (
+                    f'CREATE TABLE "reserve_msg_history" (',
+                    f'    "user"	TEXT,',
+                    f'    "rdate"	TEXT,',
+                    f'    "rtime"	TEXT,',
+                    f'    "send_dtm"	TEXT,',
+                    f'    PRIMARY KEY("user","rdate","rtime")',
+                    f")",
+                )
+            )
             with dbm as conn:
                 result = dbm.execute(sql)
                 DEBUG(f"result = [{result}]")
@@ -380,31 +396,42 @@ class WeeklyModel(list):
     def append_send_dtm(self, wabbr):
         DEBUG(f"self.data[{wabbr}] = [\n{self.data[wabbr]}\n]")
         df = self.data[wabbr]
-        date = self.data[wabbr].iloc[0]['date']
+        date = self.data[wabbr].iloc[0]["date"]
         DEBUG(f"date = [\n{date}\n]")
         DEBUG(f"type(df.iloc[0]['time']) = [{type(df.iloc[0]['time'])}]")
-        df['time'] = df['time'].astype(str)
+        df["time"] = df["time"].astype(str)
         DEBUG(f"type(df.iloc[0]['time']).astype = [{type(df.iloc[0]['time'])}]")
         df_sent_dtm = DataFrame(self.get_sent_history(date))
         if len(df_sent_dtm.values) > 0:
-            DEBUG(f"type(df_sent_dtm.iloc[0]['rtime']) = [{type(df_sent_dtm.iloc[0]['rtime'])}]")
+            DEBUG(
+                f"type(df_sent_dtm.iloc[0]['rtime']) = [{type(df_sent_dtm.iloc[0]['rtime'])}]"
+            )
             DEBUG(f"df = [\n{df}\n]")
             DEBUG(f"df_sent_dtm = [\n{df_sent_dtm}\n]")
-            df_merged = pd.merge(left=df[['date','time','user']], right=df_sent_dtm, how='left', left_on=['user','date','time'], right_on = ['user','rdate','rtime'], sort=False)[['date','time','user','send_dtm']]
-            df_merged.fillna('', inplace=True)
+            df_merged = pd.merge(
+                left=df[["date", "time", "user"]],
+                right=df_sent_dtm,
+                how="left",
+                left_on=["user", "date", "time"],
+                right_on=["user", "rdate", "rtime"],
+                sort=False,
+            )[["date", "time", "user", "send_dtm"]]
+            df_merged.fillna("", inplace=True)
             DEBUG(f"df_merged = [\n{df_merged}\n]")
             self.data[wabbr] = df_merged
 
     def get_sent_history(self, date):
         dbm = DBMgr.instance()
 
-        sql = " \n".join((
-            f"SELECT user, rdate, rtime, send_dtm",
-            f"FROM reserve_msg_history",
-            f"WHERE",
-            f"rdate = '{date}'",
-            f"ORDER BY rdate, rtime",
-        ))
+        sql = " \n".join(
+            (
+                f"SELECT user, rdate, rtime, send_dtm",
+                f"FROM reserve_msg_history",
+                f"WHERE",
+                f"rdate = '{date}'",
+                f"ORDER BY rdate, rtime",
+            )
+        )
         DEBUG(f"sql = [{sql}]")
 
         with dbm as conn:
@@ -416,7 +443,14 @@ class WeeklyModel(list):
     # 현재 Page 조회
     def query_page(self) -> None:
         # self.data = dbm.query(sql)
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = (
+            "mon",
+            "tue",
+            "wed",
+            "thir",
+            "fri",
+            "sat",
+        )
         for wabbr in week_abbr:
             self.append_send_dtm(wabbr)
 
@@ -435,15 +469,17 @@ class WeeklyModel(list):
     def update_sent_dtm(self, user_msg):
         dbm = DBMgr.instance()
 
-        sql = " \n".join(( 
-            f"INSERT INTO reserve_msg_history(user, rdate, rtime, send_dtm)",
-            f"VALUES (",
-            f"    '{user_msg['user']}',",
-            f"    '{user_msg['rdate']}',",
-            f"    '{user_msg['rtime']}',",
-            f"    strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
-            f")",
-        ))
+        sql = " \n".join(
+            (
+                f"INSERT INTO reserve_msg_history(user, rdate, rtime, send_dtm)",
+                f"VALUES (",
+                f"    '{user_msg['user']}',",
+                f"    '{user_msg['rdate']}',",
+                f"    '{user_msg['rtime']}',",
+                f"    strftime('%Y-%m-%d %H:%M:%f','now', 'localtime')",
+                f")",
+            )
+        )
 
         DEBUG(f"sql = [\n{sql}\n]")
 
@@ -456,7 +492,6 @@ class WeeklyModel(list):
 
         self.query_page()
         self.applyModel()
-
 
     def applyModel(self):
         week_abbr = (
@@ -886,7 +921,7 @@ class LogViewModel:
 
         ## Thread Setup
         # self.setup_log_capture_thread()
-        self.setup_send_msg_thread()
+        # self.setup_send_msg_thread()
 
         ## Auto Processing
         self.timer = QTimer()
@@ -1261,10 +1296,10 @@ class LogViewModel:
         #     "rtime": time_str,
         # }
         INFO(f"{user_msg}")
-        if user_msg['inout'] in ("등원","하원"):
+        if user_msg["inout"] in ("등원", "하원"):
             self.model.update_sent_dtm(user_msg)
             self.adjust_log_view_column()
-        elif user_msg['inout'] in ("예약"):
+        elif user_msg["inout"] in ("예약"):
             self.weekly_model.update_sent_dtm(user_msg)
             self.adjust_weekly_view_column()
 
