@@ -80,7 +80,7 @@ class Config(dict, SingletonInstane):
         print(f"file_path = [{file_path}]")
         if file_path:
             try:
-                with open(file_path, "r") as f:
+                with open(file_path, "r", encoding='UTF8') as f:
                     self.update(json.load(f))
             except FileNotFoundError as fe:
                 print(f"error = [{fe}]")
