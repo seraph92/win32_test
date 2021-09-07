@@ -49,6 +49,7 @@ from BKLOG import *
 
 ui_form = uic.loadUiType("ui/auto_log_program.ui")[0]
 UserDetailDialog = uic.loadUiType("ui/user_detail.ui")[0]
+ReservMessageSetupDialog = uic.loadUiType("ui/msg_setup_reserve.ui")[0]
 
 
 class MsgsModel(list):
@@ -333,7 +334,7 @@ class WeeklyModel(list):
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -380,20 +381,21 @@ class WeeklyModel(list):
     def append_send_dtm(self, wabbr):
         DEBUG(f"self.data[{wabbr}] = [\n{self.data[wabbr]}\n]")
         df = self.data[wabbr]
-        date = self.data[wabbr].iloc[0]['date']
-        DEBUG(f"date = [\n{date}\n]")
-        DEBUG(f"type(df.iloc[0]['time']) = [{type(df.iloc[0]['time'])}]")
-        df['time'] = df['time'].astype(str)
-        DEBUG(f"type(df.iloc[0]['time']).astype = [{type(df.iloc[0]['time'])}]")
-        df_sent_dtm = DataFrame(self.get_sent_history(date))
-        if len(df_sent_dtm.values) > 0:
-            DEBUG(f"type(df_sent_dtm.iloc[0]['rtime']) = [{type(df_sent_dtm.iloc[0]['rtime'])}]")
-            DEBUG(f"df = [\n{df}\n]")
-            DEBUG(f"df_sent_dtm = [\n{df_sent_dtm}\n]")
-            df_merged = pd.merge(left=df[['date','time','user']], right=df_sent_dtm, how='left', left_on=['user','date','time'], right_on = ['user','rdate','rtime'], sort=False)[['date','time','user','send_dtm']]
-            df_merged.fillna('', inplace=True)
-            DEBUG(f"df_merged = [\n{df_merged}\n]")
-            self.data[wabbr] = df_merged
+        if len(self.data[wabbr]) > 0:
+            date = self.data[wabbr].iloc[0]['date']
+            DEBUG(f"date = [\n{date}\n]")
+            DEBUG(f"type(df.iloc[0]['time']) = [{type(df.iloc[0]['time'])}]")
+            df['time'] = df['time'].astype(str)
+            DEBUG(f"type(df.iloc[0]['time']).astype = [{type(df.iloc[0]['time'])}]")
+            df_sent_dtm = DataFrame(self.get_sent_history(date))
+            if len(df_sent_dtm.values) > 0:
+                DEBUG(f"type(df_sent_dtm.iloc[0]['rtime']) = [{type(df_sent_dtm.iloc[0]['rtime'])}]")
+                DEBUG(f"df = [\n{df}\n]")
+                DEBUG(f"df_sent_dtm = [\n{df_sent_dtm}\n]")
+                df_merged = pd.merge(left=df[['date','time','user']], right=df_sent_dtm, how='left', left_on=['user','date','time'], right_on = ['user','rdate','rtime'], sort=False)[['date','time','user','send_dtm']]
+                df_merged.fillna('', inplace=True)
+                DEBUG(f"df_merged = [\n{df_merged}\n]")
+                self.data[wabbr] = df_merged
 
     def get_sent_history(self, date):
         dbm = DBMgr.instance()
@@ -416,7 +418,7 @@ class WeeklyModel(list):
     # 현재 Page 조회
     def query_page(self) -> None:
         # self.data = dbm.query(sql)
-        week_abbr = ( "mon", "tue", "wed", "thir", "fri", "sat",)
+        week_abbr = ( "mon", "tue", "wed", "thu", "fri", "sat",)
         for wabbr in week_abbr:
             self.append_send_dtm(wabbr)
 
@@ -463,7 +465,7 @@ class WeeklyModel(list):
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -859,7 +861,7 @@ class LogViewModel:
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -880,12 +882,16 @@ class LogViewModel:
 
         views["save_weekly_button"].clicked.connect(self.save_weekly_plan)
         views["load_weekly_button"].clicked.connect(self.load_weekly_plan)
+        views["msg_setup_button"].clicked.connect(self.show_reserv_msg_setup_dialog)
+        views["shrink_weekly_button"].clicked.connect(self.shrink_weekly_view)
+        views["expand_weekly_button"].clicked.connect(self.expand_weekly_view)
+        self.weekly_frame: QFrame  = views["weekly_frame"]
 
         # msg List
         self.msg_view.doubleClicked.connect(self.del_msg)
 
         ## Thread Setup
-        # self.setup_log_capture_thread()
+        self.setup_log_capture_thread()
         self.setup_send_msg_thread()
 
         ## Auto Processing
@@ -905,10 +911,19 @@ class LogViewModel:
 
     def load_weekly_plan(self):
         # 파일 브라우저를 통해서 저장위치 결정
+        try:
+            dir_name = CONFIG["reserv_excel_dir"]
+        except KeyError as ke:
+            dir_name = "./"
+
         fname = QFileDialog.getOpenFileName(
-            self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+            #self.parent, "Open file", "./", "Excel File(*.xlsx *.xls);; All File(*)"
+            self.parent, "Open file", dir_name, "Excel File(*.xlsx *.xls);; All File(*)"
         )
-        DEBUG(f"선택파일: [{fname[0]}]")
+        INFO(f"선택파일: [{fname[0]}]")
+        if not fname[0]:
+            return None
+        dir_name = os.path.dirname(fname[0])
         try:
             df = pd.read_excel(fname[0], header=None)
             DEBUG(f"df = [\n{df}]")
@@ -919,7 +934,7 @@ class LogViewModel:
                 "mon",
                 "tue",
                 "wed",
-                "thir",
+                "thu",
                 "fri",
                 "sat",
             )
@@ -935,15 +950,20 @@ class LogViewModel:
                 _slice.columns = ["time", "user", "send_dtm"]
                 _slice.drop_duplicates(["time", "user"], inplace=True)
                 _slice.fillna({"send_dtm": ""}, inplace=True)
+                DEBUG(f"_slice({wabbr}) before dropna = [{_slice}]")
+                _slice.dropna(inplace=True)
+                _slice.reset_index(drop=True, inplace=True)
+                DEBUG(f"_slice({wabbr}) = [{_slice}]")
                 # 각 아이템에 날짜 정보를 부여하기 위해 Series를 만들어서 붙임
+                DEBUG(f"len(_slice)({wabbr}) = [{len(_slice)}]")
+                DEBUG(f"_slice.count()({wabbr}) = [{_slice.count()}]")
+                DEBUG(f"len(_slice.index)({wabbr}) = [{len(_slice.index)}]")
                 date_array = np.full((len(_slice.values)), str(date))
                 date_series = pd.Series(date_array, name="date")
                 DEBUG(f"date_series({wabbr}) = [{date_series}]")
                 _slice = pd.concat([_slice, date_series], axis=1)
                 # _slice.fillna({'date':date}, inplace=True)
-                _slice.dropna(inplace=True)
-                DEBUG(f"_slice({wabbr}) = [{_slice}]")
-                slice = _slice.sort_values(by=["time", "user"], axis=0)
+                slice = _slice.sort_values(by=["time", "user"], axis=0).reset_index(drop=True)
                 DEBUG(f"slice({wabbr}) = [{slice}]")
                 # 해당 일자로 조회해서 join해보는걸로
                 self.weekly_model.data[wabbr] = slice
@@ -953,6 +973,19 @@ class LogViewModel:
             self.adjust_weekly_view_column()
         except FileNotFoundError as fnfe:
             pass
+
+        CONFIG["reserv_excel_dir"] = dir_name
+        CONFIG.export()
+
+    def shrink_weekly_view(self):
+        rect = self.weekly_frame.geometry()
+        DEBUG(f"rect = [{rect}]")
+        self.weekly_frame.setFixedWidth(rect.width() - 30)
+
+    def expand_weekly_view(self):
+        rect = self.weekly_frame.geometry()
+        DEBUG(f"rect = [{rect}]")
+        self.weekly_frame.setFixedWidth(rect.width() + 30)
 
     def save_weekly_plan(self):
         # 파일 브라우저를 통해서 저장위치 결정
@@ -965,7 +998,7 @@ class LogViewModel:
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -1125,6 +1158,17 @@ class LogViewModel:
             #     self.view.selectRow(index)
             # self.add_msg(None)
 
+    def show_reserv_msg_setup_dialog(self):
+        # 상세정보 창
+        dlg = ReservMsgSetupDlg(self.parent)
+        # dlg.accepted.connect(self.regist_dialog_accept)
+        # dlg.rejected.connect(self.regist_dialog_reject)
+        dlg.exec()
+        # index = self.user_model.findRowIndex("user_name", rows["user_name"])
+        # if index:
+        #     self.user_view.selectRow(index)
+
+
     def show_detail_dialog(self):
         # 상세정보 창
         row = self.user_view.currentIndex().row()
@@ -1167,7 +1211,7 @@ class LogViewModel:
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -1426,6 +1470,89 @@ class LogViewModel:
         if rst == QMessageBox.Yes:
             self.model.remove(idx)
 
+class ReservMsgSetupDlg(QDialog, ReservMessageSetupDialog):
+    """User Detail Dialog."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+
+        self.setWindowTitle("예약 발송 메시지 수정")
+
+        # 작은 MVVM처럼 세팅
+        #self.views = {}
+        #self.models = {}
+
+        # 작은 view들 세팅
+        # self.views["reserv_msg_edit"] = self.reserv_msg_edit
+        # self.views["ok_button"] = self.okBtn
+
+        #viewAttrs(self)
+        self.reserv_msg_edit: QTextEdit = self.reservMsgEdit
+        self.sample_msg_edit: QTextEdit = self.sampleMsgEdit
+        self.ok_button: QPushButton = self.okBtn
+
+        self.reserv_msg_edit.setText(CONFIG["reserv_msg"])
+        sample_txt = "[{date} {time}] {name}학생 예약 되어 있습니다.  예약 변경 및 취소는 하루 전 오후 9시까지 가능합니다.\n-READ101-"
+        self.sample_msg_edit.setText(sample_txt)
+        self.sample_msg_edit.setStyleSheet("background-color: transparent;")
+
+        # 작은 model들 세팅
+        #self.models["user_model"] = UserModel()
+
+        #self.dataInit()
+        # event 할당
+        self.ok_button.clicked.connect(self.clicked)
+        # self.buttonBox.accepted.connect(self.accept)
+        # self.buttonBox.rejected.connect(self.reject)
+
+        # 이지만 할게 없네
+
+        # if self.user_name:
+        #     self.models["user_model"].query_one(self.user_name)
+        #     self.mapper.toFirst()
+
+            # self.name_mapper.toFirst()
+            # self.chat_mapper.toFirst()
+            # self.reg_dtm_mapper.toFirst()
+
+    def clicked(self) -> None:
+        INFO(f"accept 내부에서 처리 ")
+        INFO(f"reserv_msg_edit.text() = [{self.reserv_msg_edit.toPlainText()}]")
+        CONFIG["reserv_msg"] = self.reserv_msg_edit.toPlainText()
+        CONFIG.export()
+        
+        # 수정
+        return super().accept()
+
+    def reject(self) -> None:
+        DEBUG(f"reject 내부에서 처리")
+        return super().reject()
+
+    def dataInit(self):
+        self.mapper = QDataWidgetMapper()
+        self.mapper.setModel(self.models["user_model"].model)
+
+        # self.name_mapper = QDataWidgetMapper()
+        # self.name_mapper.setModel(self.models["user_model"].user_name_model)
+        # self.chat_mapper = QDataWidgetMapper()
+        # self.chat_mapper.setModel(self.models["user_model"].chat_room_model)
+        # self.reg_dtm_mapper = QDataWidgetMapper()
+        # self.reg_dtm_mapper.setModel(self.models["user_model"].reg_dtm_model)
+
+        # Log Tab
+        self.mapper.addMapping(self.views["user_name_edit"], 0)
+        self.mapper.addMapping(self.views["chat_room_edit"], 1)
+        self.mapper.addMapping(self.views["reg_dtm_edit"], 2)
+        self.mapper.toFirst()
+
+        # self.name_mapper.addMapping(self.views["user_name_edit"], 0)
+        # self.name_mapper.toFirst()
+        # self.chat_mapper.addMapping(self.views["chat_room_edit"], 0)
+        # self.chat_mapper.toFirst()
+        # self.reg_dtm_mapper.addMapping(self.views["reg_dtm_edit"], 0)
+        # self.reg_dtm_mapper.toFirst()
+
 
 class UserDetailDlg(QDialog, UserDetailDialog):
     """User Detail Dialog."""
@@ -1560,14 +1687,18 @@ class MainWindow(QMainWindow, ui_form):
 
         ## Weekly Tab
         # self.views["weekly_table_view"] = self.weeklyTableView
+        self.views["msg_setup_button"] = self.msgSetupBtn
         self.views["save_weekly_button"] = self.saveWeeklyBtn
         self.views["load_weekly_button"] = self.loadWeeklyBtn
+        self.views["shrink_weekly_button"] = self.shrinkBtn
+        self.views["expand_weekly_button"] = self.expandBtn
+        self.views["weekly_frame"] = self.frame_2
 
         week_abbr = (
             "mon",
             "tue",
             "wed",
-            "thir",
+            "thu",
             "fri",
             "sat",
         )
@@ -1601,7 +1732,7 @@ class MainWindow(QMainWindow, ui_form):
         #         "week": self.weekHeaderLineEdit_wed,
         #         "view": self.reserveView_wed,
         #     },
-        #     "thir": {
+        #     "thu": {
         #         "date": self.dateHeaderLineEdit_thir,
         #         "week": self.weekHeaderLineEdit_thir,
         #         "view": self.reserveView_thir,

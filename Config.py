@@ -1,4 +1,5 @@
 import json
+from logging import FATAL
 
 temp = {}
 
@@ -80,7 +81,7 @@ class Config(dict, SingletonInstane):
         print(f"file_path = [{file_path}]")
         if file_path:
             try:
-                with open(file_path, "r", encoding='UTF8') as f:
+                with open(file_path, "r", encoding='UTF-8-sig') as f:
                     self.update(json.load(f))
             except FileNotFoundError as fe:
                 print(f"error = [{fe}]")
@@ -127,8 +128,8 @@ class Config(dict, SingletonInstane):
 
     def export(self, save_file_name="./config.json"):
         if save_file_name:
-            with open(save_file_name, "w") as f:
-                json.dump(dict(self.values), f)
+            with open(save_file_name, "w", encoding='UTF-8-sig') as f:
+                json.dump(self.__dict__, f, indent=4, ensure_ascii=False)
 
 
 CONFIG = Config.instance()
