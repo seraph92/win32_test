@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1338</width>
-    <height>856</height>
+    <width>2024</width>
+    <height>844</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -367,8 +367,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>796</width>
-                 <height>562</height>
+                 <width>791</width>
+                 <height>548</height>
                 </rect>
                </property>
               </widget>
@@ -404,6 +404,20 @@
                </spacer>
               </item>
               <item>
+               <widget class="QToolButton" name="shrinkBtn">
+                <property name="text">
+                 <string>&gt;&lt;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QToolButton" name="expandBtn">
+                <property name="text">
+                 <string>&lt; &gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="horizontalSpacer_14">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -415,6 +429,13 @@
                  </size>
                 </property>
                </spacer>
+              </item>
+              <item>
+               <widget class="QToolButton" name="msgSetupBtn">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -475,40 +496,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_mon">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_mon"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_mon">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_mon"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_mon">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_mon"/>
       </item>
      </layout>
     </item>
@@ -521,40 +515,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_tue">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_tue"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_tue">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_tue"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_tue">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_tue"/>
       </item>
      </layout>
     </item>
@@ -567,40 +534,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_wed">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_wed"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_wed">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_wed"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_wed">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_wed"/>
       </item>
      </layout>
     </item>
@@ -613,40 +553,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_thir">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_thu"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_thir">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_thu"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_thir">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_thu"/>
       </item>
      </layout>
     </item>
@@ -659,40 +572,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_fri">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_fri"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_fri">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_fri"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_fri">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_fri"/>
       </item>
      </layout>
     </item>
@@ -705,40 +591,13 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item>
-       <widget class="QLineEdit" name="dateHeaderLineEdit_sat">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="dateHeaderLineEdit_sat"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="weekHeaderLineEdit_sat">
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="weekHeaderLineEdit_sat"/>
       </item>
       <item>
-       <widget class="QTableView" name="reserveView_sat">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
-        </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectRows</enum>
-        </property>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
+       <widget class="QTableView" name="reserveView_sat"/>
       </item>
      </layout>
     </item>
@@ -758,8 +617,8 @@
      <y>51</y>
     </hint>
     <hint type="destinationlabel">
-     <x>707</x>
-     <y>582</y>
+     <x>816</x>
+     <y>622</y>
     </hint>
    </hints>
   </connection>
