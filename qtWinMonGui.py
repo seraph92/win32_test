@@ -433,6 +433,12 @@ class WeeklyModel(list):
 
         return data
 
+    def update_page_dtm(self):
+        week_abbr = ( "mon", "tue", "wed", "thu", "fri", "sat",)
+        for wabbr in week_abbr:
+            self.append_send_dtm(wabbr)
+        self.updateModel()
+
     # 현재 Page 조회
     def query_page(self) -> None:
         # self.data = dbm.query(sql)
@@ -476,8 +482,37 @@ class WeeklyModel(list):
             except sqlite3.IntegrityError as ie:
                 ERROR(f"메시지 발송정보 등록에 실패하였습니다.[{ie}]")
 
-        self.query_page()
-        self.applyModel()
+        #self.query_page()
+        self.update_page_dtm()
+        #self.applyModel()
+
+    def updateModel(self):
+        week_abbr = ( "mon", "tue", "wed", "thu", "fri", "sat",)
+
+        for wabbr in week_abbr:
+            #self.head_model[wabbr].clear()
+            #for i, head in enumerate(self.head_data[wabbr]):
+            #    DEBUG(f"head({wabbr}) = [{head}]")
+            #    self.head_model[wabbr].setItem(0, i, QStandardItem(str(head)))
+
+            model: QStandardItemModel = self.model[wabbr]
+            #model.clear()
+            #model.setColumnCount(3)
+            # Header Setting
+            #model.setHorizontalHeaderLabels(["Time", "User", "send_dtm"])
+
+            #DEBUG(f"self.data[{wabbr}] = [{self.data[wabbr]}]")
+
+            for idx, row in self.data[wabbr].iterrows():
+                DEBUG(f"row = [{row}]")
+                model.setItem(idx, 2, QStandardItem(str(row["send_dtm"])))
+                # appendRow(
+                #     [
+                #         QStandardItem(str(row["time"])),
+                #         QStandardItem(str(row["user"])),
+                #         QStandardItem(str(row["send_dtm"])),
+                #     ]
+                # )
 
     def applyModel(self):
         week_abbr = (
@@ -494,16 +529,17 @@ class WeeklyModel(list):
                 DEBUG(f"head({wabbr}) = [{head}]")
                 self.head_model[wabbr].setItem(0, i, QStandardItem(str(head)))
 
-            self.model[wabbr].clear()
-            self.model[wabbr].setColumnCount(3)
+            model: QStandardItemModel = self.model[wabbr]
+            model.clear()
+            model.setColumnCount(3)
             # Header Setting
-            self.model[wabbr].setHorizontalHeaderLabels(["Time", "User", "send_dtm"])
+            model.setHorizontalHeaderLabels(["Time", "User", "send_dtm"])
 
             DEBUG(f"self.data[{wabbr}] = [{self.data[wabbr]}]")
 
             for idx, row in self.data[wabbr].iterrows():
                 DEBUG(f"row = [{row}]")
-                self.model[wabbr].appendRow(
+                model.appendRow(
                     [
                         QStandardItem(str(row["time"])),
                         QStandardItem(str(row["user"])),
@@ -921,10 +957,14 @@ class LogViewModel:
 
     def get_weekly_view_double_click_handler(self, wabbr):
         this = self
+        #view = self.weekly_views[wabbr]
         # def weekly_view_double_click_handler(self, model: QModelIndex):
         def weekly_view_double_click_handler(self):
             INFO(f"double_clicked = [{wabbr}]")
+            #tview: QTableView = view["view"]
+            #cur_pos = tview.verticalScrollBar().value()
             this.add_reserve_msg(wabbr)
+            #tview.verticalScrollBar().setValue(cur_pos)
 
         return weekly_view_double_click_handler
 
@@ -1385,7 +1425,8 @@ class LogViewModel:
         if not rows["send_dtm"]:
             if self.msg_model.add_reserve_msg(rows):
                 rows["send_dtm"] = "-"
-                self.weekly_model.applyModel()
+                #self.weekly_model.applyModel()
+                self.weekly_model.updateModel()
         elif rows["send_dtm"] == "-":
             msg = "메시지 발송을 시도 했지만, 처리되지 않았습니다. 다시 시도 할까요?"
             rst = QMessageBox.question(
@@ -1394,7 +1435,8 @@ class LogViewModel:
             if rst == QMessageBox.Yes:
                 if self.msg_model.add_reserve_msg(rows):
                     rows["send_dtm"] = "-"
-                    self.weekly_model.applyModel()
+                    #self.weekly_model.applyModel()
+                    self.weekly_model.updateModel()
 
         self.adjust_weekly_view_column()
 
