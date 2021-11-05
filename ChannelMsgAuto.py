@@ -11,6 +11,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 
+import chromedriver_autoinstaller
+import os
+
 from DBM import DBMgr
 from Config import CONFIG
 from BKLOG import DEBUG, INFO, ERROR
@@ -65,9 +68,27 @@ class ChannelMessageSending(QObject):
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         # options.headless = True
 
+        chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
+        driver_path = f'./{chrome_ver}/chromedriver.exe'
+
+        if os.path.exists(driver_path):
+            INFO(f"chrom driver is insatlled: {driver_path}")
+        else:
+            INFO(f"install the chrome driver(ver: {chrome_ver})")
+            chromedriver_autoinstaller.install(True)
+
+        INFO(f"driver path = [{driver_path}]")
+
         self.driver = webdriver.Chrome(
-            executable_path="./driver/chromedriver.exe", options=options
+            #executable_path="./driver/chromedriver.exe", options=options
+            executable_path=driver_path, options=options
         )
+
+        # if 'browserVersion' in self.driver.capabilities:
+        #     INFO(f"chrome browserVersion: [{self.driver.capabilities['browserVersion']}]")
+        # else:
+        #     INFO(f"chrome Version: [{self.driver.capabilities['version']}]")
+
 
         self.vars = {}
 
