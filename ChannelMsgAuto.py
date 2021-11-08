@@ -164,9 +164,19 @@ class ChannelMessageSending(QObject):
             self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
 
         # 4 | click | xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a |
-        self.driver.find_element(
-            By.XPATH, "//div[@id='mFeature']/div/div[2]/ul/li[3]/a"
-        ).click()
+        #self.driver.find_element(
+        #    By.XPATH, "//div[@id='mFeature']/div/div[2]/ul/li[3]/a"
+        #).click()
+        #20211108 변경되었음
+        element = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a",
+                )
+            )
+        )
+        element.click()
         # 5 | click | linkText=채팅 목록 |
         self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
 
