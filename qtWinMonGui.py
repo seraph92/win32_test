@@ -1913,12 +1913,15 @@ if __name__ == "__main__":
 
     # mt = MemTrace()
 
-    app = QApplication(sys.argv)
-    myWindow = MainWindow()
-    myWindow.setWindowTitle(f"Log Monitor [{CONFIG['RUN_MODE']}]")
-    # myWindow.show()
-    # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
-    INFO(f"current thread id :[{threading.get_ident()}]")
-    app.exec_()
+    try:
+        app = QApplication(sys.argv)
+        myWindow = MainWindow()
+        myWindow.setWindowTitle(f"Log Monitor [{CONFIG['RUN_MODE']}]")
+        # myWindow.show()
+        # 이벤트 큐 루프에 들어가기전 log capture thread와 channel message sending thread 가동
+        INFO(f"current thread id :[{threading.get_ident()}]")
+        app.exec_()
+    except Exception as e:
+        ERROR(f"{e}")
 
     # mt.end_print()

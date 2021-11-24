@@ -4,6 +4,7 @@ __author__ = "seraph92@gmail.com"
 import sys
 import datetime
 import logging
+import logging.handlers
 
 from Config import CONFIG
 
@@ -66,6 +67,11 @@ now = datetime.datetime.now()
 #formattedDate = now.strftime("%Y%m%d_%H%M%S")
 formattedDate = now.strftime("%Y%m%d")
 #print(formattedDate)
-file_handler = logging.FileHandler(f"./log/scrap_{formattedDate}.log")
+
+file_handler = logging.FileHandler(f"./log/scrap_{formattedDate}.log", encoding='utf-8')
 file_handler.setFormatter(formatter)
 LOG.addHandler(file_handler)
+
+timed_file_handler = logging.handlers.TimedRotatingFileHandler(filename=f"./log/scrap_log", when='midnight', interval=1, encoding='utf-8')
+timed_file_handler.setFormatter(formatter)
+LOG.addHandler(timed_file_handler)
