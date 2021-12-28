@@ -119,7 +119,7 @@ class ChannelMessageSending(QObject):
 
         if login_pattern.match(self.driver.current_url):
             # 로그인 처리 필요
-            DEBUG(f"로그인 필요!!")
+            INFO(f"로그인 필요!!")
             try:
                 # 4 | type | id=id_email_2 |
                 self.driver.find_element(
@@ -142,32 +142,84 @@ class ChannelMessageSending(QObject):
                     # time.sleep(1)
                     break
 
+                INFO(f"로그인 대기!!")
                 time.sleep(5)
 
+            INFO(f"대쉬보드로 이동")
+            # not clickable error fix but solved by script click
+            #self.driver.maximize_window()
+            # 20211227 변경
+            # element = WebDriverWait(self.driver, 10).until(
+            #     EC.presence_of_element_located(
+            #         (
+            #             By.XPATH,
+            #             "//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')]",
+            #         )
+            #     )
+            # )
+            # element.click()
             element = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
                     (
-                        By.XPATH,
-                        "//a[contains(@href, 'https://center-pf.kakao.com/_RdKNT/dashboard')]",
+                        #By.XPATH,
+                        #"//span[contains(.,\'리드101송도학원\')]",
+                        By.CSS_SELECTOR,
+                        ".name_profile",
                     )
                 )
             )
-            element.click()
+            #element.click()
+            self.driver.execute_script("arguments[0].click();", element)
+ 
+            #self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            #time.sleep(5)
+            #self.driver.find_element(By.XPATH, "//div/a/span").click()
+            #self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            INFO(f"대쉬보드로 이동 click")
 
-
+        # 20211227 변경
         elif dashboard_pattern.match(self.driver.current_url):
             # 이미 로그인 되어 있음
             # 3 | click | css=.tit_invite |
-            self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+            #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+            self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
         else:
-            # 3 | click | css=.tit_invite |
-            self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+             # 3 | click | css=.tit_invite |
+            #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
+            self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
 
+
+        # if dashboard_pattern.match(self.driver.current_url):
+        #     # 이미 로그인 되어 있음
+        #     # 3 | click | css=.tit_invite |
+        #     element = WebDriverWait(self.driver, 10).until(
+        #         EC.presence_of_element_located(
+        #             (
+        #                 By.CSS_SELECTOR,
+        #                 ".cont_thumb",
+        #             )
+        #         )
+        #     )
+        #     element.click()
+    
+        # else:
+        #     # 3 | click | css=.tit_invite |
+        #     element = WebDriverWait(self.driver, 10).until(
+        #         EC.presence_of_element_located(
+        #             (
+        #                 By.CSS_SELECTOR,
+        #                 ".cont_thumb",
+        #             )
+        #         )
+        #     )
+        #     element.click()
+ 
         # 4 | click | xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a |
         #self.driver.find_element(
         #    By.XPATH, "//div[@id='mFeature']/div/div[2]/ul/li[3]/a"
         #).click()
         #20211108 변경되었음
+        INFO(f"1:1채팅")
         element = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
                 (
@@ -177,7 +229,13 @@ class ChannelMessageSending(QObject):
             )
         )
         element.click()
+        INFO(f"1:1채팅 클릭!!")
+
+        #INFO(f"채팅 메뉴 로딩 대기!!")
+        #time.sleep(5)
+
         # 5 | click | linkText=채팅 목록 |
+        INFO(f"채팅목록")
         self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
 
         while self.loop_flag:
