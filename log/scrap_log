@@ -330,3 +330,20 @@
 2021-12-28 16:11:33,609 - root - INFO - [run:237] 채팅목록
 2021-12-28 16:11:35,516 - root - INFO - [close:1146] ViewModel Closing!
 2021-12-28 16:11:35,517 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2021-12-28 16:12:01,252 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E393BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E393BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE8B0>}}]
+2021-12-28 16:12:01,256 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E393BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E393BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E393BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000207E39DE820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000207E39DE8B0>}}]
+2021-12-28 16:12:01,261 - root - ERROR - [__getInstance:23] instance 없음  th:[23068]
+2021-12-28 16:12:01,263 - root - INFO - [instance:61] instance 추가 [23068]
+2021-12-28 16:12:01,302 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2021-12-28 16:12:01,328 - root - INFO - [setup_method:75] chrom driver is insatlled: ./96/chromedriver.exe
+2021-12-28 16:12:01,329 - root - INFO - [setup_method:80] driver path = [./96/chromedriver.exe]
+2021-12-28 16:12:03,236 - root - INFO - [<module>:1922] current thread id :[23068]
+2021-12-28 16:12:05,138 - root - INFO - [run:122] 로그인 필요!!
+2021-12-28 16:12:05,616 - root - INFO - [run:145] 로그인 대기!!
+2021-12-28 16:12:10,638 - root - INFO - [run:148] 대쉬보드로 이동
+2021-12-28 16:12:11,500 - root - INFO - [run:177] 대쉬보드로 이동 click
+2021-12-28 16:12:11,501 - root - INFO - [run:221] 1:1채팅
+2021-12-28 16:12:12,696 - root - INFO - [run:231] 1:1채팅 클릭!!
+2021-12-28 16:12:12,696 - root - INFO - [run:237] 채팅목록
+2021-12-28 16:14:01,489 - root - INFO - [close:1146] ViewModel Closing!
+2021-12-28 16:14:01,491 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
