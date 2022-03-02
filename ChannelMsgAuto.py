@@ -228,7 +228,8 @@ class ChannelMessageSending(QObject):
                 )
             )
         )
-        element.click()
+        #element.click()
+        self.driver.execute_script("arguments[0].click();", element)
         INFO(f"1:1채팅 클릭!!")
 
         #INFO(f"채팅 메뉴 로딩 대기!!")
@@ -236,7 +237,16 @@ class ChannelMessageSending(QObject):
 
         # 5 | click | linkText=채팅 목록 |
         INFO(f"채팅목록")
-        self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
+        #self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
+        element = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(
+                (
+                    By.LINK_TEXT,
+                    "채팅 목록",
+                )
+            )
+        )
+        self.driver.execute_script("arguments[0].click();", element)
 
         while self.loop_flag:
             self.running.emit()
