@@ -1,86 +1,17 @@
-2022-03-02 14:35:28,154 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FFBD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FFBF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD8B0>}}]
-2022-03-02 14:35:28,158 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FFBD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FFBEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FFBF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000178F7FDD820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000178F7FDD8B0>}}]
-2022-03-02 14:35:28,164 - root - ERROR - [__getInstance:23] instance 없음  th:[23600]
-2022-03-02 14:35:28,172 - root - INFO - [instance:61] instance 추가 [23600]
-2022-03-02 14:35:28,222 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2022-03-02 14:35:28,237 - root - INFO - [setup_method:77] install the chrome driver(ver: 98)
-2022-03-02 14:35:29,935 - root - INFO - [setup_method:80] driver path = [./98/chromedriver.exe]
-2022-03-02 14:35:32,455 - root - INFO - [<module>:1922] current thread id :[23600]
-2022-03-02 14:35:34,765 - root - INFO - [run:122] 로그인 필요!!
-2022-03-02 14:35:35,370 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:35:40,383 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:35:45,393 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:35:50,411 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:35:55,417 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:00,432 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:05,451 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:10,460 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:15,475 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:20,485 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:25,503 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:30,515 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:35,529 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:40,548 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:45,564 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:50,571 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:36:55,586 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:00,601 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:05,614 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:10,624 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:15,639 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:20,656 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:25,672 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:30,691 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:35,713 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:40,729 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:45,739 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:50,760 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:37:55,776 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:38:00,794 - root - INFO - [run:148] 대쉬보드로 이동
-2022-03-02 14:38:01,665 - root - INFO - [run:178] 대쉬보드로 이동 click
-2022-03-02 14:38:01,666 - root - INFO - [run:222] 1:1채팅
-2022-03-02 14:38:59,994 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCBD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCBF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE8B0>}}]
-2022-03-02 14:38:59,997 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCBD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCBEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCBF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001ED33CCE820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001ED33CCE8B0>}}]
-2022-03-02 14:39:00,001 - root - ERROR - [__getInstance:23] instance 없음  th:[24132]
-2022-03-02 14:39:00,002 - root - INFO - [instance:61] instance 추가 [24132]
-2022-03-02 14:39:00,029 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2022-03-02 14:39:00,043 - root - INFO - [setup_method:75] chrom driver is insatlled: ./98/chromedriver.exe
-2022-03-02 14:39:00,044 - root - INFO - [setup_method:80] driver path = [./98/chromedriver.exe]
-2022-03-02 14:39:01,358 - root - INFO - [<module>:1922] current thread id :[24132]
-2022-03-02 14:39:02,897 - root - INFO - [run:122] 로그인 필요!!
-2022-03-02 14:39:03,212 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:39:08,228 - root - INFO - [run:148] 대쉬보드로 이동
-2022-03-02 14:39:09,018 - root - INFO - [run:178] 대쉬보드로 이동 click
-2022-03-02 14:39:09,019 - root - INFO - [run:222] 1:1채팅
-2022-03-02 14:44:09,996 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE324BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE324BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D8B0>}}]
-2022-03-02 14:44:10,001 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE324BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE324BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE324BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000017FE322D820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000017FE322D8B0>}}]
-2022-03-02 14:44:10,007 - root - ERROR - [__getInstance:23] instance 없음  th:[2452]
-2022-03-02 14:44:10,010 - root - INFO - [instance:61] instance 추가 [2452]
-2022-03-02 14:44:10,054 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2022-03-02 14:44:10,069 - root - INFO - [setup_method:75] chrom driver is insatlled: ./98/chromedriver.exe
-2022-03-02 14:44:10,070 - root - INFO - [setup_method:80] driver path = [./98/chromedriver.exe]
-2022-03-02 14:44:11,388 - root - INFO - [<module>:1922] current thread id :[2452]
-2022-03-02 14:44:12,900 - root - INFO - [run:122] 로그인 필요!!
-2022-03-02 14:44:13,173 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:44:18,193 - root - INFO - [run:148] 대쉬보드로 이동
-2022-03-02 14:44:18,829 - root - INFO - [run:178] 대쉬보드로 이동 click
-2022-03-02 14:44:18,830 - root - INFO - [run:222] 1:1채팅
-2022-03-02 14:44:19,502 - root - INFO - [run:233] 1:1채팅 클릭!!
-2022-03-02 14:44:19,503 - root - INFO - [run:239] 채팅목록
-2022-03-02 14:49:13,145 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A68BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A68BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D8B0>}}]
-2022-03-02 14:49:13,148 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A68BD30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BE50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A68BEE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A68BF70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D1F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001C33A66D820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001C33A66D8B0>}}]
-2022-03-02 14:49:13,151 - root - ERROR - [__getInstance:23] instance 없음  th:[5212]
-2022-03-02 14:49:13,153 - root - INFO - [instance:61] instance 추가 [5212]
-2022-03-02 14:49:13,181 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2022-03-02 14:49:13,195 - root - INFO - [setup_method:75] chrom driver is insatlled: ./98/chromedriver.exe
-2022-03-02 14:49:13,196 - root - INFO - [setup_method:80] driver path = [./98/chromedriver.exe]
-2022-03-02 14:49:14,528 - root - INFO - [<module>:1922] current thread id :[5212]
-2022-03-02 14:49:16,113 - root - INFO - [run:122] 로그인 필요!!
-2022-03-02 14:49:16,405 - root - INFO - [run:145] 로그인 대기!!
-2022-03-02 14:49:21,411 - root - INFO - [run:148] 대쉬보드로 이동
-2022-03-02 14:49:22,038 - root - INFO - [run:178] 대쉬보드로 이동 click
-2022-03-02 14:49:22,040 - root - INFO - [run:222] 1:1채팅
-2022-03-02 14:49:22,689 - root - INFO - [run:233] 1:1채팅 클릭!!
-2022-03-02 14:49:22,691 - root - INFO - [run:239] 채팅목록
-2022-03-02 14:49:52,768 - root - INFO - [close:1146] ViewModel Closing!
-2022-03-02 14:49:52,769 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2022-03-23 16:41:05,757 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C57D30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57E50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57EE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C57F70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C410D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C411F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C413A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C41430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C415E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C41670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C418B0>}}]
+2022-03-23 16:41:05,763 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C57D30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57E50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C57EE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C57F70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C410D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C411F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C413A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C41430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C415E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C41670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020D07C41820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020D07C418B0>}}]
+2022-03-23 16:41:05,768 - root - ERROR - [__getInstance:23] instance 없음  th:[16772]
+2022-03-23 16:41:05,775 - root - INFO - [instance:61] instance 추가 [16772]
+2022-03-23 16:41:05,816 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2022-03-23 16:41:05,843 - root - INFO - [setup_method:77] install the chrome driver(ver: 99)
+2022-03-23 16:41:06,728 - root - INFO - [setup_method:80] driver path = [./99/chromedriver.exe]
+2022-03-23 16:41:08,450 - root - INFO - [<module>:1922] current thread id :[16772]
+2022-03-23 16:41:10,620 - root - INFO - [run:122] 로그인 필요!!
+2022-03-23 16:41:11,049 - root - INFO - [run:145] 로그인 대기!!
+2022-03-23 16:41:16,109 - root - INFO - [run:148] 대쉬보드로 이동
+2022-03-23 16:41:16,914 - root - INFO - [run:178] 대쉬보드로 이동 click
+2022-03-23 16:41:16,915 - root - INFO - [run:222] 1:1채팅
+2022-03-23 16:41:17,537 - root - INFO - [run:233] 1:1채팅 클릭!!
+2022-03-23 16:41:17,538 - root - INFO - [run:239] 채팅목록
+2022-03-23 16:41:43,350 - root - INFO - [close:1146] ViewModel Closing!
+2022-03-23 16:41:43,351 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
