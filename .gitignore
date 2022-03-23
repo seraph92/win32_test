@@ -4,7 +4,8 @@
 *.exe
 *.db
 *.sqbpro
-log/scrap_log*
+scrap_log
+scrap_log.*
 __pycache__
 build/qtWinMonGui
 dist/
