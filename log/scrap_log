@@ -83,3 +83,20 @@
 2022-03-23 17:03:57,471 - root - INFO - [run:222] 1:1채팅
 2022-03-23 17:03:57,802 - root - INFO - [close:1146] ViewModel Closing!
 2022-03-23 17:03:57,803 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2022-03-23 17:05:43,681 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6236D30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236E50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236EE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6236F70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62160D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB62161F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62163A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6216430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62165E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6216670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB62168B0>}}]
+2022-03-23 17:05:43,686 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6236D30>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236E50>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6236EE0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6236F70>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62160D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB62161F0>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62163A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6216430>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB62165E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB6216670>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000020DB6216820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000020DB62168B0>}}]
+2022-03-23 17:05:43,690 - root - ERROR - [__getInstance:23] instance 없음  th:[15328]
+2022-03-23 17:05:43,691 - root - INFO - [instance:61] instance 추가 [15328]
+2022-03-23 17:05:43,711 - root - ERROR - [__init__:62] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2022-03-23 17:05:43,730 - root - INFO - [setup_method:75] chrom driver is insatlled: ./99/chromedriver.exe
+2022-03-23 17:05:43,731 - root - INFO - [setup_method:80] driver path = [./99/chromedriver.exe]
+2022-03-23 17:05:45,057 - root - INFO - [<module>:1922] current thread id :[15328]
+2022-03-23 17:05:46,618 - root - INFO - [run:122] 로그인 필요!!
+2022-03-23 17:05:46,925 - root - INFO - [run:145] 로그인 대기!!
+2022-03-23 17:05:51,993 - root - INFO - [run:148] 대쉬보드로 이동
+2022-03-23 17:05:52,806 - root - INFO - [run:178] 대쉬보드로 이동 click
+2022-03-23 17:05:52,807 - root - INFO - [run:222] 1:1채팅
+2022-03-23 17:05:53,444 - root - INFO - [run:233] 1:1채팅 클릭!!
+2022-03-23 17:05:53,445 - root - INFO - [run:239] 채팅목록
+2022-03-23 17:05:59,518 - root - INFO - [close:1146] ViewModel Closing!
+2022-03-23 17:05:59,518 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
