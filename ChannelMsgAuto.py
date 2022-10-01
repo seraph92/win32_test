@@ -122,16 +122,25 @@ class ChannelMessageSending(QObject):
             INFO(f"로그인 필요!!")
             try:
                 # 4 | type | id=id_email_2 |
+                #self.driver.find_element(
+                #    By.XPATH, "//input[@id='id_email_2']"
+                #).send_keys(CONFIG["channel_login"]["user_id"])
                 self.driver.find_element(
-                    By.XPATH, "//input[@id='id_email_2']"
+                    By.ID, "input-loginKey"
                 ).send_keys(CONFIG["channel_login"]["user_id"])
                 # 7 | type | id=id_password_3 |
+                #self.driver.find_element(
+                #    By.XPATH, "//input[@id='id_password_3']"
+                #).send_keys(CONFIG["channel_login"]["user_pw"])
                 self.driver.find_element(
-                    By.XPATH, "//input[@id='id_password_3']"
+                    By.ID, "input-password"
                 ).send_keys(CONFIG["channel_login"]["user_pw"])
                 # 6 | sendKeys | id=id_password_3 | ${KEY_ENTER}
+                #self.driver.find_element(
+                #    By.XPATH, "//input[@id='id_password_3']"
+                #).send_keys(Keys.ENTER)
                 self.driver.find_element(
-                    By.XPATH, "//input[@id='id_password_3']"
+                    By.ID, "input-password"
                 ).send_keys(Keys.ENTER)
             except selenium.common.exceptions.ElementClickInterceptedException as ecie:
                 DEBUG(f"skip login error, have to login manually [{ecie}]")
