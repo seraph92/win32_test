@@ -128,8 +128,11 @@ class ChannelMessageSending(QObject):
                 #self.driver.find_element(
                 #    By.ID, "input-loginKey"
                 #).send_keys(CONFIG["channel_login"]["user_id"])
+                #self.driver.find_element(
+                #    By.NAME, "email"
+                #).send_keys(CONFIG["channel_login"]["user_id"])
                 self.driver.find_element(
-                    By.NAME, "email"
+                    By.NAME, "loginKey"
                 ).send_keys(CONFIG["channel_login"]["user_id"])
                 # 7 | type | id=id_password_3 |
                 #self.driver.find_element(
