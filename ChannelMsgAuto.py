@@ -131,8 +131,12 @@ class ChannelMessageSending(QObject):
                 #self.driver.find_element(
                 #    By.NAME, "email"
                 #).send_keys(CONFIG["channel_login"]["user_id"])
+                # self.driver.find_element(
+                #     By.NAME, "loginKey"
+                # ).send_keys(CONFIG["channel_login"]["user_id"])
+                ## 20230722 change id
                 self.driver.find_element(
-                    By.NAME, "loginKey"
+                    By.ID, "loginId--1"
                 ).send_keys(CONFIG["channel_login"]["user_id"])
                 # 7 | type | id=id_password_3 |
                 #self.driver.find_element(
@@ -141,8 +145,12 @@ class ChannelMessageSending(QObject):
                 #self.driver.find_element(
                 #    By.ID, "input-password"
                 #).send_keys(CONFIG["channel_login"]["user_pw"])
+                # self.driver.find_element(
+                #     By.NAME, "password"
+                # ).send_keys(CONFIG["channel_login"]["user_pw"])
+                ## 20230722 change id
                 self.driver.find_element(
-                    By.NAME, "password"
+                    By.ID, "password--2"
                 ).send_keys(CONFIG["channel_login"]["user_pw"])
                 # 6 | sendKeys | id=id_password_3 | ${KEY_ENTER}
                 #self.driver.find_element(
@@ -151,8 +159,13 @@ class ChannelMessageSending(QObject):
                 #self.driver.find_element(
                 #    By.ID, "input-password"
                 #).send_keys(Keys.ENTER)
+                ## 20230722 change id
+                # self.driver.find_element(
+                #     By.NAME, "password"
+                # ).send_keys(Keys.ENTER)
+                ## 20230722 change id
                 self.driver.find_element(
-                    By.NAME, "password"
+                    By.ID, "password--2"
                 ).send_keys(Keys.ENTER)
             except selenium.common.exceptions.ElementClickInterceptedException as ecie:
                 DEBUG(f"skip login error, have to login manually [{ecie}]")
