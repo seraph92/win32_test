@@ -11,7 +11,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 
-import chromedriver_autoinstaller
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+# import chromedriver_autoinstaller
 import os
 
 from DBM import DBMgr
@@ -68,21 +71,30 @@ class ChannelMessageSending(QObject):
         options.add_experimental_option("excludeSwitches", ["enable-logging"])
         # options.headless = True
 
-        chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
-        driver_path = f'./{chrome_ver}/chromedriver.exe'
+        # for old Chrome 115<
+        # chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
+        # driver_path = f'./{chrome_ver}/chromedriver.exe'
+        # driver_path = f'./driver/chromedriver.exe'
 
-        if os.path.exists(driver_path):
-            INFO(f"chrom driver is insatlled: {driver_path}")
-        else:
-            INFO(f"install the chrome driver(ver: {chrome_ver})")
-            chromedriver_autoinstaller.install(True)
+        # if os.path.exists(driver_path):
+        #     INFO(f"chrom driver is insatlled: {driver_path}")
+        # else:
+        #     #INFO(f"install the chrome driver(ver: {chrome_ver})")
+        #     pass
+        #     # chromedriver_autoinstaller.install(True)
 
-        INFO(f"driver path = [{driver_path}]")
+        # INFO(f"driver path = [{driver_path}]")
 
         self.driver = webdriver.Chrome(
             #executable_path="./driver/chromedriver.exe", options=options
-            executable_path=driver_path, options=options
+            service=Service(ChromeDriverManager().install()), options=options
         )
+
+        # for old version ( Chrome 115< )
+        # self.driver = webdriver.Chrome(
+        #     #executable_path="./driver/chromedriver.exe", options=options
+        #     executable_path=driver_path, options=options
+        # )
 
         # if 'browserVersion' in self.driver.capabilities:
         #     INFO(f"chrome browserVersion: [{self.driver.capabilities['browserVersion']}]")
