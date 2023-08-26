@@ -1,5 +1,5 @@
 from PyQt5 import QtGui
-from PyQt5 import QtCore
+#from PyQt5 import QtCore
 from pandas.core.frame import DataFrame
 import numpy as np
 from ChannelMsgAuto import ChannelMessageSending
