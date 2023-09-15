@@ -8,6 +8,7 @@ import ctypes
 import win32clipboard
 import six
 from typing import Pattern
+from BKLOG import *
 
 
 class WindowsObject:
@@ -27,7 +28,11 @@ class WindowsObject:
 
     def __EnumWindowsHandler(self, hwnd, find_text):
         wintext = win32gui.GetWindowText(hwnd)
+        #INFO(f"*********************************")
+        #INFO(f"wintext: [{wintext}]")
+        #INFO(f"*********************************")
         if self.pattern.match(wintext):
+            INFO(f"matched wintext: [{wintext}]")
             obj: dict = {}
             obj["handle"] = hwnd
             obj["text"] = wintext
@@ -126,9 +131,8 @@ if __name__ == "__main__":
     # w = WindowsObject("KRC-EC100")
     #w = WindowsObject("워드패드")
 
-    w = WindowsObject(
-        r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]"
-    )
+    #w = WindowsObject( r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]")
+    w = WindowsObject( r"KRC-EC100 * v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ * : .* - \[.*\]")
 
     print(f"w={w.win_objs}")
     print("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
