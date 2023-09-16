@@ -29,9 +29,17 @@ class WindowsObject:
     def __EnumWindowsHandler(self, hwnd, find_text):
         wintext = win32gui.GetWindowText(hwnd)
         #INFO(f"*********************************")
-        #INFO(f"wintext: [{wintext}]")
+        if wintext.find("KRC-EC100") > -1:
+            INFO(f"wintext: [{wintext}]")
+            #pattern: Pattern = re.compile(r"KRC-EC100 * v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ * : .* - \[.*\]")
+            # pattern: Pattern = re.compile(r"KRC-EC100 에이전트*")
+            # if (pattern.match(wintext)):
+            #     INFO("*******************")
+            #     INFO("founded!!")
+            #     INFO("*******************")
         #INFO(f"*********************************")
-        if self.pattern.match(wintext):
+        #if self.pattern.match(wintext+""):
+        if self.pattern.match(str(wintext)):
             INFO(f"matched wintext: [{wintext}]")
             obj: dict = {}
             obj["handle"] = hwnd
@@ -59,6 +67,9 @@ class ChildObject:
         ctrl_id = win32gui.GetDlgCtrlID(hwnd)
         win_text = win32gui.GetWindowText(hwnd)
         wnd_clas = win32gui.GetClassName(hwnd)
+
+        #INFO(f"ctrl_id = [{ctrl_id}], win_text = [{win_text}], wind_clas = [{wnd_clas}]")
+        INFO(f"ctrl_id = [{ctrl_id:x}], win_text = [{win_text}], wind_clas = [{wnd_clas}]")
 
         if self.match_class:
             if self.pattern.match(wnd_clas):
@@ -132,7 +143,9 @@ if __name__ == "__main__":
     #w = WindowsObject("워드패드")
 
     #w = WindowsObject( r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]")
-    w = WindowsObject( r"KRC-EC100 * v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ * : .* - \[.*\]")
+    #w = WindowsObject( r"KRC-EC100 * v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ * : .* - \[.*\]")
+    w = WindowsObject( r"KRC-EC100 에이전트*")
+
 
     print(f"w={w.win_objs}")
     print("w.handle,text=[%08X][%s]" % (w.obj["handle"], w.obj["text"]))
@@ -143,7 +156,8 @@ if __name__ == "__main__":
 
     # children = ChildObject(parent, 'WindowsForms10.RichEdit20W.app.0.1bb715_r7_ad1')
     children = ChildObject(parent, class_name)
-    print(f"children={children.win_objs}")
+    # print(f"children={children.win_objs}")
+    INFO(f"children={children.win_objs}")
 
     for child in children.win_objs:
         hwnd = child["handle"]

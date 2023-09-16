@@ -40,8 +40,11 @@ class LogCaptureWin32Worker(QObject):
         try:
             if GLOBAL_WIN == "AGENT":
                 # self.w = WindowsObject("KRC-EC100 에이전트 v1.2.5.0 학원번호 : test - [  ]")
+                # self.w = WindowsObject(
+                #     r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]"
+                # )
                 self.w = WindowsObject(
-                    r"KRC-EC100 에이전트 v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ 학원번호 : .* - \[.*\]"
+                    r"KRC-EC100 에이전트*"
                 )
             else:
                 self.w = WindowsObject(r".*sample.txt - Windows 메모장")
