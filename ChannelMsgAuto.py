@@ -204,13 +204,22 @@ class ChannelMessageSending(QObject):
             #     )
             # )
             # element.click()
+            # element = WebDriverWait(self.driver, 10).until(
+            #     EC.presence_of_element_located(
+            #         (
+            #             #By.XPATH,
+            #             #"//span[contains(.,\'리드101송도학원\')]",
+            #             By.CSS_SELECTOR,
+            #             ".name_profile",
+            #         )
+            #     )
+            # )
+            # self.driver.find_element(By.XPATH, "//button[@type=\'submit\']").click()
             element = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located(
                     (
-                        #By.XPATH,
-                        #"//span[contains(.,\'리드101송도학원\')]",
-                        By.CSS_SELECTOR,
-                        ".name_profile",
+                        By.XPATH,
+                        "//button[@type=\'submit\']",
                     )
                 )
             )
