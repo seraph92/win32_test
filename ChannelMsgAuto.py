@@ -128,49 +128,20 @@ class ChannelMessageSending(QObject):
 
         dashboard_pattern = re.compile(r"^https://business.kakao.com/dashboard")
         login_pattern = re.compile(r"^https://accounts.kakao.com/login")
+        bizprofile_pattern = re.compile(r"^https://business.kakao.com/biz-profile")
 
         if login_pattern.match(self.driver.current_url):
             # 로그인 처리 필요
             INFO(f"로그인 필요!!")
             try:
-                # 4 | type | id=id_email_2 |
-                #self.driver.find_element(
-                #    By.XPATH, "//input[@id='id_email_2']"
-                #).send_keys(CONFIG["channel_login"]["user_id"])
-                #self.driver.find_element(
-                #    By.ID, "input-loginKey"
-                #).send_keys(CONFIG["channel_login"]["user_id"])
-                #self.driver.find_element(
-                #    By.NAME, "email"
-                #).send_keys(CONFIG["channel_login"]["user_id"])
-                # self.driver.find_element(
-                #     By.NAME, "loginKey"
-                # ).send_keys(CONFIG["channel_login"]["user_id"])
                 ## 20230722 change id
                 self.driver.find_element(
                     By.ID, "loginId--1"
                 ).send_keys(CONFIG["channel_login"]["user_id"])
-                # 7 | type | id=id_password_3 |
-                #self.driver.find_element(
-                #    By.XPATH, "//input[@id='id_password_3']"
-                #).send_keys(CONFIG["channel_login"]["user_pw"])
-                #self.driver.find_element(
-                #    By.ID, "input-password"
-                #).send_keys(CONFIG["channel_login"]["user_pw"])
-                # self.driver.find_element(
-                #     By.NAME, "password"
-                # ).send_keys(CONFIG["channel_login"]["user_pw"])
                 ## 20230722 change id
                 self.driver.find_element(
                     By.ID, "password--2"
                 ).send_keys(CONFIG["channel_login"]["user_pw"])
-                # 6 | sendKeys | id=id_password_3 | ${KEY_ENTER}
-                #self.driver.find_element(
-                #    By.XPATH, "//input[@id='id_password_3']"
-                #).send_keys(Keys.ENTER)
-                #self.driver.find_element(
-                #    By.ID, "input-password"
-                #).send_keys(Keys.ENTER)
                 ## 20230722 change id
                 # self.driver.find_element(
                 #     By.NAME, "password"
@@ -215,22 +186,44 @@ class ChannelMessageSending(QObject):
             #     )
             # )
             # self.driver.find_element(By.XPATH, "//button[@type=\'submit\']").click()
-            element = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
-                    (
-                        By.XPATH,
-                        "//button[@type=\'submit\']",
-                    )
-                )
-            )
+            # element = WebDriverWait(self.driver, 10).until(
+            #     EC.presence_of_element_located(
+            #         (
+            #             By.XPATH,
+            #             "//button[@type=\'submit\']",
+            #         )
+            #     )
+            # )
+            while True:
+                if bizprofile_pattern.match(self.driver.current_url):
+                    # biz_profile 대기
+                    # time.sleep(1)
+                    break
+
+                INFO(f"Profile 진입 대기!!")
+                time.sleep(5)
+
+            INFO(f"Biz Profile로 이동")
+
+            # element = WebDriverWait(self.driver, 30).until(
+            #     EC.presence_of_element_located(
+            #         (
+            #             #By.XPATH,
+            #             #"//span[contains(.,\'리드101송도학원\')]",
+            #             By.CSS_SELECTOR,
+            #             ".name_profile",
+            #         )
+            #     )
+            # )
+            # self.driver.execute_script("arguments[0].click();", element)
+
             #element.click()
-            self.driver.execute_script("arguments[0].click();", element)
  
             #self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
             #time.sleep(5)
             #self.driver.find_element(By.XPATH, "//div/a/span").click()
             #self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
-            INFO(f"대쉬보드로 이동 click")
+            INFO(f"Biz Profile로 이동")
 
         # 20211227 변경
         elif dashboard_pattern.match(self.driver.current_url):
@@ -243,46 +236,50 @@ class ChannelMessageSending(QObject):
             #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
             self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
 
-
-        # if dashboard_pattern.match(self.driver.current_url):
-        #     # 이미 로그인 되어 있음
-        #     # 3 | click | css=.tit_invite |
-        #     element = WebDriverWait(self.driver, 10).until(
-        #         EC.presence_of_element_located(
-        #             (
-        #                 By.CSS_SELECTOR,
-        #                 ".cont_thumb",
-        #             )
-        #         )
-        #     )
-        #     element.click()
-    
-        # else:
-        #     # 3 | click | css=.tit_invite |
-        #     element = WebDriverWait(self.driver, 10).until(
-        #         EC.presence_of_element_located(
-        #             (
-        #                 By.CSS_SELECTOR,
-        #                 ".cont_thumb",
-        #             )
-        #         )
-        #     )
-        #     element.click()
- 
-        # 4 | click | xpath=//div[@id='mFeature']/div/div[2]/ul/li[3]/a |
-        #self.driver.find_element(
-        #    By.XPATH, "//div[@id='mFeature']/div/div[2]/ul/li[3]/a"
-        #).click()
-        #20211108 변경되었음
-        INFO(f"1:1채팅")
-        element = WebDriverWait(self.driver, 10).until(
+        INFO(f"Biz Profile Read101클릭")
+        element = WebDriverWait(self.driver, 30).until(
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a",
+                    "//a[contains(text(),'리드101송도학원')]"
+                    #By.LINK_TEXT, 
+                    #"리드101송도학원"
                 )
             )
         )
+        #element.click()
+        self.vars["window_handles"] = self.driver.window_handles
+        self.driver.execute_script("arguments[0].click();", element)
+        INFO(f"Read101 클릭!!")
+
+        # 별도창 대기
+        self.vars["win5655"] = self.wait_for_window(2000)
+
+        # Handle 변경
+        INFO(f"새로운 창으로 핸들 변경")
+        self.driver.switch_to.window(self.vars["win5655"])
+
+
+        #20211108 변경되었음
+        INFO(f"1:1채팅")
+        # element = WebDriverWait(self.driver, 30).until(
+        #     EC.presence_of_element_located(
+        #         (
+        #             By.XPATH,
+        #             "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a",
+        #         )
+        #     )
+        # )
+        # 20231021 변경
+        element = WebDriverWait(self.driver, 30).until(
+            EC.presence_of_element_located(
+                (
+                    By.LINK_TEXT, 
+                    "1:1채팅"
+                )
+            )
+        )
+ 
         #element.click()
         self.driver.execute_script("arguments[0].click();", element)
         INFO(f"1:1채팅 클릭!!")

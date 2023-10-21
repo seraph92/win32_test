@@ -1,63 +1,464 @@
-2023-10-20 21:59:02,077 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB340D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB341F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB343A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB345E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB348B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB349D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34D30>}}]
-2023-10-20 21:59:02,116 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB340D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB341F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB343A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB345E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB348B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB349D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001252FB34CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001252FB34D30>}}]
-2023-10-20 21:59:02,160 - root - ERROR - [__getInstance:23] instance 없음  th:[13676]
-2023-10-20 21:59:02,180 - root - INFO - [instance:61] instance 추가 [13676]
-2023-10-20 21:59:02,328 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2023-10-20 21:59:02,339 - WDM - INFO - ====== WebDriver manager ======
-2023-10-20 21:59:08,831 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 21:59:08,851 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 21:59:08,852 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
-2023-10-20 21:59:08,854 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 21:59:09,035 - WDM - INFO - WebDriver version 118.0.5993.70 selected
-2023-10-20 21:59:09,037 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 21:59:09,042 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 21:59:09,288 - WDM - INFO - Driver downloading response is 200
-2023-10-20 21:59:09,910 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 21:59:10,216 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
-2023-10-20 21:59:15,121 - root - INFO - [<module>:1922] current thread id :[13676]
-2023-10-20 21:59:20,877 - root - INFO - [run:134] 로그인 필요!!
-2023-10-20 21:59:21,765 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 21:59:26,792 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 21:59:31,819 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 21:59:36,952 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 21:59:40,979 - root - INFO - [close:1146] ViewModel Closing!
-2023-10-20 21:59:40,984 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
-2023-10-20 22:00:13,000 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4520D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F4521F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4523A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4525E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F4528B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4529D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452D30>}}]
-2023-10-20 22:00:13,005 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4520D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F4521F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4523A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4525E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F4528B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F4529D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000024B3F452CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000024B3F452D30>}}]
-2023-10-20 22:00:13,010 - root - ERROR - [__getInstance:23] instance 없음  th:[18552]
-2023-10-20 22:00:13,012 - root - INFO - [instance:61] instance 추가 [18552]
-2023-10-20 22:00:13,059 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2023-10-20 22:00:13,065 - WDM - INFO - ====== WebDriver manager ======
-2023-10-20 22:00:15,716 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:00:15,729 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:00:15,730 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
-2023-10-20 22:00:15,731 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:00:15,825 - WDM - INFO - WebDriver version 118.0.5993.70 selected
-2023-10-20 22:00:15,828 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 22:00:15,830 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 22:00:16,015 - WDM - INFO - Driver downloading response is 200
-2023-10-20 22:00:16,493 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:00:16,532 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
-2023-10-20 22:00:18,499 - root - INFO - [<module>:1922] current thread id :[18552]
-2023-10-20 22:21:46,962 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3D30>}}]
-2023-10-20 22:21:46,967 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002603BFD3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002603BFD3D30>}}]
-2023-10-20 22:21:46,972 - root - ERROR - [__getInstance:23] instance 없음  th:[21992]
-2023-10-20 22:21:46,974 - root - INFO - [instance:61] instance 추가 [21992]
-2023-10-20 22:21:47,011 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
-2023-10-20 22:21:47,013 - WDM - INFO - ====== WebDriver manager ======
-2023-10-20 22:21:49,484 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:21:49,493 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:21:49,495 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
-2023-10-20 22:21:49,496 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:21:49,593 - WDM - INFO - WebDriver version 118.0.5993.70 selected
-2023-10-20 22:21:49,595 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 22:21:49,596 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
-2023-10-20 22:21:49,791 - WDM - INFO - Driver downloading response is 200
-2023-10-20 22:21:50,292 - WDM - INFO - Get LATEST chromedriver version for google-chrome
-2023-10-20 22:21:50,492 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
-2023-10-20 22:21:53,564 - root - INFO - [<module>:1922] current thread id :[21992]
-2023-10-20 22:21:59,670 - root - INFO - [run:134] 로그인 필요!!
-2023-10-20 22:22:00,126 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 22:22:05,148 - root - INFO - [run:191] 로그인 대기!!
-2023-10-20 22:22:06,186 - root - INFO - [close:1146] ViewModel Closing!
-2023-10-20 22:22:06,187 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2023-10-21 11:29:33,741 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC760D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC761F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC763A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC765E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC768B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC769D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76D30>}}]
+2023-10-21 11:29:33,746 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC760D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC761F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC763A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC765E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC768B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC769D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002BF9FC76CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002BF9FC76D30>}}]
+2023-10-21 11:29:33,748 - root - ERROR - [__getInstance:23] instance 없음  th:[25592]
+2023-10-21 11:29:33,753 - root - INFO - [instance:61] instance 추가 [25592]
+2023-10-21 11:29:33,778 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:29:33,780 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:29:35,762 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:29:35,770 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:29:35,771 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:29:35,772 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:29:35,878 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:29:35,880 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:29:35,880 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:29:36,029 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:29:36,506 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:29:36,535 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 11:29:58,829 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2D30>}}]
+2023-10-21 11:29:58,832 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000199CF1E2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000199CF1E2D30>}}]
+2023-10-21 11:29:58,835 - root - ERROR - [__getInstance:23] instance 없음  th:[21784]
+2023-10-21 11:29:58,837 - root - INFO - [instance:61] instance 추가 [21784]
+2023-10-21 11:29:58,860 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:29:58,861 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:30:00,486 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:00,487 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:00,488 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:30:00,488 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:00,550 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:30:00,551 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:30:00,552 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:30:00,700 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:30:01,242 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:01,268 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 11:30:24,580 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2D30>}}]
+2023-10-21 11:30:24,583 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E64F6C2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E64F6C2D30>}}]
+2023-10-21 11:30:24,585 - root - ERROR - [__getInstance:23] instance 없음  th:[13336]
+2023-10-21 11:30:24,587 - root - INFO - [instance:61] instance 추가 [13336]
+2023-10-21 11:30:24,611 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:30:24,612 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:30:26,216 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:26,217 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:26,218 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:30:26,218 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:26,292 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:30:26,293 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:30:26,295 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:30:26,451 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:30:26,954 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:30:26,981 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 11:31:32,956 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1520D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A1521F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1523A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1525E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A1528B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1529D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152D30>}}]
+2023-10-21 11:31:32,960 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1520D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A1521F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1523A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1525E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A1528B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A1529D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001E37A152CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001E37A152D30>}}]
+2023-10-21 11:31:32,972 - root - ERROR - [__getInstance:23] instance 없음  th:[25496]
+2023-10-21 11:31:32,979 - root - INFO - [instance:61] instance 추가 [25496]
+2023-10-21 11:31:33,028 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:31:33,033 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:31:36,601 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:31:36,604 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:31:36,605 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:31:36,607 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:31:36,713 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:31:36,716 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:31:36,718 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:31:36,886 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:31:37,430 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:31:37,655 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 11:31:41,417 - root - INFO - [<module>:1922] current thread id :[25496]
+2023-10-21 11:31:44,794 - root - INFO - [run:134] 로그인 필요!!
+2023-10-21 11:31:45,304 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:31:50,327 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:31:55,346 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:00,358 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:05,379 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:10,388 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:15,508 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:20,523 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:25,538 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:30,564 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:35,579 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:40,588 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:45,613 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:50,635 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:32:55,647 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:00,663 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:05,676 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:10,692 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:15,701 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:20,722 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:25,736 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:30,752 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:35,771 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:40,781 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:45,793 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:50,813 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:33:55,825 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:00,843 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:05,856 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:10,863 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:15,872 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:20,886 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:25,901 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:30,911 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:35,930 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:40,938 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:45,960 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:50,978 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:34:55,987 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:00,996 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:06,008 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:11,016 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:16,025 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:21,038 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:26,047 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:31,152 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:44,107 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2D30>}}]
+2023-10-21 11:35:44,110 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002F2FACF2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002F2FACF2D30>}}]
+2023-10-21 11:35:44,113 - root - ERROR - [__getInstance:23] instance 없음  th:[24880]
+2023-10-21 11:35:44,114 - root - INFO - [instance:61] instance 추가 [24880]
+2023-10-21 11:35:44,138 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:35:44,138 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:35:46,033 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:35:46,041 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:35:46,042 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:35:46,043 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:35:46,104 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:35:46,106 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:35:46,107 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:35:46,257 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:35:46,765 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:35:46,799 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 11:35:48,523 - root - INFO - [<module>:1922] current thread id :[24880]
+2023-10-21 11:35:52,182 - root - INFO - [run:134] 로그인 필요!!
+2023-10-21 11:35:52,567 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:35:57,579 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:02,598 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:07,611 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:12,634 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:17,645 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:22,655 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:36:27,894 - root - INFO - [run:164] 대쉬보드로 이동
+2023-10-21 11:48:34,507 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3D30>}}]
+2023-10-21 11:48:34,510 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001BD181E3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001BD181E3D30>}}]
+2023-10-21 11:48:34,514 - root - ERROR - [__getInstance:23] instance 없음  th:[22272]
+2023-10-21 11:48:34,516 - root - INFO - [instance:61] instance 추가 [22272]
+2023-10-21 11:48:34,535 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 11:48:34,537 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 11:48:36,444 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:48:36,452 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:48:36,454 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 11:48:36,454 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:48:36,529 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 11:48:36,530 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:48:36,531 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 11:48:36,688 - WDM - INFO - Driver downloading response is 200
+2023-10-21 11:48:37,230 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 11:48:37,371 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 11:48:39,223 - root - INFO - [<module>:1922] current thread id :[22272]
+2023-10-21 11:48:41,402 - root - INFO - [run:134] 로그인 필요!!
+2023-10-21 11:48:41,745 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:48:46,755 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:48:51,769 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:48:56,782 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:01,797 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:06,812 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:11,828 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:16,840 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:21,856 - root - INFO - [run:161] 로그인 대기!!
+2023-10-21 11:49:26,873 - root - INFO - [run:164] 대쉬보드로 이동
+2023-10-21 12:35:51,197 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3D30>}}]
+2023-10-21 12:35:51,200 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000026F28EF3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000026F28EF3D30>}}]
+2023-10-21 12:35:51,203 - root - ERROR - [__getInstance:23] instance 없음  th:[18948]
+2023-10-21 12:35:51,204 - root - INFO - [instance:61] instance 추가 [18948]
+2023-10-21 12:35:51,229 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 12:35:51,231 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 12:35:53,227 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:35:53,229 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:35:53,230 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 12:35:53,231 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:35:53,506 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 12:35:53,508 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:35:53,509 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:35:53,725 - WDM - INFO - Driver downloading response is 200
+2023-10-21 12:35:54,220 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:35:54,247 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 12:36:07,465 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05920D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B05921F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05923A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05925E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B05928B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05929D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592D30>}}]
+2023-10-21 12:36:07,468 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05920D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B05921F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05923A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05925E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B05928B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B05929D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223B0592CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223B0592D30>}}]
+2023-10-21 12:36:07,472 - root - ERROR - [__getInstance:23] instance 없음  th:[15708]
+2023-10-21 12:36:07,474 - root - INFO - [instance:61] instance 추가 [15708]
+2023-10-21 12:36:07,496 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 12:36:07,498 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 12:36:09,442 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:09,443 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:09,445 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 12:36:09,446 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:09,522 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 12:36:09,524 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:36:09,525 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:36:09,672 - WDM - INFO - Driver downloading response is 200
+2023-10-21 12:36:10,132 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:10,164 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 12:36:48,809 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D620D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D621F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D623A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D625E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D628B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D629D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62D30>}}]
+2023-10-21 12:36:48,819 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D620D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D621F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D623A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D625E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D628B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D629D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000027435D62CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000027435D62D30>}}]
+2023-10-21 12:36:48,825 - root - ERROR - [__getInstance:23] instance 없음  th:[25636]
+2023-10-21 12:36:48,832 - root - INFO - [instance:61] instance 추가 [25636]
+2023-10-21 12:36:48,885 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 12:36:48,888 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 12:36:51,642 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:51,643 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:51,645 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 12:36:51,646 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:51,761 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 12:36:51,764 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:36:51,766 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:36:51,937 - WDM - INFO - Driver downloading response is 200
+2023-10-21 12:36:52,479 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:36:52,732 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 12:36:56,012 - root - INFO - [<module>:1922] current thread id :[25636]
+2023-10-21 12:36:59,074 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 12:36:59,620 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:04,631 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:09,645 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:14,663 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:19,677 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:24,689 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:29,703 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:37:35,416 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 12:37:35,468 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:37:40,477 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:37:45,488 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:37:50,504 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 12:37:50,505 - root - INFO - [run:226] 대쉬보드로 이동 click
+2023-10-21 12:37:50,505 - root - INFO - [run:270] 1:1채팅
+2023-10-21 12:37:50,651 - root - INFO - [run:281] 1:1채팅 클릭!!
+2023-10-21 12:37:50,652 - root - INFO - [run:287] 채팅목록
+2023-10-21 12:39:16,616 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5720D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED5721F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5723A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5725E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED5728B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5729D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572D30>}}]
+2023-10-21 12:39:16,619 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5720D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED5721F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5723A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5725E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED5728B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED5729D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000283ED572CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000283ED572D30>}}]
+2023-10-21 12:39:16,622 - root - ERROR - [__getInstance:23] instance 없음  th:[15572]
+2023-10-21 12:39:16,624 - root - INFO - [instance:61] instance 추가 [15572]
+2023-10-21 12:39:16,645 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 12:39:16,647 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 12:39:18,287 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:39:18,290 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:39:18,291 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 12:39:18,291 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:39:18,360 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 12:39:18,361 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:39:18,362 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:39:18,504 - WDM - INFO - Driver downloading response is 200
+2023-10-21 12:39:18,968 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:39:19,001 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 12:39:20,328 - root - INFO - [<module>:1922] current thread id :[15572]
+2023-10-21 12:39:22,529 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 12:39:23,087 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:39:28,103 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:39:33,119 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:40:29,170 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2D30>}}]
+2023-10-21 12:40:29,172 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF20D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF21F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF23A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF25E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF28B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF29D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000242E1FF2CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000242E1FF2D30>}}]
+2023-10-21 12:40:29,174 - root - ERROR - [__getInstance:23] instance 없음  th:[23544]
+2023-10-21 12:40:29,176 - root - INFO - [instance:61] instance 추가 [23544]
+2023-10-21 12:40:29,203 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 12:40:29,204 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 12:40:30,824 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:40:30,827 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:40:30,828 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 12:40:30,829 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:40:30,895 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 12:40:30,897 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:40:30,898 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 12:40:31,035 - WDM - INFO - Driver downloading response is 200
+2023-10-21 12:40:31,469 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 12:40:31,617 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 12:40:33,356 - root - INFO - [<module>:1922] current thread id :[23544]
+2023-10-21 12:40:35,449 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 12:40:35,814 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:40:40,833 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:40:45,845 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:40:50,860 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 12:40:55,903 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 12:40:55,919 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:41:00,932 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:41:05,942 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 12:41:10,958 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 12:41:10,959 - root - INFO - [run:226] 대쉬보드로 이동 click
+2023-10-21 12:41:10,959 - root - INFO - [run:270] 1:1채팅
+2023-10-21 12:41:11,110 - root - INFO - [run:281] 1:1채팅 클릭!!
+2023-10-21 12:41:11,111 - root - INFO - [run:287] 채팅목록
+2023-10-21 13:38:15,139 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3D30>}}]
+2023-10-21 13:38:15,141 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E30D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E31F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E33A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E35E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E38B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E39D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000021DE35E3CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000021DE35E3D30>}}]
+2023-10-21 13:38:15,144 - root - ERROR - [__getInstance:23] instance 없음  th:[24264]
+2023-10-21 13:38:15,146 - root - INFO - [instance:61] instance 추가 [24264]
+2023-10-21 13:38:15,165 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:38:15,166 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:38:16,909 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:16,918 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:16,919 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:38:16,920 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:17,005 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:38:17,007 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:38:17,008 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:38:17,172 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:38:17,669 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:17,696 - root - ERROR - [<module>:1925] [WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver-win32\\chromedriver.exe' -> 'C:\\Users\\serap\\.wdm\\drivers\\chromedriver\\win64\\118.0.5993.89\\chromedriver.exe'
+2023-10-21 13:38:41,036 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F920D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F921F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F923A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F925E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F928B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F929D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92D30>}}]
+2023-10-21 13:38:41,042 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F920D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F921F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F923A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F925E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F928B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F929D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000279F8F92CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000279F8F92D30>}}]
+2023-10-21 13:38:41,048 - root - ERROR - [__getInstance:23] instance 없음  th:[25664]
+2023-10-21 13:38:41,053 - root - INFO - [instance:61] instance 추가 [25664]
+2023-10-21 13:38:41,118 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:38:41,122 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:38:43,980 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:43,982 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:43,984 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:38:43,985 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:44,096 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:38:44,098 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:38:44,099 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:38:44,278 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:38:44,858 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:38:45,088 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 13:38:48,219 - root - INFO - [<module>:1922] current thread id :[25664]
+2023-10-21 13:39:06,727 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1D30>}}]
+2023-10-21 13:39:06,729 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000001CB625B1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000001CB625B1D30>}}]
+2023-10-21 13:39:06,731 - root - ERROR - [__getInstance:23] instance 없음  th:[13084]
+2023-10-21 13:39:06,732 - root - INFO - [instance:61] instance 추가 [13084]
+2023-10-21 13:39:06,757 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:39:06,758 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:39:08,412 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:39:08,415 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:39:08,416 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:39:08,417 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:39:08,478 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:39:08,480 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:39:08,480 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:39:08,630 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:39:09,109 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:39:09,141 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 13:39:10,496 - root - INFO - [<module>:1922] current thread id :[13084]
+2023-10-21 13:39:12,506 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 13:39:12,842 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:39:17,851 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:39:22,868 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:39:27,884 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 13:39:27,892 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:39:32,913 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:39:37,928 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:39:42,937 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 13:39:42,938 - root - INFO - [run:226] Biz Profile로 이동
+2023-10-21 13:39:42,938 - root - INFO - [run:239] Biz Profile Read101클릭
+2023-10-21 13:44:43,360 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1D30>}}]
+2023-10-21 13:44:43,367 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000137EABA1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000137EABA1D30>}}]
+2023-10-21 13:44:43,373 - root - ERROR - [__getInstance:23] instance 없음  th:[16128]
+2023-10-21 13:44:43,375 - root - INFO - [instance:61] instance 추가 [16128]
+2023-10-21 13:44:43,457 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:44:43,459 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:44:46,257 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:44:46,260 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:44:46,262 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:44:46,264 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:44:46,375 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:44:46,378 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:44:46,380 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:44:46,560 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:44:47,065 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:44:47,283 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 13:44:50,396 - root - INFO - [<module>:1922] current thread id :[16128]
+2023-10-21 13:44:52,840 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 13:44:53,301 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:44:58,319 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:45:03,333 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:45:08,348 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 13:45:08,354 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:45:13,486 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:45:18,503 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 13:45:18,504 - root - INFO - [run:226] Biz Profile로 이동
+2023-10-21 13:45:18,504 - root - INFO - [run:239] Biz Profile Read101클릭
+2023-10-21 13:45:18,587 - root - INFO - [run:252] Read101 클릭!!
+2023-10-21 13:48:11,115 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1D30>}}]
+2023-10-21 13:48:11,119 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F10D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F11F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F13A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F15E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F18B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F19D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x00000223AD5F1CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x00000223AD5F1D30>}}]
+2023-10-21 13:48:11,124 - root - ERROR - [__getInstance:23] instance 없음  th:[19996]
+2023-10-21 13:48:11,129 - root - INFO - [instance:61] instance 추가 [19996]
+2023-10-21 13:48:11,189 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:48:11,191 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:48:13,737 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:48:13,740 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:48:13,741 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:48:13,741 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:48:13,823 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:48:13,826 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:48:13,827 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:48:13,986 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:48:14,509 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:48:14,675 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 13:48:16,954 - root - INFO - [<module>:1922] current thread id :[19996]
+2023-10-21 13:48:20,145 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 13:48:20,608 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:48:25,629 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:48:30,642 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:48:36,046 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 13:48:36,077 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:48:41,095 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:48:46,114 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 13:48:46,115 - root - INFO - [run:226] Biz Profile로 이동
+2023-10-21 13:48:46,115 - root - INFO - [run:239] Biz Profile Read101클릭
+2023-10-21 13:48:46,780 - root - INFO - [run:253] Read101 클릭!!
+2023-10-21 13:48:48,793 - root - INFO - [run:259] 새로운 창으로 핸들 변경
+2023-10-21 13:48:48,805 - root - INFO - [run:264] 1:1채팅
+2023-10-21 13:48:48,879 - root - INFO - [run:285] 1:1채팅 클릭!!
+2023-10-21 13:48:48,879 - root - INFO - [run:291] 채팅목록
+2023-10-21 13:49:44,476 - root - INFO - [close:1146] ViewModel Closing!
+2023-10-21 13:49:44,476 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2023-10-21 13:50:00,402 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F00D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F01F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F03A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F05E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F08B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F09D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0D30>}}]
+2023-10-21 13:50:00,405 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F00D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F01F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F03A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F05E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F08B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F09D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0A60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0AF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0C10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x000002ACAB4F0CA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x000002ACAB4F0D30>}}]
+2023-10-21 13:50:00,407 - root - ERROR - [__getInstance:23] instance 없음  th:[7688]
+2023-10-21 13:50:00,409 - root - INFO - [instance:61] instance 추가 [7688]
+2023-10-21 13:50:00,435 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 13:50:00,436 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 13:50:02,113 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:50:02,115 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:50:02,116 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 13:50:02,116 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:50:02,186 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 13:50:02,188 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:50:02,188 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 13:50:02,349 - WDM - INFO - Driver downloading response is 200
+2023-10-21 13:50:02,848 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 13:50:02,985 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 13:50:04,789 - root - INFO - [<module>:1922] current thread id :[7688]
+2023-10-21 13:50:08,291 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 13:50:08,632 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:50:13,640 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:50:18,653 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 13:50:23,737 - root - INFO - [run:165] 대쉬보드로 이동
+2023-10-21 13:50:23,855 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:50:28,873 - root - INFO - [run:203] Profile 진입 대기!!
+2023-10-21 13:50:33,887 - root - INFO - [run:206] Biz Profile로 이동
+2023-10-21 13:50:33,887 - root - INFO - [run:226] Biz Profile로 이동
+2023-10-21 13:50:33,888 - root - INFO - [run:239] Biz Profile Read101클릭
+2023-10-21 13:50:33,977 - root - INFO - [run:253] Read101 클릭!!
+2023-10-21 13:50:35,999 - root - INFO - [run:259] 새로운 창으로 핸들 변경
+2023-10-21 13:50:36,012 - root - INFO - [run:264] 1:1채팅
+2023-10-21 13:50:36,082 - root - INFO - [run:285] 1:1채팅 클릭!!
+2023-10-21 13:50:36,083 - root - INFO - [run:291] 채팅목록
+2023-10-21 13:51:30,546 - root - INFO - [close:1146] ViewModel Closing!
+2023-10-21 13:51:30,546 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
+2023-10-21 15:15:11,718 - root - INFO - [__init__:1816] weekly_columns = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF1F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF8B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF9D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFA60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CFAF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CFD30>}}]
+2023-10-21 15:15:11,722 - root - INFO - [__init__:1817] self.views['weekly_reserve'] = [{'mon': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF0D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF160>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF1F0>}, 'tue': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF310>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF3A0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF430>}, 'wed': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF550>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF5E0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF670>}, 'thu': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF790>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF820>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CF8B0>}, 'fri': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CF9D0>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFA60>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CFAF0>}, 'sat': {'date': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFC10>, 'week': <PyQt5.QtWidgets.QLineEdit object at 0x0000019B251CFCA0>, 'view': <PyQt5.QtWidgets.QTableView object at 0x0000019B251CFD30>}}]
+2023-10-21 15:15:11,727 - root - ERROR - [__getInstance:23] instance 없음  th:[27640]
+2023-10-21 15:15:11,728 - root - INFO - [instance:61] instance 추가 [27640]
+2023-10-21 15:15:11,752 - root - ERROR - [__init__:65] Log Capture 생성 오류 [Windows Object를 발견하지 못하였습니다.]
+2023-10-21 15:15:11,753 - WDM - INFO - ====== WebDriver manager ======
+2023-10-21 15:15:13,529 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 15:15:13,532 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 15:15:13,532 - WDM - INFO - There is no [win64] chromedriver "118.0.5993.89" for browser google-chrome "118.0.5993.89" in cache
+2023-10-21 15:15:13,533 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 15:15:13,602 - WDM - INFO - WebDriver version 118.0.5993.70 selected
+2023-10-21 15:15:13,604 - WDM - INFO - Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 15:15:13,605 - WDM - INFO - About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/118.0.5993.70/win32/chromedriver-win32.zip
+2023-10-21 15:15:13,764 - WDM - INFO - Driver downloading response is 200
+2023-10-21 15:15:14,244 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2023-10-21 15:15:14,389 - WDM - INFO - Driver has been saved in cache [C:\Users\serap\.wdm\drivers\chromedriver\win64\118.0.5993.89]
+2023-10-21 15:15:16,388 - root - INFO - [<module>:1922] current thread id :[27640]
+2023-10-21 15:15:20,110 - root - INFO - [run:135] 로그인 필요!!
+2023-10-21 15:15:20,521 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 15:15:25,536 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 15:15:30,546 - root - INFO - [run:162] 로그인 대기!!
+2023-10-21 15:15:32,075 - root - INFO - [close:1146] ViewModel Closing!
+2023-10-21 15:15:32,076 - root - ERROR - [close:1155] error = [wrapped C/C++ object of type QThread has been deleted]
