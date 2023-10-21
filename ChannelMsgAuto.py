@@ -274,8 +274,12 @@ class ChannelMessageSending(QObject):
         element = WebDriverWait(self.driver, 30).until(
             EC.presence_of_element_located(
                 (
-                    By.LINK_TEXT, 
-                    "1:1채팅"
+                    # By.LINK_TEXT, 
+                    # "1:1채팅"
+                    # By.XPATH, 
+                    # "//a[contains(.,'1:1채팅1')]"
+                    By.XPATH, 
+                    "//div/div/div[2]/ul/li[3]"
                 )
             )
         )
@@ -293,8 +297,10 @@ class ChannelMessageSending(QObject):
         element = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
                 (
-                    By.LINK_TEXT,
-                    "채팅 목록",
+                    # By.LINK_TEXT,
+                    # "채팅 목록",
+                    By.XPATH, 
+                    "//a[contains(@href, '/_RdKNT/chats')]"
                 )
             )
         )
