@@ -69,8 +69,12 @@ class LogCaptureWin32Worker(QObject):
 
     def run(self):
         self.running.emit()
+        #processing_pattern = re.compile(
+        #    r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{3,5}) 출입시간 : (?P<dtm2>.{19})\)"
+        #)
+
         processing_pattern = re.compile(
-            r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{3,5}) 출입시간 : (?P<dtm2>.{19})\)"
+            r"\[(?P<dtm>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})\] 출입 확인 \(이름: (?P<name>.*), 체온: (?P<temper>[0-9.]{2,5}) 출입시간 : (?P<dtm2>.{19})\)"
         )
 
         if self.loop_flag:
