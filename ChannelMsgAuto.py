@@ -85,10 +85,16 @@ class ChannelMessageSending(QObject):
 
         # INFO(f"driver path = [{driver_path}]")
 
-        self.driver = webdriver.Chrome(
-            #executable_path="./driver/chromedriver.exe", options=options
-            service=Service(ChromeDriverManager().install()), options=options
-        )
+        # 2024.08.02 ChromeDriverManager do abnormal behavior.
+        # self.driver = webdriver.Chrome(
+        #     #executable_path="./driver/chromedriver.exe", options=options
+        #     service=Service(ChromeDriverManager().install()), options=options
+        # )
+
+        # 2024.08.02 fix to correct path
+        driver_path = ChromeDriverManager().install()
+        correct_driver_path = os.path.join(os.path.dirname(driver_path), "chromedriver.exe")
+        self.driver = webdriver.Chrome(service=Service(executable_path=correct_driver_path), options=options)
 
         # for old version ( Chrome 115< )
         # self.driver = webdriver.Chrome(
@@ -381,5 +387,6 @@ if __name__ == "__main__":
         "message": "테스트 입니다.",
     }
 
-    w = ChannelMessageSending(user)
+    # w = ChannelMessageSending(user)
+    w = ChannelMessageSending()
     w.sendMessage()
