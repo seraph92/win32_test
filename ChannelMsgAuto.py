@@ -132,9 +132,12 @@ class ChannelMessageSending(QObject):
         # accounts.kakao.com/login
         DEBUG(f"url = [{self.driver.current_url}]")
 
-        dashboard_pattern = re.compile(r"^https://business.kakao.com/dashboard")
+        # dashboard_pattern = re.compile(r"^https://business.kakao.com/dashboard")
+        # 2024.08.14 Dashboard URL is changed!
+        dashboard_pattern = re.compile(r"^https://center-pf.kakao.com/_RdKNT/dashboard")
         login_pattern = re.compile(r"^https://accounts.kakao.com/login")
-        bizprofile_pattern = re.compile(r"^https://business.kakao.com/biz-profile")
+        # bizprofile_pattern = re.compile(r"^https://business.kakao.com/biz-profile")
+        bizprofile_pattern = re.compile(r"^https://center-pf.kakao.com/profiles")
 
         if login_pattern.match(self.driver.current_url):
             # 로그인 처리 필요
@@ -160,7 +163,9 @@ class ChannelMessageSending(QObject):
                 DEBUG(f"skip login error, have to login manually [{ecie}]")
 
             while True:
-                if dashboard_pattern.match(self.driver.current_url):
+                INFO(f"self.driver.current_url = {self.driver.current_url}")
+                # if dashboard_pattern.match(self.driver.current_url):
+                if bizprofile_pattern.match(self.driver.current_url):
                     # 로그인 되었음
                     # time.sleep(1)
                     break
@@ -200,6 +205,9 @@ class ChannelMessageSending(QObject):
             #         )
             #     )
             # )
+
+            # 2024.08.14 bizprofile is disappeared!
+            # 2024.08.14 profile is appeared!
             while True:
                 if bizprofile_pattern.match(self.driver.current_url):
                     # biz_profile 대기
@@ -247,23 +255,30 @@ class ChannelMessageSending(QObject):
             EC.presence_of_element_located(
                 (
                     By.XPATH,
-                    "//a[contains(text(),'리드101송도학원')]"
+                    "//strong[contains(.,'리드101송도학원')]"
+                    # By.XPATH,
+                    # "//a[contains(text(),'리드101송도학원')]"
                     #By.LINK_TEXT, 
                     #"리드101송도학원"
                 )
             )
         )
+        INFO(f"Biz Profile Read101 찾았음")
         #element.click()
+
+        #2024.08.14 새로운 창 안뜸.
         self.vars["window_handles"] = self.driver.window_handles
         self.driver.execute_script("arguments[0].click();", element)
         INFO(f"Read101 클릭!!")
 
         # 별도창 대기
-        self.vars["win5655"] = self.wait_for_window(2000)
+        #2024.08.14 새로운 창 안뜸.
+        # self.vars["win5655"] = self.wait_for_window(2000)
 
         # Handle 변경
-        INFO(f"새로운 창으로 핸들 변경")
-        self.driver.switch_to.window(self.vars["win5655"])
+        #2024.08.14 새로운 창 안뜸.
+        # INFO(f"새로운 창으로 핸들 변경")
+        # self.driver.switch_to.window(self.vars["win5655"])
 
 
         #20211108 변경되었음
@@ -290,6 +305,7 @@ class ChannelMessageSending(QObject):
             )
         )
  
+        INFO(f"1:1채팅 찾았음")
         #element.click()
         self.driver.execute_script("arguments[0].click();", element)
         INFO(f"1:1채팅 클릭!!")
@@ -303,13 +319,16 @@ class ChannelMessageSending(QObject):
         element = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located(
                 (
+                    By.XPATH, 
+                    "//a[contains(.,'채팅 목록')]"
                     # By.LINK_TEXT,
                     # "채팅 목록",
-                    By.XPATH, 
-                    "//a[contains(@href, '/_RdKNT/chats')]"
+                    # By.XPATH, 
+                    # "//a[contains(@href, '/_RdKNT/chats')]"
                 )
             )
         )
+        INFO(f"채팅목록 찾았음")
         self.driver.execute_script("arguments[0].click();", element)
 
         while self.loop_flag:
