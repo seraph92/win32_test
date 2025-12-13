@@ -124,7 +124,8 @@ class ChannelMessageSending(QObject):
     def run(self):
         self.running.emit()
         # 1 | open | / |
-        self.driver.get("https://center-pf.kakao.com/")
+        # self.driver.get("https://center-pf.kakao.com/")
+        self.driver.get(CONFIG["dashboard_url"] + "chats")
         # 2 | setWindowSize | 517x770 |
         self.driver.set_window_size(567, 770)
 
@@ -134,7 +135,9 @@ class ChannelMessageSending(QObject):
 
         # dashboard_pattern = re.compile(r"^https://business.kakao.com/dashboard")
         # 2024.08.14 Dashboard URL is changed!
-        dashboard_pattern = re.compile(r"^https://center-pf.kakao.com/_RdKNT/dashboard")
+        # dashboard_pattern = re.compile(r"^https://center-pf.kakao.com/_RdKNT/dashboard")
+        dashboard_pattern = re.compile(CONFIG["dashboard_url"])
+        chat_pattern = re.compile(CONFIG["dashboard_url"] + r"chats")
         login_pattern = re.compile(r"^https://accounts.kakao.com/login")
         # bizprofile_pattern = re.compile(r"^https://business.kakao.com/biz-profile")
         bizprofile_pattern = re.compile(r"^https://center-pf.kakao.com/profiles")
@@ -166,14 +169,19 @@ class ChannelMessageSending(QObject):
                 INFO(f"self.driver.current_url = {self.driver.current_url}")
                 # if dashboard_pattern.match(self.driver.current_url):
                 if bizprofile_pattern.match(self.driver.current_url):
-                    # 로그인 되었음
+                    # biz profile 선택화면
                     # time.sleep(1)
+                    INFO(f"Biz Profile로 이동")
+                    break
+                elif chat_pattern.match(self.driver.current_url):
+                    # 1:1채팅 화면
+                    INFO(f"1:1채팅으로 이동")
                     break
 
                 INFO(f"로그인 대기!!")
                 time.sleep(5)
 
-            INFO(f"대쉬보드로 이동")
+            INFO(f"로그인 후 화면이동 ")
             # not clickable error fix but solved by script click
             #self.driver.maximize_window()
             # 20211227 변경
@@ -208,17 +216,8 @@ class ChannelMessageSending(QObject):
 
             # 2024.08.14 bizprofile is disappeared!
             # 2024.08.14 profile is appeared!
-            while True:
-                if bizprofile_pattern.match(self.driver.current_url):
-                    # biz_profile 대기
-                    # time.sleep(1)
-                    break
 
-                INFO(f"Profile 진입 대기!!")
-                time.sleep(5)
-
-            INFO(f"Biz Profile로 이동")
-
+        
             # element = WebDriverWait(self.driver, 30).until(
             #     EC.presence_of_element_located(
             #         (
@@ -237,39 +236,53 @@ class ChannelMessageSending(QObject):
             #time.sleep(5)
             #self.driver.find_element(By.XPATH, "//div/a/span").click()
             #self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
-            INFO(f"Biz Profile로 이동")
 
         # 20211227 변경
         elif dashboard_pattern.match(self.driver.current_url):
             # 이미 로그인 되어 있음
             # 3 | click | css=.tit_invite |
             #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
-            self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            # self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            pass
         else:
              # 3 | click | css=.tit_invite |
             #self.driver.find_element(By.CSS_SELECTOR, ".tit_invite").click()
-            self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            # self.driver.find_element(By.CSS_SELECTOR, ".name_profile").click()
+            pass
 
-        INFO(f"Biz Profile Read101클릭")
-        element = WebDriverWait(self.driver, 30).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH,
-                    "//strong[contains(.,'리드101송도학원')]"
-                    # By.XPATH,
-                    # "//a[contains(text(),'리드101송도학원')]"
-                    #By.LINK_TEXT, 
-                    #"리드101송도학원"
+        # profile 선택화면 이면 입력 대기
+        INFO(f"current place : {self.driver.current_url}")
+        if bizprofile_pattern.match(self.driver.current_url):
+            INFO(f"Biz Profile Read101클릭")
+            element = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH,
+                        "//strong[contains(.,'리드101송도학원') or contains(.,'리드101송도2영어학원')]"
+                        # By.XPATH,
+                        # "//a[contains(text(),'리드101송도학원')]"
+                        #By.LINK_TEXT, 
+                        #"리드101송도학원"
+                    )
                 )
             )
-        )
-        INFO(f"Biz Profile Read101 찾았음")
-        #element.click()
+            INFO(f"Biz Profile Read101 찾았음")
+            #element.click()
 
-        #2024.08.14 새로운 창 안뜸.
-        self.vars["window_handles"] = self.driver.window_handles
-        self.driver.execute_script("arguments[0].click();", element)
-        INFO(f"Read101 클릭!!")
+            #2024.08.14 새로운 창 안뜸.
+            self.vars["window_handles"] = self.driver.window_handles
+            self.driver.execute_script("arguments[0].click();", element)
+            INFO(f"Read101 클릭!!")
+
+            # 아직도 선택화면이면 사용자가  선택
+            while True:
+                if bizprofile_pattern.match(self.driver.current_url):
+                    # biz_profile 대기
+                    # time.sleep(1)
+                    break
+
+                INFO(f"Profile 진입 대기!!")
+                time.sleep(5)
 
         # 별도창 대기
         #2024.08.14 새로운 창 안뜸.
@@ -282,54 +295,56 @@ class ChannelMessageSending(QObject):
 
 
         #20211108 변경되었음
-        INFO(f"1:1채팅")
-        # element = WebDriverWait(self.driver, 30).until(
-        #     EC.presence_of_element_located(
-        #         (
-        #             By.XPATH,
-        #             "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a",
-        #         )
-        #     )
-        # )
-        # 20231021 변경
-        element = WebDriverWait(self.driver, 30).until(
-            EC.presence_of_element_located(
-                (
-                    # By.LINK_TEXT, 
-                    # "1:1채팅"
-                    # By.XPATH, 
-                    # "//a[contains(.,'1:1채팅1')]"
-                    By.XPATH, 
-                    "//div/div/div[2]/ul/li[3]"
+        if bizprofile_pattern.match(self.driver.current_url):
+            INFO(f"1:1채팅")
+            INFO(f"current place : {self.driver.current_url}")
+            # element = WebDriverWait(self.driver, 30).until(
+            #     EC.presence_of_element_located(
+            #         (
+            #             By.XPATH,
+            #             "//div[@id=\'mFeature\']/div/div[2]/ul/li[3]/a",
+            #         )
+            #     )
+            # )
+            # 20231021 변경
+            element = WebDriverWait(self.driver, 30).until(
+                EC.presence_of_element_located(
+                    (
+                        # By.LINK_TEXT, 
+                        # "1:1채팅"
+                        # By.XPATH, 
+                        # "//a[contains(.,'1:1채팅1')]"
+                        By.XPATH, 
+                        "//div/div/div[2]/ul/li[3]"
+                    )
                 )
             )
-        )
- 
-        INFO(f"1:1채팅 찾았음")
-        #element.click()
-        self.driver.execute_script("arguments[0].click();", element)
-        INFO(f"1:1채팅 클릭!!")
+    
+            INFO(f"1:1채팅 찾았음")
+            #element.click()
+            self.driver.execute_script("arguments[0].click();", element)
+            INFO(f"1:1채팅 클릭!!")
 
-        #INFO(f"채팅 메뉴 로딩 대기!!")
-        #time.sleep(5)
+            #INFO(f"채팅 메뉴 로딩 대기!!")
+            #time.sleep(5)
 
-        # 5 | click | linkText=채팅 목록 |
-        INFO(f"채팅목록")
-        #self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
-        element = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(
-                (
-                    By.XPATH, 
-                    "//a[contains(.,'채팅 목록')]"
-                    # By.LINK_TEXT,
-                    # "채팅 목록",
-                    # By.XPATH, 
-                    # "//a[contains(@href, '/_RdKNT/chats')]"
+            # 5 | click | linkText=채팅 목록 |
+            INFO(f"채팅목록")
+            #self.driver.find_element(By.LINK_TEXT, "채팅 목록").click()
+            element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (
+                        By.XPATH, 
+                        "//a[contains(.,'채팅 목록')]"
+                        # By.LINK_TEXT,
+                        # "채팅 목록",
+                        # By.XPATH, 
+                        # "//a[contains(@href, '/_RdKNT/chats')]"
+                    )
                 )
             )
-        )
-        INFO(f"채팅목록 찾았음")
-        self.driver.execute_script("arguments[0].click();", element)
+            INFO(f"채팅목록 찾았음")
+            self.driver.execute_script("arguments[0].click();", element)
 
         while self.loop_flag:
             self.running.emit()
